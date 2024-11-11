@@ -29,6 +29,10 @@ func (c *Context) GetChat() *models.Chat {
 	return c.chat
 }
 
+func (c *Context) GetChatID() int64 {
+	return c.chat.ChatID
+}
+
 func (c *Context) SetChat(chat *models.Chat) *Context {
 	c.chat = chat
 

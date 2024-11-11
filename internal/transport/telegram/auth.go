@@ -9,7 +9,7 @@ import (
 )
 
 func (b *Bot) authorize(ctx context.Context, chatID int64) (*models.Chat, error) {
-	chat, err := b.services.Chat.Find(ctx, chatID)
+	chat, err := b.services.Chat.FindByChatID(ctx, chatID)
 	if err != nil {
 		if errors.Is(err, errors.ErrNotFound) {
 			return nil, fmt.Errorf("not authorized")

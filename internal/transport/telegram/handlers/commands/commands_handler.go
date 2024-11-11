@@ -19,7 +19,7 @@ func NewHandler(baseHandler *handlers.BaseHandler) *Handler {
 
 func (h *Handler) HandleStart(ctx *types.Context, message *tgbotapi.Message) error {
 	data := models.Chat{
-		ID: message.Chat.ID,
+		ChatID: message.Chat.ID,
 	}
 
 	if message.From != nil {
@@ -34,7 +34,7 @@ func (h *Handler) HandleStart(ctx *types.Context, message *tgbotapi.Message) err
 	ctx.SetChat(chat)
 
 	msg := h.Helper.NewMessage(
-		chat.ID,
+		ctx.GetChatID(),
 		ctx.Messages().StartSuccess,
 	)
 
@@ -43,7 +43,7 @@ func (h *Handler) HandleStart(ctx *types.Context, message *tgbotapi.Message) err
 
 func (h *Handler) HandleHelp(ctx *types.Context) error {
 	msg := h.Helper.NewMessage(
-		ctx.GetChat().ID,
+		ctx.GetChatID(),
 		ctx.Messages().Help,
 	)
 

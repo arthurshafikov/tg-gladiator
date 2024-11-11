@@ -19,7 +19,7 @@ type EventsHandler interface {
 }
 
 type Chat interface {
-	Find(ctx context.Context, id int64) (*models.Chat, error)
+	FindByChatID(ctx context.Context, chatID int64) (*models.Chat, error)
 	FirstOrCreate(ctx context.Context, chat models.Chat) (*models.Chat, bool, error)
 	UpdateLatestActiveAt(ctx *types.Context)
 	UpdateUsername(ctx *types.Context, username string) error

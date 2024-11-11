@@ -26,8 +26,10 @@ func newChatService(
 	}
 }
 
-func (s *ChatService) Find(ctx context.Context, id int64) (*models.Chat, error) {
-	chat, err := s.repo.Find(ctx, id)
+func (s *ChatService) FindByChatID(ctx context.Context, chatID int64) (*models.Chat, error) {
+	chat, err := s.repo.FindBy(ctx, &models.Chat{
+		ChatID: chatID,
+	})
 	if err != nil {
 		if !errors.Is(err, errors.ErrNotFound) {
 			s.logger.Error(err)
@@ -42,7 +44,9 @@ func (s *ChatService) Find(ctx context.Context, id int64) (*models.Chat, error) 
 }
 
 func (s *ChatService) FirstOrCreate(ctx context.Context, data models.Chat) (*models.Chat, bool, error) {
-	chat, err := s.repo.Find(ctx, data.ID)
+	chat, err := s.repo.FindBy(ctx, &models.Chat{
+		ChatID: data.ChatID,
+	})
 	if err == nil {
 		return chat, true, nil
 	}
@@ -85,8 +89,8 @@ func (s *ChatService) UpdateUsername(ctx *types.Context, username string) error 
 	return nil
 }
 
-func (s *ChatService) update(ctx context.Context, chatID int64, fields *models.Chat) (*models.Chat, error) {
-	chat, err := s.repo.Update(ctx, chatID, fields)
+func (s *ChatService) update(ctx context.Context, id int64, fields *models.Chat) (*models.Chat, error) {
+	chat, err := s.repo.Update(ctx, id, fields)
 	if err != nil {
 		if !errors.Is(err, errors.ErrNotFound) {
 			s.logger.Error(err)
