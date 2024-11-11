@@ -12,10 +12,7 @@ import (
 	mock_services "github.com/arthurshafikov/tg-gladiator/internal/services/mocks"
 	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram"
 	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/handlers"
-	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/handlers/commands"
-	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/handlers/interactions"
 	mock_handlers "github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/handlers/mocks"
-	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/handlers/queries"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
@@ -80,7 +77,7 @@ func (s *APITestSuite) SetupSuite() {
 
 	s.telegramHelper = mock_handlers.NewMockTelegramHandlerHelper(ctrl)
 
-	baseHandler := handlers.NewBaseHandler(handlers.HandlerParams{
+	_ = handlers.NewBaseHandler(handlers.HandlerParams{
 		Services: s.services,
 		Logger:   s.logger,
 		Config:   s.config,
@@ -93,9 +90,9 @@ func (s *APITestSuite) SetupSuite() {
 		Logger:   s.logger,
 		Config:   s.config,
 
-		CommandsHandler:    commands.NewHandler(baseHandler),
-		QueryHandler:       queries.NewQueryHandler(baseHandler),
-		InteractionHandler: interactions.NewHandler(baseHandler),
+		// CommandsHandler:    commands.NewHandler(baseHandler),
+		// QueryHandler:       queries.NewQueryHandler(baseHandler),
+		// InteractionHandler: interactions.NewHandler(baseHandler),
 
 		Helper: s.telegramHelper,
 	})

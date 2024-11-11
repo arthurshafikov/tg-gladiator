@@ -45,13 +45,11 @@ type Deps struct {
 }
 
 func NewServices(deps Deps) *Services {
-	interactionService := newInteractionService(deps.Logger, deps.Repository.Chat)
-
 	return &Services{
 		Chat: newChatService(
 			deps.Logger,
 			deps.Repository.Chat,
 		),
-		Interactions: interactionService,
+		Interactions: newInteractionService(deps.Logger, deps.Repository.Chat),
 	}
 }
