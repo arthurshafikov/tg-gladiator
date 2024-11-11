@@ -7,6 +7,7 @@ type MessagesBag struct {
 
 type Messages struct {
 	StartSuccess string
+	Help         string
 
 	Errors map[string]string
 }

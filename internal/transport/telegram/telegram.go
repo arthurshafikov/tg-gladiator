@@ -27,6 +27,7 @@ type Bot struct {
 
 type CommandsHandler interface {
 	HandleStart(ctx *types.Context, message *tgbotapi.Message) error
+	HandleHelp(ctx *types.Context) error
 }
 
 type QueryHandler interface {

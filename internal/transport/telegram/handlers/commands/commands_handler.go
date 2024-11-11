@@ -40,3 +40,12 @@ func (h *Handler) HandleStart(ctx *types.Context, message *tgbotapi.Message) err
 
 	return h.Helper.Send(msg)
 }
+
+func (h *Handler) HandleHelp(ctx *types.Context) error {
+	msg := h.Helper.NewMessage(
+		ctx.GetChat().ID,
+		ctx.Messages().Help,
+	)
+
+	return h.Helper.Send(msg)
+}

@@ -16,6 +16,7 @@ func (b *Bot) handleCommand(ctx *types.Context, message *tgbotapi.Message) error
 	case commands.Start:
 		return b.commandHandler.HandleStart(ctx, message)
 	case commands.Help:
+		return b.commandHandler.HandleHelp(ctx)
 	default:
 		return errors.ErrUndefinedCommand
 	}
