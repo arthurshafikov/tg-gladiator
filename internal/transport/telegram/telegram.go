@@ -109,7 +109,7 @@ func (b *Bot) ProcessUpdate(ctx context.Context, update tgbotapi.Update) {
 	// update latest active at
 	if chat != nil && (chat.LatestActiveAt.IsZero() ||
 		chat.LatestActiveAt.Before(time.Now().Add(time.Minute*-10))) { // log ,aximum once per 10 minutes
-		// b.services.Chat.UpdateLatestActiveAt(newCtx) @todo
+		b.services.Chat.UpdateLatestActiveAt(newCtx)
 	}
 
 	// handle changed username
