@@ -38,7 +38,11 @@ func (h *Handler) HandleStart(ctx *types.Context, message *tgbotapi.Message) err
 		ctx.Messages().StartSuccess,
 	)
 
-	return h.Helper.Send(msg)
+	if err := h.Helper.Send(msg); err != nil {
+		return err
+	}
+
+	return h.OpenNewMenu(ctx)
 }
 
 func (h *Handler) HandleHelp(ctx *types.Context) error {

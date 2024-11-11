@@ -7,6 +7,8 @@ import (
 type Query string
 
 const (
+	OpenMenu Query = "OpenMenu"
+
 	SpecialDelimeterInQueryCallback = "#_#"
 )
 

@@ -2,6 +2,9 @@ RU:
   StartSuccess: "Успешный старт!"
   Help: "Помощь"
 
+  OpenedMenu: "Это меню"
+  DefaultBackBtn: "Назад"
+
   Errors:
     403_forbidden: "⛔️ Ошибка: недостаточно прав для выполнения действия"
     404_not_found: "🔍 Ошибка: не найдено"
