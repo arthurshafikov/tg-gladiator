@@ -1,0 +1,21 @@
+package errors
+
+import (
+	"errors"
+)
+
+var (
+	ErrForbidden       = errors.New("403_forbidden")
+	ErrNotFound        = errors.New("404_not_found")
+	ErrServerError     = errors.New("500_server_error")
+	ErrTooManyRequests = errors.New("429_too_many_requests")
+
+	ErrAlreadyExists          = errors.New("already_exists")
+	ErrUndefinedCommand       = errors.New("undefined_command")
+	ErrUndefinedInteraction   = errors.New("undefined_interaction")
+	ErrUndefinedCallbackQuery = errors.New("undefined_callbackQuery")
+)
+
+func Is(err, target error) bool {
+	return errors.Is(err, target)
+}

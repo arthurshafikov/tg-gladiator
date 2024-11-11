@@ -1,0 +1,17 @@
+-- +goose Up
+-- +goose StatementBegin
+CREATE TABLE chats (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(250) NOT NULL,
+    username VARCHAR(250) NOT NULL,
+    interaction VARCHAR(50) NULL,
+    language VARCHAR(3) NOT NULL,
+    latest_active_at TIMESTAMP NULL,
+    created_at TIMESTAMP NULL DEFAULT NOW()
+);
+-- +goose StatementEnd
+
+-- +goose Down
+-- +goose StatementBegin
+DROP TABLE chats;
+-- +goose StatementEnd
