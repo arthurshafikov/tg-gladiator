@@ -12,5 +12,11 @@ type Messages struct {
 	OpenedMenu     string
 	DefaultBackBtn string
 
-	Errors map[string]string
+	MenuItemMyHeroes string
+	MyHeroesList     string
+
+	HeroName string
+
+	Classes map[string]string
+	Errors  map[string]string
 }

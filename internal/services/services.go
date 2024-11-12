@@ -32,9 +32,14 @@ type Interactions interface {
 	RemoveIfEquals(ctx *types.Context, interaction *interactions.Interaction) error
 }
 
+type Heroes interface {
+	GetMy(ctx *types.Context) (*[]models.Hero, error)
+}
+
 type Services struct {
 	Chat
 	Interactions
+	Heroes
 }
 
 type Deps struct {
@@ -51,5 +56,6 @@ func NewServices(deps Deps) *Services {
 			deps.Repository.Chat,
 		),
 		Interactions: newInteractionService(deps.Logger, deps.Repository.Chat),
+		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
 	}
 }

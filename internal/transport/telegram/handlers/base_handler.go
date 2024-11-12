@@ -29,12 +29,12 @@ func NewBaseHandler(tgHandlerParams HandlerParams) *BaseHandler {
 	}
 }
 
-func (h *BaseHandler) ValidateDataLength(data []string, expectedMinLength int) error {
-	if len(data) < expectedMinLength {
+func (h *BaseHandler) ValidatePayloadLength(payload []string, expectedMinLength int) error {
+	if len(payload) < expectedMinLength {
 		h.Logger.Error(fmt.Sprintf(
-			"Data Len is not %v, data: %s",
+			"Payload Len is not %v, payload: %s",
 			expectedMinLength,
-			strings.Join(data, queries.SpecialDelimeterInQueryCallback),
+			strings.Join(payload, queries.SpecialDelimeterInQueryCallback),
 		))
 
 		return errors.ErrServerError
@@ -99,7 +99,7 @@ func (h *BaseHandler) getMenuKeyboard(ctx *types.Context) *tgbotapi.InlineKeyboa
 
 	keyboard.InlineKeyboard = append(
 		keyboard.InlineKeyboard,
-		h.Helper.NewRow("Test", queries.OpenMenu),
+		h.Helper.NewRow(ctx.Messages().MenuItemMyHeroes, queries.OpenMyHeroes),
 	)
 
 	return &keyboard

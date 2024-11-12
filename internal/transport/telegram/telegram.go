@@ -31,6 +31,8 @@ type CommandsHandler interface {
 }
 
 type QueryHandler interface {
+	HandleOpenMenu(ctx *types.Context, query *tgbotapi.CallbackQuery) error
+	HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.CallbackQuery) error
 }
 
 type InteractionHandler interface {

@@ -7,7 +7,10 @@ import (
 type Query string
 
 const (
-	OpenMenu Query = "OpenMenu"
+	OpenMenu     Query = "OpenMenu"
+	OpenMyHeroes Query = "OpenMyHeroes"
+
+	Back Query = "Back"
 
 	SpecialDelimeterInQueryCallback = "#_#"
 )

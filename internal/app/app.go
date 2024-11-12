@@ -105,7 +105,7 @@ func Run() {
 		Config:   config,
 
 		CommandsHandler:    commands.NewHandler(baseHandler),
-		QueryHandler:       queries.NewQueryHandler(baseHandler),
+		QueryHandler:       queries.NewHandler(baseHandler),
 		InteractionHandler: interactions.NewHandler(baseHandler),
 
 		Helper: telegramHelper,

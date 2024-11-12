@@ -5,6 +5,14 @@ RU:
   OpenedMenu: "Это меню"
   DefaultBackBtn: "Назад"
 
+  MenuItemMyHeroes: "Мои герои"
+  MyHeroesList: "Это лист ваших героев"
+
+  HeroName: "%s - ❤️ %v, 🪙 %v"
+
+  Classes:
+    swordsman: "⚔️ Мечник"
+
   Errors:
     403_forbidden: "⛔️ Ошибка: недостаточно прав для выполнения действия"
     404_not_found: "🔍 Ошибка: не найдено"
