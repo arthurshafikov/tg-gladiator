@@ -36,7 +36,8 @@ func (h *Handler) HandleOpenMyHero(ctx *types.Context, query *tgbotapi.CallbackQ
 }
 
 func (h *Handler) HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.CallbackQuery) error {
-	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, ctx.Messages().HeroCreationSelectClass)
+	msgText := ctx.Messages().HeroCreationSelectClass
+
 	keyboardButtons := make([]telegram.KeyboardButton, 0, len(enums.GetHeroClasses()))
 	for _, heroClass := range enums.GetHeroClasses() {
 		heroClassText, err := ctx.Messages().GetHeroClass(heroClass)
@@ -45,6 +46,15 @@ func (h *Handler) HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.Ca
 
 			return errors.ErrServerError
 		}
+
+		classInfo, err := ctx.Messages().ClassInfo(heroClass)
+		if err != nil {
+			h.Logger.Error(err)
+
+			return errors.ErrServerError
+		}
+
+		msgText += fmt.Sprintf("\n\n%s", classInfo)
 
 		keyboardButtons = append(keyboardButtons, telegram.KeyboardButton{
 			CallbackQuery: queries.HeroCreationSelectClass.With(heroClass.ToString()),
@@ -55,7 +65,7 @@ func (h *Handler) HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.Ca
 		CallbackQuery: queries.OpenMyHeroes,
 		Text:          ctx.Messages().DefaultBackBtn,
 	})
-
+	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, msgText)
 	msg.ReplyMarkup = h.Helper.CreateKeyboard(keyboardButtons, 1)
 
 	return h.Helper.Send(msg)

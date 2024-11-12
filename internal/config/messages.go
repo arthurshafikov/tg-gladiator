@@ -63,6 +63,50 @@ func (m *Messages) GetHeroClass(heroClass enums.HeroClass) (string, error) {
 	return m.HeroClasses[heroClass.ToString()], nil
 }
 
+func (m *Messages) ClassInfo(heroClass enums.HeroClass) (string, error) {
+	if _, ok := m.HeroClasses[heroClass.ToString()]; !ok {
+		return "", fmt.Errorf("undefined hero class: '%s'", heroClass.ToString())
+	}
+
+	msg := fmt.Sprintf(
+		"%s: %s\n",
+		m.HeroClass,
+		m.HeroClasses[heroClass.ToString()],
+	)
+
+	attack, err := heroClass.GetAttack()
+	if err != nil {
+		return "", err
+	}
+	msg += fmt.Sprintf(
+		"%s: %v\n",
+		m.HeroAttack,
+		attack,
+	)
+
+	defense, err := heroClass.GetDefense()
+	if err != nil {
+		return "", err
+	}
+	msg += fmt.Sprintf(
+		"%s: %v\n",
+		m.HeroDefense,
+		defense,
+	)
+
+	startHP, err := heroClass.GetStartHP()
+	if err != nil {
+		return "", err
+	}
+	msg += fmt.Sprintf(
+		"%s: %v\n\n",
+		m.HeroHP,
+		startHP,
+	)
+
+	return msg, nil
+}
+
 func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	heroClass, err := m.GetHeroClass(hero.Class)
 	if err != nil {
@@ -79,7 +123,6 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.HeroAttack,
@@ -90,7 +133,6 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.HeroDefense,

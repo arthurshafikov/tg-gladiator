@@ -9,7 +9,7 @@ RU:
   MyHeroesList: "Это лист ваших героев"
 
   HeroCreationStart: "➕ Создать"
-  HeroCreationSelectClass: "Пожалуйста, выберите класс вашего героя"
+  HeroCreationSelectClass: "Пожалуйста, выберите класс вашего героя, доступные классы:"
 
   HeroCreationSuccess: "Герой был успешно создан!"
 
