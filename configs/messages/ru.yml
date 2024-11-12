@@ -11,6 +11,9 @@ RU:
   HeroCreationStart: "➕ Создать"
   HeroCreationSelectClass: "Пожалуйста, выберите класс вашего героя"
 
+  HeroCreationSuccess: "Герой был успешно создан!"
+
+  HeroOverview: "Ваш герой:"
   HeroClass: "Класс"
   HeroAttack: "💪 Атака"
   HeroDefense: "🛡 Защита"

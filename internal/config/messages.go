@@ -27,12 +27,13 @@ type Messages struct {
 
 	HeroCreationSuccess string
 
-	HeroClass   string
-	HeroAttack  string
-	HeroDefense string
-	HeroHP      string
-	HeroEnergy  string
-	HeroGold    string
+	HeroOverview string
+	HeroClass    string
+	HeroAttack   string
+	HeroDefense  string
+	HeroHP       string
+	HeroEnergy   string
+	HeroGold     string
 
 	HeroName string
 
@@ -55,7 +56,6 @@ func (m *Messages) GetHeroName(hero *models.Hero) (string, error) {
 }
 
 func (m *Messages) GetHeroClass(heroClass enums.HeroClass) (string, error) {
-	fmt.Printf("%#v\n", m.HeroClasses)
 	if _, ok := m.HeroClasses[heroClass.ToString()]; !ok {
 		return "", fmt.Errorf("undefined hero class: '%s'", heroClass.ToString())
 	}

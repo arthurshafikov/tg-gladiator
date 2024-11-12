@@ -33,6 +33,7 @@ type CommandsHandler interface {
 type QueryHandler interface {
 	HandleOpenMenu(ctx *types.Context, query *tgbotapi.CallbackQuery) error
 	HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.CallbackQuery) error
+	HandleOpenMyHero(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
 	HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.CallbackQuery) error
 	HandleHeroCreationSelectClass(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error

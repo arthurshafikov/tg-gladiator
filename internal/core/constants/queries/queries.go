@@ -9,6 +9,7 @@ type Query string
 const (
 	OpenMenu     Query = "OpenMenu"
 	OpenMyHeroes Query = "OpenMyHeroes"
+	OpenMyHero   Query = "OpenMyHero"
 
 	HeroCreationStart       Query = "HeroCreationStart"
 	HeroCreationSelectClass Query = "HeroCreationSelectClass"

@@ -35,6 +35,8 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 		return b.queryHandler.HandleOpenMenu(ctx, query)
 	case queries.OpenMyHeroes:
 		return b.queryHandler.HandleOpenMyHeroes(ctx, query)
+	case queries.OpenMyHero:
+		return b.queryHandler.HandleOpenMyHero(ctx, query, payload)
 
 	case queries.HeroCreationStart:
 		return b.queryHandler.HandleHeroCreationStart(ctx, query)

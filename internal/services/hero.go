@@ -56,3 +56,22 @@ func (s *HeroService) Create(ctx *types.Context, class string) (*models.Hero, er
 
 	return hero, nil
 }
+
+func (s *HeroService) FindMy(ctx *types.Context, id int64) (*models.Hero, error) {
+	hero, err := s.repo.Find(ctx.GetContext(), id)
+	if err != nil {
+		if errors.Is(errors.ErrNotFound, err) {
+			return nil, errors.ErrNotFound
+		}
+
+		s.logger.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	if hero.ChatID != ctx.GetChat().ID {
+		return nil, errors.ErrForbidden
+	}
+
+	return hero, nil
+}

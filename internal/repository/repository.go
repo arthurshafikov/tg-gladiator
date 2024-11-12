@@ -22,7 +22,7 @@ type Chat interface {
 }
 
 type Hero interface {
-	// Find(ctx context.Context, id int64) (*models.Chat, error)
+	Find(ctx context.Context, id int64) (*models.Hero, error)
 	// FindBy(ctx context.Context, fields *models.Chat) (*models.Chat, error)
 	GetBy(ctx context.Context, fields *models.Hero) (*[]models.Hero, error)
 	Create(ctx context.Context, chat models.Hero) (*models.Hero, error)

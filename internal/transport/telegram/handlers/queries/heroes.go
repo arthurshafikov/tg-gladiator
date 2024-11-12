@@ -28,7 +28,7 @@ func (h *Handler) HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.Callbac
 		}
 
 		keyboardButtons = append(keyboardButtons, telegram.KeyboardButton{
-			CallbackQuery: queries.OpenMyHeroes, // @todo OpenMyHero
+			CallbackQuery: queries.OpenMyHero.WithID(hero.ID),
 			Text:          heroName,
 		})
 	}
