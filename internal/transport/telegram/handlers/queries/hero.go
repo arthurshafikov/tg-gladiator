@@ -19,7 +19,7 @@ func (h *Handler) HandleOpenMyHero(ctx *types.Context, query *tgbotapi.CallbackQ
 
 	heroID, err := h.GetIDFromString(payload[0])
 	if err != nil {
-		return err 
+		return err
 	}
 
 	hero, err := h.Services.Hero.FindMy(ctx, heroID)
@@ -51,6 +51,10 @@ func (h *Handler) HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.Ca
 			Text:          heroClassText,
 		})
 	}
+	keyboardButtons = append(keyboardButtons, telegram.KeyboardButton{
+		CallbackQuery: queries.OpenMyHeroes,
+		Text:          ctx.Messages().DefaultBackBtn,
+	})
 
 	msg.ReplyMarkup = h.Helper.CreateKeyboard(keyboardButtons, 1)
 
