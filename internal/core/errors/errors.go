@@ -14,6 +14,8 @@ var (
 	ErrUndefinedCommand       = errors.New("undefined_command")
 	ErrUndefinedInteraction   = errors.New("undefined_interaction")
 	ErrUndefinedCallbackQuery = errors.New("undefined_callbackQuery")
+
+	ErrInvalidHeroClass = errors.New("invalid_hero_class")
 )
 
 func Is(err, target error) bool {

@@ -20,9 +20,16 @@ func (h *Handler) HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.Callbac
 	keyboardButtons := make([]telegram.KeyboardButton, 0, len(*heroes))
 
 	for _, hero := range *heroes {
+		heroName, err := ctx.Messages().GetHeroName(&hero)
+		if err != nil {
+			h.Logger.Error(err)
+
+			return errors.ErrServerError
+		}
+
 		keyboardButtons = append(keyboardButtons, telegram.KeyboardButton{
 			CallbackQuery: queries.OpenMyHeroes, // @todo OpenMyHero
-			Text:          hero.GetName(ctx.Messages()),
+			Text:          heroName,
 		})
 	}
 	keyboardButtons = append(keyboardButtons, telegram.KeyboardButton{

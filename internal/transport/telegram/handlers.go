@@ -28,7 +28,7 @@ func (b *Bot) handleCommand(ctx *types.Context, message *tgbotapi.Message) error
 func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQuery) error {
 	splittedData := strings.Split(query.Data, queries.SpecialDelimeterInQueryCallback)
 
-	// payload := splittedData[1:]
+	payload := splittedData[1:]
 
 	switch queries.Query(splittedData[0]) {
 	case queries.OpenMenu:
@@ -37,7 +37,9 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 		return b.queryHandler.HandleOpenMyHeroes(ctx, query)
 
 	case queries.HeroCreationStart:
-		return b.queryHandler.HandleStartHeroCreation(ctx, query)
+		return b.queryHandler.HandleHeroCreationStart(ctx, query)
+	case queries.HeroCreationSelectClass:
+		return b.queryHandler.HandleHeroCreationSelectClass(ctx, query, payload)
 
 	default:
 		return errors.ErrUndefinedCallbackQuery

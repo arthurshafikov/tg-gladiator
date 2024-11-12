@@ -11,6 +11,13 @@ RU:
   HeroCreationStart: "➕ Создать"
   HeroCreationSelectClass: "Пожалуйста, выберите класс вашего героя"
 
+  HeroClass: "Класс"
+  HeroAttack: "💪 Атака"
+  HeroDefense: "🛡 Защита"
+  HeroHP: "❤️ Здоровье"
+  HeroEnergy: "🏃‍♂️ Энергия"
+  HeroGold: "🪙 Золото"
+
   HeroName: "%s - ❤️ %v, 🪙 %v"
 
   HeroClasses:
@@ -21,7 +28,10 @@ RU:
     404_not_found: "🔍 Ошибка: не найдено"
     500_server_error: "⚠️ Ошибка: проблемы на сервере, попробуйте позже"
     429_too_many_requests: "🚫 Ошибка: слишком много запросов, попробуйте позже"
+
     already_exists: "⚠️ Ошибка: уже существует"
     undefined_command: "❓ Ошибка: неизвестная команда"
     undefined_interaction: "❓ Ошибка: неизвестное взаимодействие"
     undefined_callbackQuery: "❓ Ошибка: неизвестный запрос"
+
+    invalid_hero_class: "❓ Ошибка: неизвестный класс героя"
