@@ -20,7 +20,7 @@ type Hero struct {
 func (h *Hero) GetName(messages *config.Messages) string {
 	return fmt.Sprintf(
 		messages.HeroName,
-		messages.Classes[h.Class],
+		messages.GetHeroClass(h.Class),
 		h.CurrentHP,
 		h.CurrentGold,
 	)

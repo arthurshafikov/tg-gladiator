@@ -8,9 +8,12 @@ RU:
   MenuItemMyHeroes: "Мои герои"
   MyHeroesList: "Это лист ваших героев"
 
+  HeroCreationStart: "➕ Создать"
+  HeroCreationSelectClass: "Пожалуйста, выберите класс вашего героя"
+
   HeroName: "%s - ❤️ %v, 🪙 %v"
 
-  Classes:
+  HeroClasses:
     swordsman: "⚔️ Мечник"
 
   Errors:

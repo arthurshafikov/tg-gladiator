@@ -1,5 +1,11 @@
 package config
 
+import (
+	"fmt"
+
+	"github.com/sirupsen/logrus"
+)
+
 type MessagesBag struct {
 	RU Messages
 	EN Messages
@@ -15,8 +21,21 @@ type Messages struct {
 	MenuItemMyHeroes string
 	MyHeroesList     string
 
+	HeroCreationStart       string
+	HeroCreationSelectClass string
+
 	HeroName string
 
-	Classes map[string]string
-	Errors  map[string]string
+	heroClasses map[string]string
+	Errors      map[string]string
+}
+
+func (m *Messages) GetHeroClass(heroClass string) string {
+	if _, ok := m.heroClasses[heroClass]; !ok {
+		logrus.Error(fmt.Errorf("undefined hero class: '%s'", heroClass))
+
+		return "undefined"
+	}
+
+	return m.heroClasses[heroClass]
 }

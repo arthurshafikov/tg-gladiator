@@ -15,12 +15,7 @@ const DefaultTelegramParseMode = telegram.TelegramHTMLParseMode
 type TelegramHandlerHelper interface {
 	NewCallback(id string, text string) tgbotapi.CallbackConfig
 	NewMessage(chatID int64, text string) tgbotapi.MessageConfig
-	NewEditMessageText(chatID int64, messageID int, text string) tgbotapi.EditMessageTextConfig
-	NewEditMessageReplyMarkup(
-		chatID int64,
-		messageID int,
-		replyMarkup *tgbotapi.InlineKeyboardMarkup,
-	) tgbotapi.EditMessageReplyMarkupConfig
+	NewEditMessage(chatID int64, messageID int, text string) tgbotapi.EditMessageTextConfig
 	Send(msg tgbotapi.Chattable) error
 	SendMessage(msg tgbotapi.MessageConfig) error
 	SendTextMessage(chatID int64, text string) error
@@ -68,16 +63,8 @@ func (h *Helper) NewCallback(id string, text string) tgbotapi.CallbackConfig {
 	return tgbotapi.NewCallback(id, text)
 }
 
-func (h *Helper) NewEditMessageText(chatID int64, messageID int, text string) tgbotapi.EditMessageTextConfig {
+func (h *Helper) NewEditMessage(chatID int64, messageID int, text string) tgbotapi.EditMessageTextConfig {
 	return tgbotapi.NewEditMessageText(chatID, messageID, text)
-}
-
-func (h *Helper) NewEditMessageReplyMarkup(
-	chatID int64,
-	messageID int,
-	replyMarkup *tgbotapi.InlineKeyboardMarkup,
-) tgbotapi.EditMessageReplyMarkupConfig {
-	return tgbotapi.NewEditMessageReplyMarkup(chatID, messageID, *replyMarkup)
 }
 
 func (h *Helper) Send(msg tgbotapi.Chattable) error {

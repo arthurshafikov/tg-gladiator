@@ -10,6 +10,9 @@ const (
 	OpenMenu     Query = "OpenMenu"
 	OpenMyHeroes Query = "OpenMyHeroes"
 
+	HeroCreationStart       Query = "HeroCreationStart"
+	HeroCreationSelectClass Query = "HeroCreationSelectClass"
+
 	Back Query = "Back"
 
 	SpecialDelimeterInQueryCallback = "#_#"

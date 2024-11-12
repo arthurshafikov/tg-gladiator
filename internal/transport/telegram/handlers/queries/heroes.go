@@ -26,11 +26,15 @@ func (h *Handler) HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.Callbac
 		})
 	}
 	keyboardButtons = append(keyboardButtons, telegram.KeyboardButton{
+		CallbackQuery: queries.HeroCreationStart,
+		Text:          ctx.Messages().HeroCreationStart,
+	})
+	keyboardButtons = append(keyboardButtons, telegram.KeyboardButton{
 		CallbackQuery: queries.OpenMenu,
 		Text:          ctx.Messages().DefaultBackBtn,
 	})
 
-	msg := h.Helper.NewEditMessageText(ctx.GetChatID(), query.Message.MessageID, ctx.Messages().MyHeroesList)
+	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, ctx.Messages().MyHeroesList)
 	msg.ReplyMarkup = h.Helper.CreateKeyboard(keyboardButtons, 1)
 
 	return h.Helper.Send(msg)

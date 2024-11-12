@@ -82,7 +82,7 @@ func (s *APITestSuite) SetupSuite() {
 		Logger:   s.logger,
 		Config:   s.config,
 
-		Helper: s.telegramHelper,
+		// Helper: s.telegramHelper,
 	})
 
 	s.bot = telegram.NewBot(&telegram.Deps{
@@ -94,7 +94,7 @@ func (s *APITestSuite) SetupSuite() {
 		// QueryHandler:       queries.NewQueryHandler(baseHandler),
 		// InteractionHandler: interactions.NewHandler(baseHandler),
 
-		Helper: s.telegramHelper,
+		// Helper: s.telegramHelper,
 	})
 }
 

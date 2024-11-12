@@ -62,7 +62,7 @@ func (h *BaseHandler) EditMessageOpenMenu(ctx *types.Context, message *tgbotapi.
 		return err
 	}
 
-	msg := h.Helper.NewEditMessageText(
+	msg := h.Helper.NewEditMessage(
 		ctx.GetChatID(), message.MessageID,
 		ctx.Messages().OpenedMenu,
 	)

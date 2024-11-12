@@ -35,6 +35,10 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 		return b.queryHandler.HandleOpenMenu(ctx, query)
 	case queries.OpenMyHeroes:
 		return b.queryHandler.HandleOpenMyHeroes(ctx, query)
+
+	case queries.HeroCreationStart:
+		return b.queryHandler.HandleStartHeroCreation(ctx, query)
+
 	default:
 		return errors.ErrUndefinedCallbackQuery
 	}
