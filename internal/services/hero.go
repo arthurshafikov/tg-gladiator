@@ -43,7 +43,7 @@ func (s *HeroService) Create(ctx *types.Context, name, class string) (*models.He
 		return nil, err
 	}
 
-	startHP, err := heroClass.GetStartHP()
+	classCharacteristics, err := heroClass.GetCharacteristics()
 	if err != nil {
 		s.logger.Error(err)
 
@@ -54,7 +54,7 @@ func (s *HeroService) Create(ctx *types.Context, name, class string) (*models.He
 		ChatID:        ctx.GetChat().ID,
 		Name:          name,
 		Class:         heroClass,
-		CurrentHP:     startHP,
+		CurrentHP:     classCharacteristics.StartHP,
 		CurrentEnergy: StartEnergy,
 		CurrentGold:   StartGold,
 	})

@@ -25,6 +25,8 @@ RU:
   HeroClass: "Класс"
   HeroAttack: "💪 Атака"
   HeroDefense: "🛡 Защита"
+  HeroCriticalChancePercent: "🍀 Шанс критического урона"
+  HeroEvasionChancePercent: "🍀 Шанс уворота"
   HeroHP: "❤️ Здоровье"
   HeroEnergy: "🏃‍♂️ Энергия"
   HeroGold: "🪙 Золото"

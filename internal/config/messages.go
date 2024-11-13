@@ -35,14 +35,16 @@ type Messages struct {
 
 	HeroCreationSuccess string
 
-	HeroOverview string
-	HeroName     string
-	HeroClass    string
-	HeroAttack   string
-	HeroDefense  string
-	HeroHP       string
-	HeroEnergy   string
-	HeroGold     string
+	HeroOverview              string
+	HeroName                  string
+	HeroClass                 string
+	HeroAttack                string
+	HeroDefense               string
+	HeroCriticalChancePercent string
+	HeroEvasionChancePercent  string
+	HeroHP                    string
+	HeroEnergy                string
+	HeroGold                  string
 
 	HeroNameWithStats string
 
@@ -78,34 +80,39 @@ func (m *Messages) ClassInfo(heroClass enums.HeroClass) (string, error) {
 		m.HeroClasses[heroClass.ToString()],
 	)
 
-	attack, err := heroClass.GetAttack()
+	classCharacteristics, err := heroClass.GetCharacteristics()
 	if err != nil {
 		return "", err
 	}
+
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.HeroAttack,
-		attack,
+		classCharacteristics.Attack,
 	)
 
-	defense, err := heroClass.GetDefense()
-	if err != nil {
-		return "", err
-	}
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.HeroDefense,
-		defense,
+		classCharacteristics.Defense,
 	)
 
-	startHP, err := heroClass.GetStartHP()
-	if err != nil {
-		return "", err
-	}
 	msg += fmt.Sprintf(
-		"%s: %v\n\n",
+		"%s: %v\n",
 		m.HeroHP,
-		startHP,
+		classCharacteristics.StartHP,
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v%%\n",
+		m.HeroCriticalChancePercent,
+		classCharacteristics.CriticalChancePercent,
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v%%\n\n",
+		m.HeroEvasionChancePercent,
+		classCharacteristics.EvasionChancePercent,
 	)
 
 	return msg, nil
@@ -123,40 +130,49 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	classCharacteristics, err := hero.Class.GetCharacteristics()
+	if err != nil {
+		return "", err
+	}
+
 	msg += fmt.Sprintf(
 		"%s: %s\n",
 		m.HeroClass,
 		heroClass,
 	)
 
-	attack, err := hero.Class.GetAttack()
-	if err != nil {
-		return "", err
-	}
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.HeroAttack,
-		attack,
+		classCharacteristics.Attack,
 	)
 
-	defense, err := hero.Class.GetDefense()
-	if err != nil {
-		return "", err
-	}
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.HeroDefense,
-		defense,
+		classCharacteristics.Defense,
 	)
 
 	msg += fmt.Sprintf(
-		"%s: %v\n\n",
+		"%s: %v\n",
 		m.HeroHP,
 		hero.CurrentHP,
 	)
 
 	msg += fmt.Sprintf(
-		"%s: %v\n\n",
+		"%s: %v%%\n",
+		m.HeroCriticalChancePercent,
+		classCharacteristics.CriticalChancePercent,
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v%%\n",
+		m.HeroEvasionChancePercent,
+		classCharacteristics.EvasionChancePercent,
+	)
+
+	msg += fmt.Sprintf(
+		"\n%s: %v\n\n",
 		m.HeroGold,
 		hero.CurrentGold,
 	)

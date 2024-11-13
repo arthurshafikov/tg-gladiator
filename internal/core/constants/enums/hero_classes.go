@@ -32,56 +32,22 @@ func (hc HeroClass) ToString() string {
 	return string(hc)
 }
 
-func (hc HeroClass) GetAttack() (int, error) {
-	characteristics, err := hc.getCharacteristics()
-	if err != nil {
-		return 0, err
-	}
-
-	return characteristics.Attack, nil
-}
-
-func (hc HeroClass) GetDefense() (int, error) {
-	characteristics, err := hc.getCharacteristics()
-	if err != nil {
-		return 0, err
-	}
-
-	return characteristics.Defense, nil
-}
-
-func (hc HeroClass) GetCriticalChancePercent() (int, error) {
-	characteristics, err := hc.getCharacteristics()
-	if err != nil {
-		return 0, err
-	}
-
-	return characteristics.CriticalChancePercent, nil
-}
-
-func (hc HeroClass) GetStartHP() (int, error) {
-	characteristics, err := hc.getCharacteristics()
-	if err != nil {
-		return 0, err
-	}
-
-	return characteristics.StartHP, nil
-}
-
 type classCharacteristics struct {
 	Attack                int
 	Defense               int
 	CriticalChancePercent int
+	EvasionChancePercent  int
 	StartHP               int
 }
 
-func (hc HeroClass) getCharacteristics() (*classCharacteristics, error) {
+func (hc HeroClass) GetCharacteristics() (*classCharacteristics, error) {
 	switch hc {
 	case Swordsman:
 		return &classCharacteristics{
 			Attack:                10,
 			Defense:               5,
 			CriticalChancePercent: 10,
+			EvasionChancePercent:  5,
 			StartHP:               100,
 		}, nil
 	default:
