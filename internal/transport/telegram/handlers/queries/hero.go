@@ -108,19 +108,14 @@ func (h *Handler) HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQ
 		return err
 	}
 
-	heroName, err := ctx.Messages().GetHeroName(hero)
-	if err != nil {
-		h.Logger.Error(err)
-
-		return errors.ErrServerError
-	}
+	heroName := ctx.Messages().GetHeroNameWithStats(hero)
 
 	msg := h.Helper.NewEditMessage(
 		ctx.GetChatID(),
 		query.Message.MessageID,
 		fmt.Sprintf(
 			ctx.Messages().HeroDeleteConfirmationPrompt,
-			heroName, // @todo name field in heroes table
+			heroName,
 			ctx.Messages().DeleteConfirmation,
 		),
 	)

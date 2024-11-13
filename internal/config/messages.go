@@ -36,6 +36,7 @@ type Messages struct {
 	HeroCreationSuccess string
 
 	HeroOverview string
+	HeroName     string
 	HeroClass    string
 	HeroAttack   string
 	HeroDefense  string
@@ -43,24 +44,19 @@ type Messages struct {
 	HeroEnergy   string
 	HeroGold     string
 
-	HeroName string
+	HeroNameWithStats string
 
 	HeroClasses map[string]string
 	Errors      map[string]string
 }
 
-func (m *Messages) GetHeroName(hero *models.Hero) (string, error) {
-	heroClass, err := m.GetHeroClass(hero.Class)
-	if err != nil {
-		return "", err
-	}
-
+func (m *Messages) GetHeroNameWithStats(hero *models.Hero) string {
 	return fmt.Sprintf(
-		m.HeroName,
-		heroClass,
+		m.HeroNameWithStats,
+		hero.Name,
 		hero.CurrentHP,
 		hero.CurrentGold,
-	), nil
+	)
 }
 
 func (m *Messages) GetHeroClass(heroClass enums.HeroClass) (string, error) {
@@ -116,14 +112,19 @@ func (m *Messages) ClassInfo(heroClass enums.HeroClass) (string, error) {
 }
 
 func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
+	msg := fmt.Sprintf(
+		"%s\n\n%s: %s\n",
+		m.HeroOverview,
+		m.HeroName,
+		hero.Name,
+	)
+
 	heroClass, err := m.GetHeroClass(hero.Class)
 	if err != nil {
 		return "", err
 	}
-
-	msg := fmt.Sprintf(
-		"%s\n\n%s: %s\n",
-		m.HeroOverview,
+	msg += fmt.Sprintf(
+		"%s: %s\n",
 		m.HeroClass,
 		heroClass,
 	)

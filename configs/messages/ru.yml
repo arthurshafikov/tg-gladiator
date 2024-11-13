@@ -29,7 +29,8 @@ RU:
   HeroEnergy: "🏃‍♂️ Энергия"
   HeroGold: "🪙 Золото"
 
-  HeroName: "%s - ❤️ %v, 🪙 %v"
+  HeroName: "Имя"
+  HeroNameWithStats: "%s - ❤️ %v, 🪙 %v"
 
   HeroClasses:
     swordsman: "⚔️ Мечник"
