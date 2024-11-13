@@ -5,9 +5,9 @@ CREATE TABLE heroes (
     chat_id BIGINT NOT NULL,
     name VARCHAR(50) NOT NULL,
     class VARCHAR(20) NOT NULL,
-    current_hp BIGINT NOT NULL CHECK (current_hp >= 0),
-    current_energy BIGINT NOT NULL CHECK (current_energy >= 0),
-    current_gold BIGINT NOT NULL CHECK (current_gold >= 0),
+    current_hp INT NOT NULL CHECK (current_hp >= 0),
+    current_energy INT NOT NULL CHECK (current_energy >= 0),
+    current_gold INT NOT NULL CHECK (current_gold >= 0),
     created_at TIMESTAMP NULL DEFAULT NOW(),
 
     FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE
