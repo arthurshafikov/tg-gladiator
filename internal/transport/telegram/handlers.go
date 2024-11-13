@@ -43,6 +43,9 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 	case queries.HeroCreationSelectClass:
 		return b.queryHandler.HandleHeroCreationSelectClass(ctx, query, payload)
 
+	case queries.HeroDelete:
+		return b.queryHandler.HandleHeroDelete(ctx, query, payload)
+
 	default:
 		return errors.ErrUndefinedCallbackQuery
 	}

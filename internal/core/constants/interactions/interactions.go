@@ -7,6 +7,8 @@ import (
 type Interaction string
 
 const (
+	HeroDelete Interaction = "HeroDelete"
+
 	SpecialDelimeterForInteractions = "#_#"
 )
 

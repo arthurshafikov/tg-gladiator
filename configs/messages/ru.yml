@@ -2,11 +2,16 @@ RU:
   StartSuccess: "Успешный старт!"
   Help: "Помощь"
 
+  DeleteConfirmation: "Удалить"
+
   OpenedMenu: "Это меню"
   DefaultBackBtn: "Назад"
 
   MenuItemMyHeroes: "Мои герои"
   MyHeroesList: "Это лист ваших героев"
+
+  MenuItemDeleteHero: "❌ Удалить"
+  HeroDeleteConfirmationPrompt: "⚠️ Пожалуйста, подтвердите удаление героя %s, для подтверждения отправьте сообщением текст \"%s\", для отмены нажмите на кнопку Назад."
 
   HeroCreationStart: "➕ Создать"
   HeroCreationSelectClass: "Пожалуйста, выберите класс вашего героя, доступные классы:"

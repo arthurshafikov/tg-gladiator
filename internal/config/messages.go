@@ -16,11 +16,16 @@ type Messages struct {
 	StartSuccess string
 	Help         string
 
+	DeleteConfirmation string
+
 	OpenedMenu     string
 	DefaultBackBtn string
 
 	MenuItemMyHeroes string
 	MyHeroesList     string
+
+	MenuItemDeleteHero           string
+	HeroDeleteConfirmationPrompt string
 
 	HeroCreationStart       string
 	HeroCreationSelectClass string

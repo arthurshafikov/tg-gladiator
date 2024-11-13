@@ -14,6 +14,8 @@ const (
 	HeroCreationStart       Query = "HeroCreationStart"
 	HeroCreationSelectClass Query = "HeroCreationSelectClass"
 
+	HeroDelete Query = "HeroDelete"
+
 	Back Query = "Back"
 
 	SpecialDelimeterInQueryCallback = "#_#"

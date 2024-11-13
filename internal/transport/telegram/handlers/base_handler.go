@@ -71,12 +71,16 @@ func (h *BaseHandler) EditMessageOpenMenu(ctx *types.Context, message *tgbotapi.
 	return h.Helper.Send(msg)
 }
 
-func (h *BaseHandler) GetKeyboardWithBackButton(ctx *types.Context) *tgbotapi.InlineKeyboardMarkup {
-	keyboard := tgbotapi.InlineKeyboardMarkup{}
+func (h *BaseHandler) GetKeyboardWithBackButton(ctx *types.Context, backQuery ...queries.Query) *tgbotapi.InlineKeyboardMarkup {
+	query := queries.OpenMenu
+	if len(backQuery) > 0 {
+		query = backQuery[0]
+	}
 
+	keyboard := tgbotapi.InlineKeyboardMarkup{}
 	keyboard.InlineKeyboard = append(
 		keyboard.InlineKeyboard,
-		h.GetBackButtonKeyboardRow(ctx, queries.OpenMenu),
+		h.GetBackButtonKeyboardRow(ctx, query),
 	)
 
 	return &keyboard

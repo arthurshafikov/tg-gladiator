@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/interactions"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
@@ -93,6 +94,46 @@ func (h *Handler) HandleHeroCreationSelectClass(
 	)
 }
 
+func (h *Handler) HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	if err := h.ValidatePayloadLength(payload, 1); err != nil {
+		return err
+	}
+
+	heroID, err := h.GetIDFromString(payload[0])
+	if err != nil {
+		return err
+	}
+
+	hero, err := h.Services.Hero.FindMy(ctx, heroID)
+	if err != nil {
+		return err
+	}
+
+	if err := h.Services.Interactions.Set(ctx, interactions.HeroDelete.WithID(hero.ID)); err != nil {
+		return err
+	}
+
+	heroName, err := ctx.Messages().GetHeroName(hero)
+	if err != nil {
+		h.Logger.Error(err)
+
+		return errors.ErrServerError
+	}
+
+	msg := h.Helper.NewEditMessage(
+		ctx.GetChatID(),
+		query.Message.MessageID,
+		fmt.Sprintf(
+			ctx.Messages().HeroDeleteConfirmationPrompt,
+			heroName, // @todo name field in heroes table
+			ctx.Messages().DeleteConfirmation,
+		),
+	)
+	msg.ReplyMarkup = h.GetKeyboardWithBackButton(ctx, queries.OpenMyHero.WithID(hero.ID))
+
+	return h.Helper.Send(msg)
+}
+
 func (h *Handler) openMyHero(ctx *types.Context, query *tgbotapi.CallbackQuery, hero *models.Hero, startText string) error {
 	heroInfo, err := ctx.Messages().GetHeroInfo(hero)
 	if err != nil {
@@ -111,10 +152,14 @@ func (h *Handler) openMyHero(ctx *types.Context, query *tgbotapi.CallbackQuery, 
 		),
 	)
 
-	keyboardButtons := make([]telegram.KeyboardButton, 0, 1)
+	keyboardButtons := make([]telegram.KeyboardButton, 0, 2)
 
 	keyboardButtons = append(
 		keyboardButtons,
+		telegram.KeyboardButton{
+			CallbackQuery: queries.HeroDelete.WithID(hero.ID),
+			Text:          ctx.Messages().MenuItemDeleteHero,
+		},
 		telegram.KeyboardButton{
 			CallbackQuery: queries.OpenMyHeroes,
 			Text:          ctx.Messages().DefaultBackBtn,
