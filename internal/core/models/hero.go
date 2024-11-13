@@ -9,6 +9,7 @@ import (
 type Hero struct {
 	ID            int64           `gorm:"->" json:"id"`
 	ChatID        int64           `json:"chat_id"`
+	Name          string          `json:"name"`
 	Class         enums.HeroClass `json:"class"`
 	CurrentHP     int             `json:"current_hp"`
 	CurrentEnergy int             `json:"current_energy"`
