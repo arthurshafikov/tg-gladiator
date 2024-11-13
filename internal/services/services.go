@@ -34,6 +34,7 @@ type Interactions interface {
 
 type Hero interface {
 	Create(ctx *types.Context, class string) (*models.Hero, error)
+	DeleteMy(ctx *types.Context, id int64) error
 	FindMy(ctx *types.Context, id int64) (*models.Hero, error)
 }
 

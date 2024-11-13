@@ -42,6 +42,7 @@ type QueryHandler interface {
 }
 
 type InteractionHandler interface {
+	HandleHeroDelete(ctx *types.Context, message *tgbotapi.Message, payload []string) error
 }
 
 type NotificationsHandler interface {

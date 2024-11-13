@@ -26,6 +26,8 @@ type Messages struct {
 
 	MenuItemDeleteHero           string
 	HeroDeleteConfirmationPrompt string
+	HeroDeleteCancelled          string
+	HeroDeleteSuccessful         string
 
 	HeroCreationStart       string
 	HeroCreationSelectClass string

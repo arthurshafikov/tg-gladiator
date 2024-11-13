@@ -58,7 +58,11 @@ func (b *Bot) handleInteraction(
 ) error {
 	splittedData := strings.Split(string(*interaction), interactions.SpecialDelimeterForInteractions)
 
+	payload := splittedData[1:]
+
 	switch interactions.Interaction(splittedData[0]) {
+	case interactions.HeroDelete:
+		return b.interactionHandler.HandleHeroDelete(ctx, message, payload)
 	default:
 		return errors.ErrUndefinedInteraction
 	}

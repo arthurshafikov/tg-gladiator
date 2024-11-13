@@ -57,6 +57,25 @@ func (s *HeroService) Create(ctx *types.Context, class string) (*models.Hero, er
 	return hero, nil
 }
 
+func (s *HeroService) DeleteMy(ctx *types.Context, id int64) error {
+	hero, err := s.FindMy(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if err := s.repo.DeleteByID(ctx.GetContext(), hero.ID); err != nil {
+		if errors.Is(err, errors.ErrNotFound) {
+			return errors.ErrNotFound
+		}
+
+		s.logger.Error(err)
+
+		return errors.ErrServerError
+	}
+
+	return nil
+}
+
 func (s *HeroService) FindMy(ctx *types.Context, id int64) (*models.Hero, error) {
 	hero, err := s.repo.Find(ctx.GetContext(), id)
 	if err != nil {

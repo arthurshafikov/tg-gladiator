@@ -12,6 +12,8 @@ RU:
 
   MenuItemDeleteHero: "❌ Удалить"
   HeroDeleteConfirmationPrompt: "⚠️ Пожалуйста, подтвердите удаление героя %s, для подтверждения отправьте сообщением текст \"%s\", для отмены нажмите на кнопку Назад."
+  HeroDeleteCancelled: "Удаление героя было отменено."
+  HeroDeleteSuccessful: "❌ Герой был успешно удалён."
 
   HeroCreationStart: "➕ Создать"
   HeroCreationSelectClass: "Пожалуйста, выберите класс вашего героя, доступные классы:"

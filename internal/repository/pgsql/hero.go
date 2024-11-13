@@ -18,6 +18,28 @@ func NewHeroRepository(baseRepo BaseRepo) *Hero {
 	}
 }
 
+func (r *Hero) Create(ctx context.Context, hero models.Hero) (*models.Hero, error) {
+	if err := r.getDBInstance(ctx).Create(&hero).Error; err != nil {
+		return nil, err
+	}
+
+	return &hero, nil
+}
+
+func (r *Hero) DeleteByID(ctx context.Context, id int64) error {
+	if err := r.getDBInstance(ctx).Delete(&models.Hero{
+		ID: id,
+	}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.ErrNotFound
+		}
+
+		return err
+	}
+
+	return nil
+}
+
 func (r *Hero) Find(ctx context.Context, id int64) (*models.Hero, error) {
 	fields := &models.Hero{
 		ID: id,
@@ -54,14 +76,6 @@ func (r *Hero) GetBy(ctx context.Context, fields *models.Hero) (*[]models.Hero, 
 	}
 
 	return &heroes, nil
-}
-
-func (r *Hero) Create(ctx context.Context, hero models.Hero) (*models.Hero, error) {
-	if err := r.getDBInstance(ctx).Create(&hero).Error; err != nil {
-		return nil, err
-	}
-
-	return &hero, nil
 }
 
 func (r *Hero) Update(ctx context.Context, id int64, fields *models.Hero) (*models.Hero, error) {
