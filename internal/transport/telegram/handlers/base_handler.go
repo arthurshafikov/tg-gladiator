@@ -7,7 +7,9 @@ import (
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"github.com/arthurshafikov/tg-gladiator/internal/services"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -118,4 +120,47 @@ func (h *BaseHandler) GetIDFromString(str string) (int64, error) {
 	}
 
 	return IDInt64, nil
+}
+
+func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ...*tgbotapi.CallbackQuery) error {
+	heroInfo, err := ctx.Messages().GetHeroInfo(hero)
+	if err != nil {
+		h.Logger.Error(err)
+
+		return errors.ErrServerError
+	}
+
+	keyboardButtons := make([]telegram.KeyboardButton, 0, 2)
+
+	keyboardButtons = append(
+		keyboardButtons,
+		telegram.KeyboardButton{
+			CallbackQuery: queries.HeroDelete.WithID(hero.ID),
+			Text:          ctx.Messages().MenuItemDeleteHero,
+		},
+		telegram.KeyboardButton{
+			CallbackQuery: queries.OpenMyHeroes,
+			Text:          ctx.Messages().DefaultBackBtn,
+		},
+	)
+	keyboard := h.Helper.CreateKeyboard(keyboardButtons, 1)
+
+	if len(query) > 0 {
+		msg := h.Helper.NewEditMessage(
+			ctx.GetChatID(),
+			query[0].Message.MessageID,
+			heroInfo,
+		)
+		msg.ReplyMarkup = keyboard
+
+		return h.Helper.Send(msg)
+	} else {
+		msg := h.Helper.NewMessage(
+			ctx.GetChatID(),
+			heroInfo,
+		)
+		msg.ReplyMarkup = keyboard
+
+		return h.Helper.Send(msg)
+	}
 }

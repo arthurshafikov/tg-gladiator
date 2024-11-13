@@ -32,3 +32,19 @@ func (h *Handler) HandleHeroDelete(ctx *types.Context, message *tgbotapi.Message
 
 	return h.OpenNewMenu(ctx)
 }
+
+func (h *Handler) HandleHeroCreationEnterName(ctx *types.Context, message *tgbotapi.Message, payload []string) error {
+	hero, err := h.Services.Hero.Create(ctx, message.Text, payload[0])
+	if err != nil {
+		return err
+	}
+
+	if err := h.Helper.SendTextMessage(ctx.GetChatID(), ctx.Messages().HeroCreationSuccess); err != nil {
+		return err
+	}
+
+	return h.OpenMyHero(
+		ctx,
+		hero,
+	)
+}

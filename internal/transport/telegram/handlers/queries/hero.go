@@ -8,7 +8,6 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
-	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -28,11 +27,10 @@ func (h *Handler) HandleOpenMyHero(ctx *types.Context, query *tgbotapi.CallbackQ
 		return err
 	}
 
-	return h.openMyHero(
+	return h.OpenMyHero(
 		ctx,
-		query,
 		hero,
-		ctx.Messages().HeroOverview,
+		query,
 	)
 }
 
@@ -81,17 +79,14 @@ func (h *Handler) HandleHeroCreationSelectClass(
 		return err
 	}
 
-	hero, err := h.Services.Hero.Create(ctx, payload[0])
-	if err != nil {
+	if err := h.Services.Interactions.Set(ctx, interactions.HeroCreationEnterName.With(payload[0])); err != nil {
 		return err
 	}
 
-	return h.openMyHero(
-		ctx,
-		query,
-		hero,
-		ctx.Messages().HeroCreationSuccess,
-	)
+	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, ctx.Messages().HeroCreationEnterNamePrompt)
+	msg.ReplyMarkup = h.GetKeyboardWithBackButton(ctx, queries.OpenMyHeroes)
+
+	return h.Helper.Send(msg)
 }
 
 func (h *Handler) HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
@@ -130,42 +125,6 @@ func (h *Handler) HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQ
 		),
 	)
 	msg.ReplyMarkup = h.GetKeyboardWithBackButton(ctx, queries.OpenMyHero.WithID(hero.ID))
-
-	return h.Helper.Send(msg)
-}
-
-func (h *Handler) openMyHero(ctx *types.Context, query *tgbotapi.CallbackQuery, hero *models.Hero, startText string) error {
-	heroInfo, err := ctx.Messages().GetHeroInfo(hero)
-	if err != nil {
-		h.Logger.Error(err)
-
-		return errors.ErrServerError
-	}
-
-	msg := h.Helper.NewEditMessage(
-		ctx.GetChatID(),
-		query.Message.MessageID,
-		fmt.Sprintf(
-			"%s\n\n%s",
-			startText,
-			heroInfo,
-		),
-	)
-
-	keyboardButtons := make([]telegram.KeyboardButton, 0, 2)
-
-	keyboardButtons = append(
-		keyboardButtons,
-		telegram.KeyboardButton{
-			CallbackQuery: queries.HeroDelete.WithID(hero.ID),
-			Text:          ctx.Messages().MenuItemDeleteHero,
-		},
-		telegram.KeyboardButton{
-			CallbackQuery: queries.OpenMyHeroes,
-			Text:          ctx.Messages().DefaultBackBtn,
-		},
-	)
-	msg.ReplyMarkup = h.Helper.CreateKeyboard(keyboardButtons, 1)
 
 	return h.Helper.Send(msg)
 }

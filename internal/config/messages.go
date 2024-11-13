@@ -29,8 +29,9 @@ type Messages struct {
 	HeroDeleteCancelled          string
 	HeroDeleteSuccessful         string
 
-	HeroCreationStart       string
-	HeroCreationSelectClass string
+	HeroCreationStart           string
+	HeroCreationSelectClass     string
+	HeroCreationEnterNamePrompt string
 
 	HeroCreationSuccess string
 
@@ -121,7 +122,8 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	}
 
 	msg := fmt.Sprintf(
-		"%s: %s\n",
+		"%s\n\n%s: %s\n",
+		m.HeroOverview,
 		m.HeroClass,
 		heroClass,
 	)

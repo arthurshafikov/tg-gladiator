@@ -42,6 +42,7 @@ type QueryHandler interface {
 }
 
 type InteractionHandler interface {
+	HandleHeroCreationEnterName(ctx *types.Context, message *tgbotapi.Message, payload []string) error
 	HandleHeroDelete(ctx *types.Context, message *tgbotapi.Message, payload []string) error
 }
 

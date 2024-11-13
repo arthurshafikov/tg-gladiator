@@ -2,6 +2,7 @@ package errors
 
 import (
 	"errors"
+	"fmt"
 )
 
 var (
@@ -16,8 +17,13 @@ var (
 	ErrUndefinedCallbackQuery = errors.New("undefined_callbackQuery")
 
 	ErrInvalidHeroClass = errors.New("invalid_hero_class")
+	ErrEmpty            = errors.New("empty")
 )
 
 func Is(err, target error) bool {
 	return errors.Is(err, target)
+}
+
+func ErrTooLong(maximumSymbols int) error {
+	return fmt.Errorf("too_long:%v", maximumSymbols)
 }

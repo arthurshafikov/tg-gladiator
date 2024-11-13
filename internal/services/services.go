@@ -33,7 +33,7 @@ type Interactions interface {
 }
 
 type Hero interface {
-	Create(ctx *types.Context, class string) (*models.Hero, error)
+	Create(ctx *types.Context, name, class string) (*models.Hero, error)
 	DeleteMy(ctx *types.Context, id int64) error
 	FindMy(ctx *types.Context, id int64) (*models.Hero, error)
 }
@@ -57,13 +57,15 @@ type Deps struct {
 }
 
 func NewServices(deps Deps) *Services {
+	validatorService := newValidatorService(deps.Logger)
+
 	return &Services{
 		Chat: newChatService(
 			deps.Logger,
 			deps.Repository.Chat,
 		),
 		Interactions: newInteractionService(deps.Logger, deps.Repository.Chat),
-		Hero:         newHeroService(deps.Logger, deps.Repository.Hero),
+		Hero:         newHeroService(deps.Logger, deps.Repository.Hero, validatorService),
 		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
 	}
 }

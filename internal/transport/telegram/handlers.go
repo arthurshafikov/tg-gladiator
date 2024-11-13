@@ -61,6 +61,9 @@ func (b *Bot) handleInteraction(
 	payload := splittedData[1:]
 
 	switch interactions.Interaction(splittedData[0]) {
+	case interactions.HeroCreationEnterName:
+		return b.interactionHandler.HandleHeroCreationEnterName(ctx, message, payload)
+
 	case interactions.HeroDelete:
 		return b.interactionHandler.HandleHeroDelete(ctx, message, payload)
 	default:

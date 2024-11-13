@@ -16,19 +16,28 @@ const (
 type HeroService struct {
 	logger Logger
 	repo   repository.Hero
+
+	validatorService *ValidatorService
 }
 
 func newHeroService(
 	logger Logger,
 	repo repository.Hero,
+	validatorService *ValidatorService,
 ) *HeroService {
 	return &HeroService{
-		logger: logger,
-		repo:   repo,
+		logger:           logger,
+		repo:             repo,
+		validatorService: validatorService,
 	}
 }
 
-func (s *HeroService) Create(ctx *types.Context, class string) (*models.Hero, error) {
+func (s *HeroService) Create(ctx *types.Context, name, class string) (*models.Hero, error) {
+	name, err := s.validatorService.SanitizeHeroName(name)
+	if err != nil {
+		return nil, err
+	}
+
 	heroClass, err := enums.GetHeroClass(class)
 	if err != nil {
 		return nil, err
@@ -43,6 +52,7 @@ func (s *HeroService) Create(ctx *types.Context, class string) (*models.Hero, er
 
 	hero, err := s.repo.Create(ctx.GetContext(), models.Hero{
 		ChatID:        ctx.GetChat().ID,
+		Name:          name,
 		Class:         heroClass,
 		CurrentHP:     startHP,
 		CurrentEnergy: StartEnergy,
