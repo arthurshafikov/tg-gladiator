@@ -11,26 +11,26 @@ import (
 )
 
 type TournamentFightService struct {
-	logger      Logger
-	repo        repository.Fight
-	heroService *HeroService
+	logger       Logger
+	repo         repository.Fight
+	heroService  *HeroService
+	enemyService *EnemyService
 }
 
-func newTournamentFightService(logger Logger, repo repository.Fight, heroService *HeroService) *TournamentFightService {
+func newTournamentFightService(logger Logger, repo repository.Fight, heroService *HeroService, enemyService *EnemyService) *TournamentFightService {
 	return &TournamentFightService{
-		logger:      logger,
-		repo:        repo,
-		heroService: heroService,
+		logger:       logger,
+		repo:         repo,
+		heroService:  heroService,
+		enemyService: enemyService,
 	}
 }
 
 func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*models.Fight, error) {
-	// enemy, err := s.enemyService.GetRandomEnemy(ctx)
-	// if err != nil {
-	// 	return err
-	// }
-	// @todo
-	enemy := models.Enemy{}
+	enemy, err := s.enemyService.getRandomEnemy(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	hero, err := s.heroService.FindMy(ctx, heroID)
 	if err != nil {

@@ -39,10 +39,19 @@ type Fight interface {
 	// UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Chat, error)
 }
 
+type Enemy interface {
+	Find(ctx context.Context, id int64) (*models.Enemy, error)
+	FindBy(ctx context.Context, fields *models.Enemy) (*models.Enemy, error)
+	GetBy(ctx context.Context, fields *models.Enemy) (*[]models.Enemy, error)
+	// Update(ctx context.Context, id int64, fields *models.Chat) (*models.Chat, error)
+	// UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Chat, error)
+}
+
 type Repository struct {
 	Chat
 	Hero
 	Fight
+	Enemy
 }
 
 func NewRepository(db *gorm.DB) *Repository {
@@ -52,5 +61,6 @@ func NewRepository(db *gorm.DB) *Repository {
 		Chat:  pgsql.NewChatRepository(*baseRepo),
 		Hero:  pgsql.NewHeroRepository(*baseRepo),
 		Fight: pgsql.NewFightRepository(*baseRepo),
+		Enemy: pgsql.NewEnemyRepository(*baseRepo),
 	}
 }
