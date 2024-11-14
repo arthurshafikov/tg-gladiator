@@ -132,8 +132,18 @@ func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ..
 
 	keyboardButtons := make([]telegram.KeyboardButton, 0, 2)
 
+	// @todo add btn Go Fight?
+	// on btn - select random enemy from enemies table
+	// create a row in fights table with status ongoing
+	// affect hp on punch + add enemy punching
+	// add defeat message
+
 	keyboardButtons = append(
 		keyboardButtons,
+		telegram.KeyboardButton{
+			CallbackQuery: queries.StartTournamentFight.WithID(hero.ID),
+			Text:          ctx.Messages().MenuItemStartTournamentFight,
+		},
 		telegram.KeyboardButton{
 			CallbackQuery: queries.HeroDelete.WithID(hero.ID),
 			Text:          ctx.Messages().MenuItemDeleteHero,

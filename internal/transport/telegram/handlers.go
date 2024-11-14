@@ -20,8 +20,6 @@ func (b *Bot) handleCommand(ctx *types.Context, message *tgbotapi.Message) error
 	default:
 		return errors.ErrUndefinedCommand
 	}
-
-	return nil
 }
 
 //nolint:funlen,gocyclo
@@ -42,6 +40,9 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 		return b.queryHandler.HandleHeroCreationStart(ctx, query)
 	case queries.HeroCreationSelectClass:
 		return b.queryHandler.HandleHeroCreationSelectClass(ctx, query, payload)
+
+	case queries.StartTournamentFight:
+		return b.queryHandler.HandleStartTournamentFIght(ctx, query, payload)
 
 	case queries.HeroDelete:
 		return b.queryHandler.HandleHeroDelete(ctx, query, payload)

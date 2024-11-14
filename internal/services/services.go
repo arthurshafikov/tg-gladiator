@@ -42,11 +42,16 @@ type Heroes interface {
 	GetMy(ctx *types.Context) (*[]models.Hero, error)
 }
 
+type TournamentFight interface {
+	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
+}
+
 type Services struct {
 	Chat
 	Interactions
 	Hero
 	Heroes
+	TournamentFight
 }
 
 type Deps struct {
@@ -59,13 +64,16 @@ type Deps struct {
 func NewServices(deps Deps) *Services {
 	validatorService := newValidatorService(deps.Logger)
 
+	heroService := newHeroService(deps.Logger, deps.Repository.Hero, validatorService)
+
 	return &Services{
 		Chat: newChatService(
 			deps.Logger,
 			deps.Repository.Chat,
 		),
-		Interactions: newInteractionService(deps.Logger, deps.Repository.Chat),
-		Hero:         newHeroService(deps.Logger, deps.Repository.Hero, validatorService),
-		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
+		Interactions:    newInteractionService(deps.Logger, deps.Repository.Chat),
+		Hero:            heroService,
+		Heroes:          newHeroesService(deps.Logger, deps.Repository.Hero),
+		TournamentFight: newTournamentFightService(deps.Logger, deps.Repository.Fight, heroService),
 	}
 }

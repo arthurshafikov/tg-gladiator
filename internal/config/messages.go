@@ -24,6 +24,7 @@ type Messages struct {
 	MenuItemMyHeroes string
 	MyHeroesList     string
 
+	MenuItemStartTournamentFight string
 	MenuItemDeleteHero           string
 	HeroDeleteConfirmationPrompt string
 	HeroDeleteCancelled          string

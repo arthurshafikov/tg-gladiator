@@ -38,6 +38,8 @@ type QueryHandler interface {
 	HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.CallbackQuery) error
 	HandleHeroCreationSelectClass(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
+	HandleStartTournamentFIght(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+
 	HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 }
 

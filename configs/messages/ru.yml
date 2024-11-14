@@ -10,6 +10,7 @@ RU:
   MenuItemMyHeroes: "Мои герои"
   MyHeroesList: "Это лист ваших героев"
 
+  MenuItemStartTournamentFight: "Учавствовать в Турнире"
   MenuItemDeleteHero: "❌ Удалить"
   HeroDeleteConfirmationPrompt: "⚠️ Пожалуйста, подтвердите удаление героя %s, для подтверждения отправьте сообщением текст '<code>%s</code>', для отмены нажмите на кнопку Назад."
   HeroDeleteCancelled: "Удаление героя было отменено."

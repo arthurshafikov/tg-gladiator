@@ -14,6 +14,8 @@ const (
 	HeroCreationStart       Query = "HeroCreationStart"
 	HeroCreationSelectClass Query = "HeroCreationSelectClass"
 
+	StartTournamentFight Query = "StartTournamentFight"
+
 	HeroDelete Query = "HeroDelete"
 
 	Back Query = "Back"
