@@ -26,7 +26,7 @@ RU:
   HeroClass: "Класс"
   HeroAttack: "💪 Атака"
   HeroDefense: "🛡 Защита"
-  HeroCriticalChancePercent: "🍀 Шанс критического урона"
+  HeroCriticalChancePercent: "💥 Шанс критического урона"
   HeroEvasionChancePercent: "🍀 Шанс уворота"
   HP: "❤️ Здоровье"
   HeroEnergy: "🏃‍♂️ Энергия"
@@ -38,6 +38,8 @@ RU:
   FightOverview: "⚔️ Битва ⚔️ \nВаш герой: %s\nПротивник: %s\n\n"
   FightStatistics: "Статистика боя"
   FightChooseAction: "Выберите действие:"
+  FightActionRunAway: "🏃 Убежать"
+  FightRunAwaySuccess: "Вы успешно сбежали 🏃"
 
   HeroClasses:
     swordsman: "⚔️ Мечник"

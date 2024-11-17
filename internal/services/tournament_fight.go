@@ -60,3 +60,31 @@ func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*mode
 
 	return fight, nil
 }
+func (s *TournamentFightService) FindByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error) {
+	fight, err := s.repo.FindBy(ctx.GetContext(), &models.Fight{
+		HeroID: heroID,
+	})
+	if err != nil {
+		if errors.Is(err, errors.ErrNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		s.logger.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	return fight, nil
+}
+
+func (s *TournamentFightService) RunAwayAsHero(ctx *types.Context, fightID int64) error {
+	if _, err := s.repo.Update(ctx.GetContext(), fightID, &models.Fight{
+		Status: enums.FightStatusFleed,
+	}); err != nil {
+		s.logger.Error(err)
+
+		return errors.ErrServerError
+	}
+
+	return nil
+}

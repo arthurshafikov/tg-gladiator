@@ -1,6 +1,8 @@
 package queries
 
 import (
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -31,7 +33,14 @@ func (h *Handler) HandleStartTournamentFIght(ctx *types.Context, query *tgbotapi
 
 	// @todo
 	// show buttons (punch, run away)
-	// msg.ReplyMarkup =
+	buttons := []telegram.KeyboardButton{
+		{
+			CallbackQuery: queries.OpenMyHero.WithID(heroID),
+			Text: ctx.Messages().FightActionRunAway,
+		},
+	}
+
+	msg.ReplyMarkup = h.Helper.CreateKeyboard(buttons, 1)
 
 	return h.Helper.Send(msg)
 }

@@ -44,6 +44,8 @@ type Heroes interface {
 
 type TournamentFight interface {
 	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
+	FindByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error)
+	RunAwayAsHero(ctx *types.Context, fightID int64) error
 }
 
 type Services struct {

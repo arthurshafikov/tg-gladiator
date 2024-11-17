@@ -49,9 +49,11 @@ type Messages struct {
 
 	HeroNameWithStats string
 
-	FightOverview     string
-	FightStatistics   string
-	FightChooseAction string
+	FightOverview       string
+	FightStatistics     string
+	FightChooseAction   string
+	FightActionRunAway  string
+	FightRunAwaySuccess string
 
 	HeroClasses map[string]string
 	Errors      map[string]string

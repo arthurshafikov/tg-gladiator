@@ -34,8 +34,8 @@ type Hero interface {
 type Fight interface {
 	Create(ctx context.Context, fight models.Fight) (*models.Fight, error)
 	Find(ctx context.Context, id int64) (*models.Fight, error)
-	// FindBy(ctx context.Context, fields *models.Chat) (*models.Chat, error)
-	// Update(ctx context.Context, id int64, fields *models.Chat) (*models.Chat, error)
+	FindBy(ctx context.Context, fields *models.Fight) (*models.Fight, error)
+	Update(ctx context.Context, id int64, fields *models.Fight) (*models.Fight, error)
 	// UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Chat, error)
 }
 
