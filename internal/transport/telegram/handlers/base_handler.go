@@ -123,7 +123,7 @@ func (h *BaseHandler) GetIDFromString(str string) (int64, error) {
 }
 
 func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ...*tgbotapi.CallbackQuery) error {
-	ended, err := h.endExistingFightIfExist(ctx, hero, query...)
+	ended, err := h.endExistingActiveFightIfExist(ctx, hero, query...)
 	if err != nil {
 		return err
 	}
@@ -181,8 +181,8 @@ func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ..
 	}
 }
 
-func (h *BaseHandler) endExistingFightIfExist(ctx *types.Context, hero *models.Hero, query ...*tgbotapi.CallbackQuery) (bool, error) {
-	fight, err := h.Services.TournamentFight.FindByHeroID(ctx, hero.ID)
+func (h *BaseHandler) endExistingActiveFightIfExist(ctx *types.Context, hero *models.Hero, query ...*tgbotapi.CallbackQuery) (bool, error) {
+	fight, err := h.Services.TournamentFight.FindActiveByHeroID(ctx, hero.ID)
 	if err != nil {
 		if errors.Is(err, errors.ErrNotFound) {
 			return false, nil

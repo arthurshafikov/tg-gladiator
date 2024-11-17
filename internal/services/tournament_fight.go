@@ -60,9 +60,11 @@ func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*mode
 
 	return fight, nil
 }
-func (s *TournamentFightService) FindByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error) {
+
+func (s *TournamentFightService) FindActiveByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error) {
 	fight, err := s.repo.FindBy(ctx.GetContext(), &models.Fight{
 		HeroID: heroID,
+		Status: enums.FightStatusActive,
 	})
 	if err != nil {
 		if errors.Is(err, errors.ErrNotFound) {
