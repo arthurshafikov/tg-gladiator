@@ -16,3 +16,34 @@ type Enemy struct {
 func (Enemy) TableName() string {
 	return "enemies"
 }
+
+func (h *Enemy) GetID() int64 {
+	return h.ID
+}
+
+func (h *Enemy) GetName() string {
+	return h.Name
+}
+
+func (h *Enemy) GetHP() int {
+	return h.HP
+}
+
+func (h *Enemy) GetMinAttack() int {
+	return h.MinAttack
+}
+
+func (h *Enemy) GetMaxAttack() int {
+	return h.MaxAttack
+}
+
+func (h *Enemy) GetDefense() int {
+	return h.Defense
+}
+func (h *Enemy) GetCriticalChancePercent() int {
+	return h.CriticalChancePercent
+}
+
+func (h *Enemy) GetEvasionChancePercent() int {
+	return h.EvasionChancePercent
+}

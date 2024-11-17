@@ -43,12 +43,7 @@ func (s *HeroService) Create(ctx *types.Context, name, class string) (*models.He
 		return nil, err
 	}
 
-	classCharacteristics, err := heroClass.GetCharacteristics()
-	if err != nil {
-		s.logger.Error(err)
-
-		return nil, errors.ErrServerError
-	}
+	classCharacteristics := heroClass.GetCharacteristics()
 
 	hero, err := s.repo.Create(ctx.GetContext(), models.Hero{
 		ChatID:        ctx.GetChat().ID,

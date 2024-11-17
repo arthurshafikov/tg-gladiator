@@ -40,7 +40,7 @@ type classCharacteristics struct {
 	StartHP               int
 }
 
-func (hc HeroClass) GetCharacteristics() (*classCharacteristics, error) {
+func (hc HeroClass) GetCharacteristics() *classCharacteristics {
 	switch hc {
 	case Swordsman:
 		return &classCharacteristics{
@@ -49,8 +49,8 @@ func (hc HeroClass) GetCharacteristics() (*classCharacteristics, error) {
 			CriticalChancePercent: 10,
 			EvasionChancePercent:  5,
 			StartHP:               100,
-		}, nil
+		}
 	default:
-		return nil, fmt.Errorf("undefined class for characteristics: '%s'", hc.ToString())
+		panic(fmt.Errorf("undefined class for characteristics: '%s'", hc.ToString()))
 	}
 }

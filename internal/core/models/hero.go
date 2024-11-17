@@ -20,3 +20,35 @@ type Hero struct {
 func (Hero) TableName() string {
 	return "heroes"
 }
+
+func (h *Hero) GetID() int64 {
+	return h.ID
+}
+
+func (h *Hero) GetName() string {
+	return h.Name
+}
+
+func (h *Hero) GetHP() int {
+	return h.CurrentHP
+}
+
+func (h *Hero) GetMinAttack() int {
+	return h.Class.GetCharacteristics().Attack
+}
+
+func (h *Hero) GetMaxAttack() int {
+	return h.Class.GetCharacteristics().Attack
+}
+
+func (h *Hero) GetDefense() int {
+	return h.Class.GetCharacteristics().Defense
+}
+
+func (h *Hero) GetCriticalChancePercent() int {
+	return h.Class.GetCharacteristics().CriticalChancePercent
+}
+
+func (h *Hero) GetEvasionChancePercent() int {
+	return h.Class.GetCharacteristics().EvasionChancePercent
+}

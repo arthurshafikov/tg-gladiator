@@ -43,11 +43,15 @@ type Messages struct {
 	HeroDefense               string
 	HeroCriticalChancePercent string
 	HeroEvasionChancePercent  string
-	HeroHP                    string
+	HP                        string
 	HeroEnergy                string
 	HeroGold                  string
 
 	HeroNameWithStats string
+
+	FightOverview     string
+	FightStatistics   string
+	FightChooseAction string
 
 	HeroClasses map[string]string
 	Errors      map[string]string
@@ -81,10 +85,7 @@ func (m *Messages) ClassInfo(heroClass enums.HeroClass) (string, error) {
 		m.HeroClasses[heroClass.ToString()],
 	)
 
-	classCharacteristics, err := heroClass.GetCharacteristics()
-	if err != nil {
-		return "", err
-	}
+	classCharacteristics := heroClass.GetCharacteristics()
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
@@ -100,7 +101,7 @@ func (m *Messages) ClassInfo(heroClass enums.HeroClass) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.HeroHP,
+		m.HP,
 		classCharacteristics.StartHP,
 	)
 
@@ -131,10 +132,7 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	classCharacteristics, err := hero.Class.GetCharacteristics()
-	if err != nil {
-		return "", err
-	}
+	classCharacteristics := hero.Class.GetCharacteristics()
 
 	msg += fmt.Sprintf(
 		"%s: %s\n",
@@ -156,7 +154,7 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.HeroHP,
+		m.HP,
 		hero.CurrentHP,
 	)
 
@@ -185,4 +183,67 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	)
 
 	return msg, nil
+}
+
+func (m *Messages) FightInfo(fight *models.Fight) (string, error) {
+	if fight.Hero == nil || fight.Opponent == nil {
+		return "", fmt.Errorf("hero or enemy is null in FightInfo(), fight id: %v", fight.ID)
+	}
+
+	msg := fmt.Sprintf(
+		m.FightOverview,
+		fight.Hero.Name,
+		fight.Opponent.GetName(),
+	)
+
+	msg += fmt.Sprintf(
+		"%s:\n\n%s 👤:\n%s\n\n%s:\n%s",
+		m.FightStatistics,
+		fight.Hero.Name,
+		m.GetFightStatistics(fight, fight.Hero),
+		fight.Opponent.GetName(),
+		m.GetFightStatistics(fight, fight.Opponent),
+	)
+
+	msg += fmt.Sprintf("\n%s", m.FightChooseAction)
+
+	return msg, nil
+}
+
+func (m *Messages) GetFightStatistics(fight *models.Fight, fighter models.Fighter) string {
+	msg := ""
+
+	msg += fmt.Sprintf(
+		"%s: %v/%v\n",
+		m.HP,
+		fight.GetCurrentHPFor(fighter),
+		fighter.GetHP(),
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v-%v\n",
+		m.HeroAttack, // @todo rename
+		fighter.GetMinAttack(),
+		fighter.GetMaxAttack(),
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v\n",
+		m.HeroDefense, // @todo rename
+		fighter.GetDefense(),
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v%%\n",
+		m.HeroCriticalChancePercent, // @todo rename
+		fighter.GetCriticalChancePercent(),
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v%%\n",
+		m.HeroEvasionChancePercent, // @todo rename
+		fighter.GetEvasionChancePercent(),
+	)
+
+	return msg
 }

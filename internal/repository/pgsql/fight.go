@@ -30,6 +30,7 @@ func (r *Fight) Find(ctx context.Context, id int64) (*models.Fight, error) {
 func (r *Fight) FindBy(ctx context.Context, fields *models.Fight) (*models.Fight, error) {
 	var fight models.Fight
 	if err := r.getDBInstance(ctx).
+		Preload("Hero").
 		Where(fields).
 		First(&fight).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -37,6 +38,21 @@ func (r *Fight) FindBy(ctx context.Context, fields *models.Fight) (*models.Fight
 		}
 
 		return nil, err
+	}
+
+	if fight.OpponentType == enums.OpponentTypeMob {
+		enemy := models.Enemy{
+			ID: fight.OpponentID,
+		}
+		if err := r.getDBInstance(ctx).Find(&enemy).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return nil, errors.ErrNotFound
+			}
+
+			return nil, err
+		}
+
+		fight.Opponent = &enemy
 	}
 
 	return &fight, nil
@@ -57,7 +73,12 @@ func (r *Fight) Create(ctx context.Context, fight models.Fight) (*models.Fight, 
 		return nil, err
 	}
 
-	return &fight, nil
+	fightWithAllData, err := r.Find(ctx, fight.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return fightWithAllData, nil
 }
 
 func (r *Fight) Update(ctx context.Context, id int64, fields *models.Fight) (*models.Fight, error) {

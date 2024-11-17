@@ -28,12 +28,16 @@ RU:
   HeroDefense: "🛡 Защита"
   HeroCriticalChancePercent: "🍀 Шанс критического урона"
   HeroEvasionChancePercent: "🍀 Шанс уворота"
-  HeroHP: "❤️ Здоровье"
+  HP: "❤️ Здоровье"
   HeroEnergy: "🏃‍♂️ Энергия"
   HeroGold: "🪙 Золото"
 
   HeroName: "Имя"
   HeroNameWithStats: "%s - ❤️ %v, 🪙 %v"
+
+  FightOverview: "⚔️ Битва ⚔️ \nВаш герой: %s\nПротивник: %s\n\n"
+  FightStatistics: "Статистика боя"
+  FightChooseAction: "Выберите действие:"
 
   HeroClasses:
     swordsman: "⚔️ Мечник"

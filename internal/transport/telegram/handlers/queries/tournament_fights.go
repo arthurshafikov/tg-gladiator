@@ -1,6 +1,7 @@
 package queries
 
 import (
+	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -15,13 +16,18 @@ func (h *Handler) HandleStartTournamentFIght(ctx *types.Context, query *tgbotapi
 		return err
 	}
 
-	_, err = h.Services.TournamentFight.Create(ctx, heroID)
+	fight, err := h.Services.TournamentFight.Create(ctx, heroID)
 	if err != nil {
 		return err
 	}
 
-	// @todo show a fight window (stats for both sides)
-	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, "") //ctx.Messages().FightInfo(fight))
+	msgText, err := ctx.Messages().FightInfo(fight)
+	if err != nil {
+		h.Logger.Error(err)
+
+		return errors.ErrServerError
+	}
+	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, msgText)
 
 	// @todo
 	// show buttons (punch, run away)

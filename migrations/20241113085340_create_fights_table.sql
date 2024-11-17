@@ -6,16 +6,19 @@ CREATE TABLE fights (
     hero_id BIGINT NOT NULL,
     opponent_type VARCHAR(20) NOT NULL,
     opponent_id BIGINT NOT NULL,
-    hero_hp INT NOT NULL CHECK (hero_hp >= 0)
-    opponent_hp INT NOT NULL CHECK (opponent_hp >= 0)
+    hero_hp INT NOT NULL CHECK (hero_hp >= 0),
+    opponent_hp INT NOT NULL CHECK (opponent_hp >= 0),
     
     created_at TIMESTAMP NULL DEFAULT NOW(),
 
     FOREIGN KEY (hero_id) REFERENCES heroes(id) ON DELETE CASCADE
 );
+
+CREATE UNIQUE INDEX only_one_active_fight_for_a_hero ON fights (hero_id) WHERE (status = 'active');
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
+DROP INDEX only_one_active_fight_for_a_hero;
 DROP TABLE fights;
 -- +goose StatementEnd
