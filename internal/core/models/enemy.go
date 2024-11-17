@@ -1,5 +1,7 @@
 package models
 
+import "github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+
 type Enemy struct {
 	ID                    int64  `gorm:"->" json:"id"`
 	Name                  string `json:"name"`
@@ -17,8 +19,8 @@ func (Enemy) TableName() string {
 	return "enemies"
 }
 
-func (h *Enemy) GetID() int64 {
-	return h.ID
+func (h *Enemy) GetType() string {
+	return enums.FighterTypeOpponent
 }
 
 func (h *Enemy) GetName() string {

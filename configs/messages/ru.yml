@@ -30,14 +30,15 @@ RU:
   HeroEvasionChancePercent: "🍀 Шанс уворота"
   HP: "❤️ Здоровье"
   HeroEnergy: "🏃‍♂️ Энергия"
-  HeroGold: "🪙 Золото"
+  HeroGold: "💰 Золото"
 
   HeroName: "Имя"
-  HeroNameWithStats: "%s - ❤️ %v, 🪙 %v"
+  HeroNameWithStats: "%s - ❤️ %v, 💰 %v"
 
   FightOverview: "⚔️ Битва ⚔️ \nВаш герой: %s\nПротивник: %s\n\n"
   FightStatistics: "Статистика боя"
   FightChooseAction: "Выберите действие:"
+  FightActionPunch: "👊 Ударить"
   FightActionRunAway: "🏃 Убежать"
   FightRunAwaySuccess: "Вы успешно сбежали 🏃"
 

@@ -6,4 +6,7 @@ const (
 	FightStatusEnded  = "ended"
 
 	OpponentTypeMob = "mob"
+
+	FighterTypeHero     = "hero"
+	FighterTypeOpponent = "opponent"
 )

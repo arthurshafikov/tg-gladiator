@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 )
 
 type Fight struct {
@@ -19,7 +21,7 @@ type Fight struct {
 }
 
 func (f *Fight) GetCurrentHPFor(fighter Fighter) int {
-	if fighter.GetID() == f.HeroID {
+	if fighter.GetType() == enums.FighterTypeHero {
 		return f.HeroHP
 	}
 
@@ -27,7 +29,7 @@ func (f *Fight) GetCurrentHPFor(fighter Fighter) int {
 }
 
 type Fighter interface {
-	GetID() int64
+	GetType() string
 	GetName() string
 	GetHP() int
 	GetMinAttack() int

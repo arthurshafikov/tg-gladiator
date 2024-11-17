@@ -52,6 +52,7 @@ type Messages struct {
 	FightOverview       string
 	FightStatistics     string
 	FightChooseAction   string
+	FightActionPunch    string
 	FightActionRunAway  string
 	FightRunAwaySuccess string
 

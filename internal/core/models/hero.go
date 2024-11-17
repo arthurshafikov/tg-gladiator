@@ -21,8 +21,8 @@ func (Hero) TableName() string {
 	return "heroes"
 }
 
-func (h *Hero) GetID() int64 {
-	return h.ID
+func (h *Hero) GetType() string {
+	return enums.FighterTypeHero
 }
 
 func (h *Hero) GetName() string {

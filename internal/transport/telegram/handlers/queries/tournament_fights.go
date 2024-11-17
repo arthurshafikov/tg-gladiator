@@ -31,12 +31,14 @@ func (h *Handler) HandleStartTournamentFIght(ctx *types.Context, query *tgbotapi
 	}
 	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, msgText)
 
-	// @todo
-	// show buttons (punch, run away)
 	buttons := []telegram.KeyboardButton{
 		{
+			CallbackQuery: queries.FightActionPunch.WithID(heroID),
+			Text:          ctx.Messages().FightActionPunch,
+		},
+		{
 			CallbackQuery: queries.OpenMyHero.WithID(heroID),
-			Text: ctx.Messages().FightActionRunAway,
+			Text:          ctx.Messages().FightActionRunAway, // @todo action should reduce energy
 		},
 	}
 
