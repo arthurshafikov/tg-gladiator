@@ -66,11 +66,15 @@ func (h *Handler) HandleFightActionPunch(ctx *types.Context, query *tgbotapi.Cal
 			msgText = ctx.Messages().FightResultOpponentWon
 		}
 
-		if err := h.Helper.SendTextMessage(ctx.GetChatID(), msgText); err != nil {
-			return err
-		}
+		msg := h.Helper.NewMessage(ctx.GetChatID(), msgText)
+		msg.ReplyMarkup = h.Helper.CreateKeyboard([]telegram.KeyboardButton{
+			{
+				CallbackQuery: queries.OpenMyHero.WithID(heroID),
+				Text:          ctx.Messages().FightResultBackButton,
+			},
+		}, 1)
 
-		return h.OpenMyHero(ctx, fight.Hero)
+		return h.Helper.Send(msg)
 	}
 
 	return nil

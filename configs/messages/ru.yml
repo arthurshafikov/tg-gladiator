@@ -50,6 +50,7 @@ RU:
 
   FightResultHeroWon: "Поздравляем, вы победили!"
   FightResultOpponentWon: "К сожалению вы проиграли"
+  FightResultBackButton: "Вернуться на страницу героя"
 
   HeroClasses:
     swordsman: "⚔️ Мечник"

@@ -64,6 +64,7 @@ type Messages struct {
 
 	FightResultHeroWon     string
 	FightResultOpponentWon string
+	FightResultBackButton  string
 
 	HeroClasses map[string]string
 	Errors      map[string]string
