@@ -2,6 +2,7 @@ package services
 
 import (
 	"crypto/rand"
+	"fmt"
 	"math/big"
 	"time"
 
@@ -82,6 +83,7 @@ func (s *TournamentFightService) FindActiveByHeroID(ctx *types.Context, heroID i
 	return fight, nil
 }
 
+// @todo refactor this method to many sub-methods
 func (s *TournamentFightService) MakeTurn(
 	ctx *types.Context,
 	fight *models.Fight,
@@ -122,6 +124,19 @@ func (s *TournamentFightService) MakeTurn(
 
 	if fields[models.FightFieldOpponentHP] == 0 || fields[models.FightFieldHeroHP] == 0 {
 		fields[models.FightFieldStatus] = enums.FightStatusEnded
+
+		if fields[models.FightFieldOpponentHP] == 0 {
+			goldReward, err := s.calculateGoldReward(fight.Opponent)
+			if err != nil {
+				return nil, nil, err
+			}
+
+			fields[models.FightFieldGoldReward] = goldReward
+
+			if err := s.heroService.RewardGold(ctx, fight.HeroID, goldReward); err != nil {
+				return nil, nil, err
+			}
+		}
 	}
 
 	fight, err = s.repo.UpdateMap(ctx.GetContext(), fight.ID, fields)
@@ -211,4 +226,30 @@ func (s *TournamentFightService) calculateRandomChance(desiredChance int) (bool,
 	}
 
 	return (random.Int64() + 1) <= int64(desiredChance), nil
+}
+
+func (s *TournamentFightService) calculateGoldReward(opponent models.Fighter) (int, error) {
+	if opponent.GetMaxReward() < opponent.GetMinReward() {
+		s.logger.Error(fmt.Errorf(
+			"gold reward max cannot be less than min, enemy id: %s - %v",
+			opponent.GetType(),
+			opponent.GetID(),
+		))
+
+		return 0, errors.ErrServerError
+	}
+
+	return s.generateRandomNumberInRange(opponent.GetMinReward(), opponent.GetMaxReward())
+}
+
+// @todo helper
+func (s *TournamentFightService) generateRandomNumberInRange(min, max int) (int, error) {
+	random, err := rand.Int(rand.Reader, big.NewInt(int64(max-min+1)))
+	if err != nil {
+		s.logger.Error(err)
+
+		return 0, errors.ErrServerError
+	}
+
+	return int(random.Int64()) + min, nil
 }

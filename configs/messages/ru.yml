@@ -48,7 +48,7 @@ RU:
   FightActionInfoOpponentHPLost: "и %s потерял %v ❤️"
   FightActionInfoOpponentEvaded: "и %s увернулся 🍀 (шанс уворота - %v%%)"
 
-  FightResultHeroWon: "Поздравляем, вы победили!"
+  FightResultHeroWon: "Поздравляем, вы победили, ваша награда - %v 💰!"
   FightResultOpponentWon: "К сожалению вы проиграли"
   FightResultBackButton: "Вернуться на страницу героя"
 

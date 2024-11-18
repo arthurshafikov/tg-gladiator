@@ -6,6 +6,8 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 )
 
+const HeroFieldCurrentGold = "current_gold"
+
 type Hero struct {
 	ID            int64           `gorm:"->" json:"id"`
 	ChatID        int64           `json:"chat_id"`
@@ -19,6 +21,10 @@ type Hero struct {
 
 func (Hero) TableName() string {
 	return "heroes"
+}
+
+func (h *Hero) GetID() int64 {
+	return h.ID
 }
 
 func (h *Hero) GetType() enums.FighterType {
@@ -51,4 +57,12 @@ func (h *Hero) GetCriticalChancePercent() int {
 
 func (h *Hero) GetEvasionChancePercent() int {
 	return h.Class.GetCharacteristics().EvasionChancePercent
+}
+
+func (h *Hero) GetMinReward() int {
+	return 0
+}
+
+func (h *Hero) GetMaxReward() int {
+	return 0
 }

@@ -1,6 +1,8 @@
 package queries
 
 import (
+	"fmt"
+
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
@@ -61,7 +63,10 @@ func (h *Handler) HandleFightActionPunch(ctx *types.Context, query *tgbotapi.Cal
 	if fight.HasEnded() {
 		var msgText string
 		if fight.IsHeroWon() {
-			msgText = ctx.Messages().FightResultHeroWon
+			msgText = fmt.Sprintf(
+				ctx.Messages().FightResultHeroWon,
+				fight.GoldReward,
+			)
 		} else {
 			msgText = ctx.Messages().FightResultOpponentWon
 		}

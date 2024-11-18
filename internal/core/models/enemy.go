@@ -19,33 +19,45 @@ func (Enemy) TableName() string {
 	return "enemies"
 }
 
-func (h *Enemy) GetType() enums.FighterType {
+func (e *Enemy) GetID() int64 {
+	return e.ID
+}
+
+func (e *Enemy) GetType() enums.FighterType {
 	return enums.FighterTypeOpponent
 }
 
-func (h *Enemy) GetName() string {
-	return h.Name
+func (e *Enemy) GetName() string {
+	return e.Name
 }
 
-func (h *Enemy) GetHP() int {
-	return h.HP
+func (e *Enemy) GetHP() int {
+	return e.HP
 }
 
-func (h *Enemy) GetMinAttack() int {
-	return h.MinAttack
+func (e *Enemy) GetMinAttack() int {
+	return e.MinAttack
 }
 
-func (h *Enemy) GetMaxAttack() int {
-	return h.MaxAttack
+func (e *Enemy) GetMaxAttack() int {
+	return e.MaxAttack
 }
 
-func (h *Enemy) GetDefense() int {
-	return h.Defense
+func (e *Enemy) GetDefense() int {
+	return e.Defense
 }
-func (h *Enemy) GetCriticalChancePercent() int {
-	return h.CriticalChancePercent
+func (e *Enemy) GetCriticalChancePercent() int {
+	return e.CriticalChancePercent
 }
 
-func (h *Enemy) GetEvasionChancePercent() int {
-	return h.EvasionChancePercent
+func (e *Enemy) GetEvasionChancePercent() int {
+	return e.EvasionChancePercent
+}
+
+func (e *Enemy) GetMinReward() int {
+	return e.GoldRewardMin
+}
+
+func (e *Enemy) GetMaxReward() int {
+	return e.GoldRewardMax
 }

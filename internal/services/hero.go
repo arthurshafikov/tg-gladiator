@@ -99,3 +99,20 @@ func (s *HeroService) FindMy(ctx *types.Context, id int64) (*models.Hero, error)
 
 	return hero, nil
 }
+
+func (s *HeroService) RewardGold(ctx *types.Context, id int64, amount int) error {
+	hero, err := s.FindMy(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	fields := map[string]interface{}{
+		models.HeroFieldCurrentGold: hero.CurrentGold + amount,
+	}
+
+	if _, err := s.repo.UpdateMap(ctx.GetContext(), id, fields); err != nil {
+		return err
+	}
+
+	return nil
+}
