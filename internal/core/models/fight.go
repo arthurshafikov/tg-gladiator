@@ -28,8 +28,16 @@ func (f *Fight) GetCurrentHPFor(fighter Fighter) int {
 	return f.OpponentHP
 }
 
+func (f *Fight) IsHeroWon() bool {
+	return f.OpponentHP <= 0
+}
+
+func (f *Fight) HasEnded() bool {
+	return f.Status == enums.FightStatusEnded
+}
+
 type Fighter interface {
-	GetType() string
+	GetType() enums.FighterType
 	GetName() string
 	GetHP() int
 	GetMinAttack() int
@@ -37,4 +45,17 @@ type Fighter interface {
 	GetDefense() int
 	GetCriticalChancePercent() int
 	GetEvasionChancePercent() int
+}
+
+type FightEvent struct {
+	ActionType     enums.FightActionType
+	DamageDealt    int
+	DamageReceived int
+	IsCritical     bool
+	WasEvaded      bool
+}
+
+type FightEvents struct {
+	HeroFightEvent     FightEvent
+	OpponentFightEvent FightEvent
 }

@@ -19,7 +19,7 @@ func (Enemy) TableName() string {
 	return "enemies"
 }
 
-func (h *Enemy) GetType() string {
+func (h *Enemy) GetType() enums.FighterType {
 	return enums.FighterTypeOpponent
 }
 

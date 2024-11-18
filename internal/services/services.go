@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/interactions"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -45,6 +46,11 @@ type Heroes interface {
 type TournamentFight interface {
 	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
 	FindActiveByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error)
+	MakeTurn(
+		ctx *types.Context,
+		fight *models.Fight,
+		actionType enums.FightActionType,
+	) (*models.Fight, *models.FightEvents, error)
 	RunAwayAsHero(ctx *types.Context, fightID int64) error
 }
 

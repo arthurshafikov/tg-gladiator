@@ -1,5 +1,8 @@
 package enums
 
+type FighterType string
+type FightActionType string
+
 const (
 	FightStatusActive = "active"
 	FightStatusFleed  = "fleed"
@@ -7,6 +10,8 @@ const (
 
 	OpponentTypeMob = "mob"
 
-	FighterTypeHero     = "hero"
-	FighterTypeOpponent = "opponent"
+	FighterTypeHero     FighterType = "hero"
+	FighterTypeOpponent FighterType = "opponent"
+
+	FightActionPunch FightActionType = "punch"
 )

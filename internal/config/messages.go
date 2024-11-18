@@ -50,11 +50,20 @@ type Messages struct {
 	HeroNameWithStats string
 
 	FightOverview       string
-	FightStatistics     string
 	FightChooseAction   string
 	FightActionPunch    string
 	FightActionRunAway  string
 	FightRunAwaySuccess string
+
+	FightTurnOverview                string
+	FightActionInfoDealtSimplePunch  string
+	FightActionInfoDealtSimpleAttack string
+	FightActionInfoCritical          string
+	FightActionInfoOpponentHPLost    string
+	FightActionInfoOpponentEvaded    string
+
+	FightResultHeroWon     string
+	FightResultOpponentWon string
 
 	HeroClasses map[string]string
 	Errors      map[string]string
@@ -194,21 +203,21 @@ func (m *Messages) FightInfo(fight *models.Fight) (string, error) {
 	}
 
 	msg := fmt.Sprintf(
+		"%s\n\n",
 		m.FightOverview,
-		fight.Hero.Name,
-		fight.Opponent.GetName(),
 	)
 
 	msg += fmt.Sprintf(
-		"%s:\n\n%s 👤:\n%s\n\n%s:\n%s",
-		m.FightStatistics,
+		"%s 👤:\n%s\n\n%s:\n%s",
 		fight.Hero.Name,
 		m.GetFightStatistics(fight, fight.Hero),
 		fight.Opponent.GetName(),
 		m.GetFightStatistics(fight, fight.Opponent),
 	)
 
-	msg += fmt.Sprintf("\n%s", m.FightChooseAction)
+	if !fight.HasEnded() {
+		msg += fmt.Sprintf("\n\n%s", m.FightChooseAction)
+	}
 
 	return msg, nil
 }
@@ -223,11 +232,25 @@ func (m *Messages) GetFightStatistics(fight *models.Fight, fighter models.Fighte
 		fighter.GetHP(),
 	)
 
+	if fighter.GetMinAttack() != fighter.GetMaxAttack() {
+		msg += fmt.Sprintf(
+			"%s: %v-%v\n",
+			m.HeroAttack, // @todo rename
+			fighter.GetMinAttack(),
+			fighter.GetMaxAttack(),
+		)
+	} else {
+		msg += fmt.Sprintf(
+			"%s: %v\n",
+			m.HeroAttack, // @todo rename
+			fighter.GetMinAttack(),
+		)
+	}
+
 	msg += fmt.Sprintf(
-		"%s: %v-%v\n",
-		m.HeroAttack, // @todo rename
-		fighter.GetMinAttack(),
-		fighter.GetMaxAttack(),
+		"%s: %v%%\n",
+		m.HeroCriticalChancePercent, // @todo rename
+		fighter.GetCriticalChancePercent(),
 	)
 
 	msg += fmt.Sprintf(
@@ -237,16 +260,64 @@ func (m *Messages) GetFightStatistics(fight *models.Fight, fighter models.Fighte
 	)
 
 	msg += fmt.Sprintf(
-		"%s: %v%%\n",
-		m.HeroCriticalChancePercent, // @todo rename
-		fighter.GetCriticalChancePercent(),
-	)
-
-	msg += fmt.Sprintf(
-		"%s: %v%%\n",
+		"%s: %v%%",
 		m.HeroEvasionChancePercent, // @todo rename
 		fighter.GetEvasionChancePercent(),
 	)
 
 	return msg
+}
+
+func (m *Messages) FightEvents(fight *models.Fight, fightEvents *models.FightEvents) string {
+	msg := m.FightTurnOverview
+
+	msg += "\n\n"
+
+	msg += fmt.Sprintf("%s 👤\n", fight.Hero.GetName())
+	msg += fmt.Sprintf("%s\n\n", m.FightActionInfo(fightEvents.HeroFightEvent, fight.Opponent))
+
+	msg += fmt.Sprintf("%s\n", fight.Opponent.GetName())
+	msg += fmt.Sprintf("%s\n\n", m.FightActionInfo(fightEvents.OpponentFightEvent, fight.Hero))
+
+	return msg
+}
+
+func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models.Fighter) string {
+	var actionInfo string
+	switch fightEvent.ActionType {
+	case enums.FightActionPunch:
+		actionInfo = m.FightActionInfoDealtSimplePunch
+	default:
+		actionInfo = m.FightActionInfoDealtSimpleAttack
+	}
+
+	var criticalInfo string
+	if fightEvent.IsCritical {
+		criticalInfo = fmt.Sprintf(" (%s)", m.FightActionInfoCritical)
+	}
+
+	var opponentReactionInfo string
+	if fightEvent.WasEvaded {
+		opponentReactionInfo = fmt.Sprintf(
+			m.FightActionInfoOpponentEvaded,
+			opponent.GetName(),
+			opponent.GetEvasionChancePercent(),
+		)
+	} else {
+		opponentReactionInfo = fmt.Sprintf(
+			m.FightActionInfoOpponentHPLost,
+			opponent.GetName(),
+			fightEvent.DamageReceived,
+		)
+	}
+
+	return fmt.Sprintf(
+		"%s%s %s",
+		fmt.Sprintf(
+			actionInfo,
+			fightEvent.DamageDealt,
+		),
+		criticalInfo,
+		opponentReactionInfo,
+	)
 }

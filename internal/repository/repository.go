@@ -36,7 +36,7 @@ type Fight interface {
 	Find(ctx context.Context, id int64) (*models.Fight, error)
 	FindBy(ctx context.Context, fields *models.Fight) (*models.Fight, error)
 	Update(ctx context.Context, id int64, fields *models.Fight) (*models.Fight, error)
-	// UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Chat, error)
+	UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Fight, error)
 }
 
 type Enemy interface {
