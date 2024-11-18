@@ -108,7 +108,7 @@ func (s *TournamentFightService) MakeTurn(
 			opponentHP = 0
 		}
 
-		fields["opponent_hp"] = opponentHP // @todo field constants
+		fields[models.FightFieldOpponentHP] = opponentHP
 	}
 
 	if events.OpponentFightEvent.DamageDealt > 0 {
@@ -117,11 +117,11 @@ func (s *TournamentFightService) MakeTurn(
 			heroHP = 0
 		}
 
-		fields["hero_hp"] = heroHP // @todo field constants
+		fields[models.FightFieldHeroHP] = heroHP
 	}
 
-	if fields["opponent_hp"] == 0 || fields["hero_hp"] == 0 {
-		fields["status"] = enums.FightStatusEnded
+	if fields[models.FightFieldOpponentHP] == 0 || fields[models.FightFieldHeroHP] == 0 {
+		fields[models.FightFieldStatus] = enums.FightStatusEnded
 	}
 
 	fight, err = s.repo.UpdateMap(ctx.GetContext(), fight.ID, fields)

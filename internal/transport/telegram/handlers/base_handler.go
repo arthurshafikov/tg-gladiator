@@ -140,10 +140,6 @@ func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ..
 
 	keyboardButtons := make([]telegram.KeyboardButton, 0, 2)
 
-	// @todo add btn Go Fight?
-	// affect hp on punch + add enemy punching
-	// add defeat message
-
 	keyboardButtons = append(
 		keyboardButtons,
 		telegram.KeyboardButton{

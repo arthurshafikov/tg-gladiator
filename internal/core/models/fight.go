@@ -6,6 +6,12 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 )
 
+const (
+	FightFieldStatus     = "status"
+	FightFieldOpponentHP = "opponent_hp"
+	FightFieldHeroHP     = "hero_hp"
+)
+
 type Fight struct {
 	ID           int64     `json:"id"`
 	Status       string    `json:"status"`
