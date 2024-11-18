@@ -36,16 +36,16 @@ type Messages struct {
 
 	HeroCreationSuccess string
 
-	HeroOverview              string
-	HeroName                  string
-	HeroClass                 string
-	HeroAttack                string
-	HeroDefense               string
-	HeroCriticalChancePercent string
-	HeroEvasionChancePercent  string
-	HP                        string
-	HeroEnergy                string
-	HeroGold                  string
+	HeroOverview          string
+	HeroName              string
+	HeroClass             string
+	Attack                string
+	Defense               string
+	CriticalChancePercent string
+	EvasionChancePercent  string
+	HP                    string
+	HeroEnergy            string
+	HeroGold              string
 
 	HeroNameWithStats string
 
@@ -101,13 +101,13 @@ func (m *Messages) ClassInfo(heroClass enums.HeroClass) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.HeroAttack,
+		m.Attack,
 		classCharacteristics.Attack,
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.HeroDefense,
+		m.Defense,
 		classCharacteristics.Defense,
 	)
 
@@ -119,13 +119,13 @@ func (m *Messages) ClassInfo(heroClass enums.HeroClass) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s: %v%%\n",
-		m.HeroCriticalChancePercent,
+		m.CriticalChancePercent,
 		classCharacteristics.CriticalChancePercent,
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v%%\n\n",
-		m.HeroEvasionChancePercent,
+		m.EvasionChancePercent,
 		classCharacteristics.EvasionChancePercent,
 	)
 
@@ -154,13 +154,13 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.HeroAttack,
+		m.Attack,
 		classCharacteristics.Attack,
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.HeroDefense,
+		m.Defense,
 		classCharacteristics.Defense,
 	)
 
@@ -172,13 +172,13 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s: %v%%\n",
-		m.HeroCriticalChancePercent,
+		m.CriticalChancePercent,
 		classCharacteristics.CriticalChancePercent,
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v%%\n",
-		m.HeroEvasionChancePercent,
+		m.EvasionChancePercent,
 		classCharacteristics.EvasionChancePercent,
 	)
 
@@ -235,33 +235,33 @@ func (m *Messages) GetFightStatistics(fight *models.Fight, fighter models.Fighte
 	if fighter.GetMinAttack() != fighter.GetMaxAttack() {
 		msg += fmt.Sprintf(
 			"%s: %v-%v\n",
-			m.HeroAttack, // @todo rename
+			m.Attack,
 			fighter.GetMinAttack(),
 			fighter.GetMaxAttack(),
 		)
 	} else {
 		msg += fmt.Sprintf(
 			"%s: %v\n",
-			m.HeroAttack, // @todo rename
+			m.Attack,
 			fighter.GetMinAttack(),
 		)
 	}
 
 	msg += fmt.Sprintf(
 		"%s: %v%%\n",
-		m.HeroCriticalChancePercent, // @todo rename
+		m.CriticalChancePercent,
 		fighter.GetCriticalChancePercent(),
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.HeroDefense, // @todo rename
+		m.Defense,
 		fighter.GetDefense(),
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v%%",
-		m.HeroEvasionChancePercent, // @todo rename
+		m.EvasionChancePercent,
 		fighter.GetEvasionChancePercent(),
 	)
 
