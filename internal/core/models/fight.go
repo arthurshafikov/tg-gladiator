@@ -1,6 +1,7 @@
 package models
 
 import (
+	"math"
 	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
@@ -11,6 +12,8 @@ const (
 	FightFieldOpponentHP = "opponent_hp"
 	FightFieldHeroHP     = "hero_hp"
 	FightFieldGoldReward = "gold_reward"
+
+	FightArmorDamageReductionModificator = 40 // the more - the less % of damage will get blocked
 )
 
 type Fight struct {
@@ -63,6 +66,7 @@ type FightEvent struct {
 	ActionType     enums.FightActionType
 	DamageDealt    int
 	DamageReceived int
+	DamageBlocked  int
 	IsCritical     bool
 	WasEvaded      bool
 }
@@ -70,4 +74,18 @@ type FightEvent struct {
 type FightEvents struct {
 	HeroFightEvent     FightEvent
 	OpponentFightEvent FightEvent
+}
+
+func CalculateArmorReductionMultiplier(defense int) float64 {
+	if defense < 1 {
+		return 0
+	}
+
+	return float64(defense) / float64(defense+FightArmorDamageReductionModificator)
+}
+
+func CalculateArmorReductionPercent(defense int) float64 {
+	multiplier := CalculateArmorReductionMultiplier(defense)
+
+	return math.Round(multiplier * 100)
 }

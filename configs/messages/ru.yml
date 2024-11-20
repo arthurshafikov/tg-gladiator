@@ -46,6 +46,7 @@ RU:
   FightActionInfoDealtSimpleAttack: "Нанёс %v урона"
   FightActionInfoCritical: "крит 💥"
   FightActionInfoOpponentHPLost: "и %s потерял %v ❤️"
+  FightActionInfoOpponentDamageBlocked: "(🛡-%v)"
   FightActionInfoOpponentEvaded: "и %s увернулся 🍀 (шанс уворота - %v%%)"
 
   FightResultHeroWon: "Поздравляем, вы победили, ваша награда - %v 💰!"

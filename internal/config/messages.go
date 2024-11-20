@@ -55,12 +55,13 @@ type Messages struct {
 	FightActionRunAway  string
 	FightRunAwaySuccess string
 
-	FightTurnOverview                string
-	FightActionInfoDealtSimplePunch  string
-	FightActionInfoDealtSimpleAttack string
-	FightActionInfoCritical          string
-	FightActionInfoOpponentHPLost    string
-	FightActionInfoOpponentEvaded    string
+	FightTurnOverview                    string
+	FightActionInfoDealtSimplePunch      string
+	FightActionInfoDealtSimpleAttack     string
+	FightActionInfoCritical              string
+	FightActionInfoOpponentHPLost        string
+	FightActionInfoOpponentDamageBlocked string
+	FightActionInfoOpponentEvaded        string
 
 	FightResultHeroWon     string
 	FightResultOpponentWon string
@@ -255,9 +256,10 @@ func (m *Messages) GetFightStatistics(fight *models.Fight, fighter models.Fighte
 	)
 
 	msg += fmt.Sprintf(
-		"%s: %v\n",
+		"%s: %v (%v%%)\n",
 		m.Defense,
 		fighter.GetDefense(),
+		models.CalculateArmorReductionPercent(fighter.GetDefense()),
 	)
 
 	msg += fmt.Sprintf(
@@ -305,10 +307,25 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models
 			opponent.GetEvasionChancePercent(),
 		)
 	} else {
+		var damageBlockedText string
+		if fightEvent.DamageBlocked > 0 {
+			damageBlockedText = fmt.Sprintf(
+				" %s",
+				fmt.Sprintf(
+					m.FightActionInfoOpponentDamageBlocked,
+					fightEvent.DamageBlocked,
+				),
+			)
+		}
+
 		opponentReactionInfo = fmt.Sprintf(
-			m.FightActionInfoOpponentHPLost,
-			opponent.GetName(),
-			fightEvent.DamageReceived,
+			"%s%s",
+			fmt.Sprintf(
+				m.FightActionInfoOpponentHPLost,
+				opponent.GetName(),
+				fightEvent.DamageReceived,
+			),
+			damageBlockedText,
 		)
 	}
 

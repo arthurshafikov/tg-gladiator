@@ -3,6 +3,7 @@ package services
 import (
 	"crypto/rand"
 	"fmt"
+	"math"
 	"math/big"
 	"time"
 
@@ -208,13 +209,22 @@ func (s *TournamentFightService) getFighterFightEvent(
 	}
 	fighterEvent.WasEvaded = wasEvaded
 
-	if fighterEvent.WasEvaded {
-		fighterEvent.DamageReceived = 0
-	} else {
-		fighterEvent.DamageReceived = fighterEvent.DamageDealt // @todo armor
+	if !fighterEvent.WasEvaded {
+		fighterEvent.DamageReceived, fighterEvent.DamageBlocked = s.calculateReceivedDamage(
+			opponent.GetDefense(),
+			fighterEvent.DamageDealt,
+		)
 	}
 
 	return fighterEvent, nil
+}
+
+func (s *TournamentFightService) calculateReceivedDamage(defense, damageDealt int) (int, int) {
+	damageReductionMultiplier := models.CalculateArmorReductionMultiplier(defense)
+
+	blockedDamage := int(math.Round(float64(damageDealt) * damageReductionMultiplier))
+
+	return damageDealt - blockedDamage, blockedDamage
 }
 
 func (s *TournamentFightService) calculateRandomChance(desiredChance int) (bool, error) {
