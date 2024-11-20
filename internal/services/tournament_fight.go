@@ -88,19 +88,19 @@ func (s *TournamentFightService) FindActiveByHeroID(ctx *types.Context, heroID i
 func (s *TournamentFightService) MakeTurn(
 	ctx *types.Context,
 	fight *models.Fight,
-	actionType enums.FightActionType, // @todo temp unused
+	actionType enums.FightActionType,
 ) (*models.Fight, *models.FightEvents, error) {
 	fields := map[string]interface{}{}
 
 	events := &models.FightEvents{}
 
 	var err error
-	events.HeroFightEvent, err = s.getFighterFightEvent(fight.Hero, fight.Opponent)
+	events.HeroFightEvent, err = s.getFighterFightEvent(actionType, fight.Hero, fight.Opponent)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	events.OpponentFightEvent, err = s.getFighterFightEvent(fight.Opponent, fight.Hero)
+	events.OpponentFightEvent, err = s.getFighterFightEvent(enums.FightActionPunch, fight.Opponent, fight.Hero)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -168,10 +168,13 @@ func (s *TournamentFightService) RunAwayAsHero(ctx *types.Context, fightID int64
 }
 
 func (s *TournamentFightService) getFighterFightEvent(
+	actionType enums.FightActionType,
 	fighter models.Fighter,
 	opponent models.Fighter,
 ) (models.FightEvent, error) {
-	fighterEvent := models.FightEvent{}
+	fighterEvent := models.FightEvent{
+		ActionType: actionType,
+	}
 
 	isCritical, err := s.calculateRandomChance(fighter.GetCriticalChancePercent())
 	if err != nil {
@@ -179,6 +182,7 @@ func (s *TournamentFightService) getFighterFightEvent(
 	}
 	fighterEvent.IsCritical = isCritical
 
+	var baseDamage int
 	// various damage
 	if fighter.GetMaxAttack() != fighter.GetMinAttack() {
 		damageDealt, err := rand.Int(
@@ -194,19 +198,31 @@ func (s *TournamentFightService) getFighterFightEvent(
 		}
 		damageDealtInt := int(damageDealt.Int64())
 		damageDealtInt += 1 + fighter.GetMinAttack()
-		fighterEvent.DamageDealt = damageDealtInt
+		baseDamage = damageDealtInt
 	} else {
-		fighterEvent.DamageDealt = fighter.GetMinAttack()
+		baseDamage = fighter.GetMinAttack()
 	}
+
+	fighterEvent.DamageDealt = s.calculatePunchTypeModificatorDamage(fighterEvent.ActionType, baseDamage)
 
 	if fighterEvent.IsCritical {
 		fighterEvent.DamageDealt *= 2
 	}
 
-	wasEvaded, err := s.calculateRandomChance(opponent.GetEvasionChancePercent())
+	var additionalEvasionPercentBasedOnActionType int
+	switch actionType {
+	case enums.FightActionPunch:
+		additionalEvasionPercentBasedOnActionType = 0
+	case enums.FightActionStrongPunch:
+		additionalEvasionPercentBasedOnActionType = 20
+	}
+
+	evasionChance := opponent.GetEvasionChancePercent() + additionalEvasionPercentBasedOnActionType
+	wasEvaded, err := s.calculateRandomChance(evasionChance)
 	if err != nil {
 		return fighterEvent, err
 	}
+	fighterEvent.EvadeChancePercent = evasionChance
 	fighterEvent.WasEvaded = wasEvaded
 
 	if !fighterEvent.WasEvaded {
@@ -217,6 +233,25 @@ func (s *TournamentFightService) getFighterFightEvent(
 	}
 
 	return fighterEvent, nil
+}
+
+func (s *TournamentFightService) calculatePunchTypeModificatorDamage(
+	actionType enums.FightActionType,
+	baseDamage int,
+) int {
+	if baseDamage < 1 {
+		return 0
+	}
+
+	var damageDealt int
+	switch actionType {
+	case enums.FightActionPunch:
+		damageDealt = baseDamage
+	case enums.FightActionStrongPunch:
+		damageDealt = int(math.Round(float64(baseDamage) * 1.5))
+	}
+
+	return damageDealt
 }
 
 func (s *TournamentFightService) calculateReceivedDamage(defense, damageDealt int) (int, int) {

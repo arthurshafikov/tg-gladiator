@@ -63,12 +63,13 @@ type Fighter interface {
 }
 
 type FightEvent struct {
-	ActionType     enums.FightActionType
-	DamageDealt    int
-	DamageReceived int
-	DamageBlocked  int
-	IsCritical     bool
-	WasEvaded      bool
+	ActionType         enums.FightActionType
+	DamageDealt        int
+	DamageReceived     int
+	DamageBlocked      int
+	IsCritical         bool
+	EvadeChancePercent int
+	WasEvaded          bool
 }
 
 type FightEvents struct {

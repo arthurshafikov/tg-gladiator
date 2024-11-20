@@ -45,6 +45,8 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 		return b.queryHandler.HandleStartTournamentFight(ctx, query, payload)
 	case queries.FightActionPunch:
 		return b.queryHandler.HandleFightActionPunch(ctx, query, payload)
+	case queries.FightActionStrongPunch:
+		return b.queryHandler.HandleFightActionStrongPunch(ctx, query, payload)
 
 	case queries.HeroDelete:
 		return b.queryHandler.HandleHeroDelete(ctx, query, payload)

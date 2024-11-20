@@ -49,14 +49,16 @@ type Messages struct {
 
 	HeroNameWithStats string
 
-	FightOverview       string
-	FightChooseAction   string
-	FightActionPunch    string
-	FightActionRunAway  string
-	FightRunAwaySuccess string
+	FightOverview          string
+	FightChooseAction      string
+	FightActionPunch       string
+	FightActionStrongPunch string
+	FightActionRunAway     string
+	FightRunAwaySuccess    string
 
 	FightTurnOverview                    string
 	FightActionInfoDealtSimplePunch      string
+	FightActionInfoDealtStrongPunch      string
 	FightActionInfoDealtSimpleAttack     string
 	FightActionInfoCritical              string
 	FightActionInfoOpponentHPLost        string
@@ -290,8 +292,8 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models
 	switch fightEvent.ActionType {
 	case enums.FightActionPunch:
 		actionInfo = m.FightActionInfoDealtSimplePunch
-	default:
-		actionInfo = m.FightActionInfoDealtSimpleAttack
+	case enums.FightActionStrongPunch:
+		actionInfo = m.FightActionInfoDealtStrongPunch
 	}
 
 	var criticalInfo string
@@ -304,7 +306,7 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models
 		opponentReactionInfo = fmt.Sprintf(
 			m.FightActionInfoOpponentEvaded,
 			opponent.GetName(),
-			opponent.GetEvasionChancePercent(),
+			fightEvent.EvadeChancePercent,
 		)
 	} else {
 		var damageBlockedText string

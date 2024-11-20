@@ -16,7 +16,8 @@ const (
 
 	StartTournamentFight Query = "StartTournamentFight"
 
-	FightActionPunch Query = "FightActionPunch"
+	FightActionPunch       Query = "FightActionPunch"
+	FightActionStrongPunch Query = "FightActionStrongPunch"
 
 	HeroDelete Query = "HeroDelete"
 

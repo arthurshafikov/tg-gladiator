@@ -31,6 +31,19 @@ func (h *Handler) HandleStartTournamentFight(ctx *types.Context, query *tgbotapi
 }
 
 func (h *Handler) HandleFightActionPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	return h.tournamentTurn(ctx, query, payload, enums.FightActionPunch)
+}
+
+func (h *Handler) HandleFightActionStrongPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	return h.tournamentTurn(ctx, query, payload, enums.FightActionStrongPunch)
+}
+
+func (h *Handler) tournamentTurn(
+	ctx *types.Context,
+	query *tgbotapi.CallbackQuery,
+	payload []string,
+	fightAction enums.FightActionType,
+) error {
 	if err := h.ValidatePayloadLength(payload, 1); err != nil {
 		return err
 	}
@@ -45,7 +58,7 @@ func (h *Handler) HandleFightActionPunch(ctx *types.Context, query *tgbotapi.Cal
 		return err
 	}
 
-	fight, fightEvents, err := h.Services.TournamentFight.MakeTurn(ctx, fight, enums.FightActionPunch)
+	fight, fightEvents, err := h.Services.TournamentFight.MakeTurn(ctx, fight, fightAction)
 	if err != nil {
 		return err
 	}
@@ -103,8 +116,12 @@ func (h *Handler) sendFightOverviewMessage(ctx *types.Context, fight *models.Fig
 				Text:          ctx.Messages().FightActionPunch,
 			},
 			{
+				CallbackQuery: queries.FightActionStrongPunch.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionStrongPunch,
+			},
+			{
 				CallbackQuery: queries.OpenMyHero.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionRunAway, // @todo action should reduce energy
+				Text:          ctx.Messages().FightActionRunAway, // @todo action should reduce double energy
 			},
 		}
 		keyboard = h.Helper.CreateKeyboard(buttons, 1)

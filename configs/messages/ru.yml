@@ -37,12 +37,14 @@ RU:
 
   FightOverview: "⚔️ Битва ⚔️"
   FightChooseAction: "Выберите действие:"
-  FightActionPunch: "👊 Ударить"
+  FightActionPunch: "🗡️ Простой удар"
+  FightActionStrongPunch: "🔥 Сильный удар (+50% 💪, но +20% 🍀)"
   FightActionRunAway: "🏃 Убежать"
   FightRunAwaySuccess: "Вы успешно сбежали 🏃"
   
   FightTurnOverview: "Ход боя"
   FightActionInfoDealtSimplePunch: "Нанёс простым ударом %v урона"
+  FightActionInfoDealtStrongPunch: "Нанёс сильным ударом %v урона"
   FightActionInfoDealtSimpleAttack: "Нанёс %v урона"
   FightActionInfoCritical: "крит 💥"
   FightActionInfoOpponentHPLost: "и %s потерял %v ❤️"
