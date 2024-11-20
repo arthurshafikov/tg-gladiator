@@ -41,6 +41,7 @@ type QueryHandler interface {
 	HandleStartTournamentFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionStrongPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleFightActionPrecisePunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
 	HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 }

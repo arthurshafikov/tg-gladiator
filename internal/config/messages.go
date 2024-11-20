@@ -49,16 +49,18 @@ type Messages struct {
 
 	HeroNameWithStats string
 
-	FightOverview          string
-	FightChooseAction      string
-	FightActionPunch       string
-	FightActionStrongPunch string
-	FightActionRunAway     string
-	FightRunAwaySuccess    string
+	FightOverview           string
+	FightChooseAction       string
+	FightActionPunch        string
+	FightActionStrongPunch  string
+	FightActionPrecisePunch string
+	FightActionRunAway      string
+	FightRunAwaySuccess     string
 
 	FightTurnOverview                    string
 	FightActionInfoDealtSimplePunch      string
 	FightActionInfoDealtStrongPunch      string
+	FightActionInfoDealtPrecisePunch     string
 	FightActionInfoDealtSimpleAttack     string
 	FightActionInfoCritical              string
 	FightActionInfoOpponentHPLost        string
@@ -291,9 +293,11 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models
 	var actionInfo string
 	switch fightEvent.ActionType {
 	case enums.FightActionPunch:
-		actionInfo = m.FightActionInfoDealtSimplePunch
+		actionInfo = m.FightActionInfoDealtSimplePunch // @todo strike
 	case enums.FightActionStrongPunch:
 		actionInfo = m.FightActionInfoDealtStrongPunch
+	case enums.FightActionPrecisePunch:
+		actionInfo = m.FightActionInfoDealtPrecisePunch
 	}
 
 	var criticalInfo string

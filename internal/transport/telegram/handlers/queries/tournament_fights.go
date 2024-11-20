@@ -38,6 +38,10 @@ func (h *Handler) HandleFightActionStrongPunch(ctx *types.Context, query *tgbota
 	return h.tournamentTurn(ctx, query, payload, enums.FightActionStrongPunch)
 }
 
+func (h *Handler) HandleFightActionPrecisePunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	return h.tournamentTurn(ctx, query, payload, enums.FightActionPrecisePunch)
+}
+
 func (h *Handler) tournamentTurn(
 	ctx *types.Context,
 	query *tgbotapi.CallbackQuery,
@@ -117,7 +121,11 @@ func (h *Handler) sendFightOverviewMessage(ctx *types.Context, fight *models.Fig
 			},
 			{
 				CallbackQuery: queries.FightActionStrongPunch.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionStrongPunch,
+				Text:          ctx.Messages().FightActionStrongPunch, // @todo should decrease hero's armor
+			},
+			{
+				CallbackQuery: queries.FightActionPrecisePunch.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionPrecisePunch,
 			},
 			{
 				CallbackQuery: queries.OpenMyHero.WithID(fight.HeroID),

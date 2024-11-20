@@ -215,6 +215,8 @@ func (s *TournamentFightService) getFighterFightEvent(
 		additionalEvasionPercentBasedOnActionType = 0
 	case enums.FightActionStrongPunch:
 		additionalEvasionPercentBasedOnActionType = 20
+	case enums.FightActionPrecisePunch:
+		additionalEvasionPercentBasedOnActionType = -25 // @todo should be propotional instead of raw deduction
 	}
 
 	evasionChance := opponent.GetEvasionChancePercent() + additionalEvasionPercentBasedOnActionType
@@ -249,6 +251,8 @@ func (s *TournamentFightService) calculatePunchTypeModificatorDamage(
 		damageDealt = baseDamage
 	case enums.FightActionStrongPunch:
 		damageDealt = int(math.Round(float64(baseDamage) * 1.5))
+	case enums.FightActionPrecisePunch:
+		damageDealt = int(math.Round(float64(baseDamage) * 0.7))
 	}
 
 	return damageDealt
@@ -263,6 +267,10 @@ func (s *TournamentFightService) calculateReceivedDamage(defense, damageDealt in
 }
 
 func (s *TournamentFightService) calculateRandomChance(desiredChance int) (bool, error) {
+	if desiredChance < 1 {
+		return false, nil
+	}
+
 	random, err := rand.Int(rand.Reader, big.NewInt(100))
 	if err != nil {
 		s.logger.Error(err)
