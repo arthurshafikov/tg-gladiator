@@ -38,8 +38,8 @@ RU:
   FightOverview: "⚔️ Битва ⚔️"
   FightChooseAction: "Выберите действие:"
   FightActionPunch: "🗡️ Простой удар"
-  FightActionStrongPunch: "🔥 Сильный удар (+50% 💪, но +20% 🍀)"
-  FightActionPrecisePunch: "🎯 Точный удар (-30% 💪, но - 🍀)"
+  FightActionStrongPunch: "🔥 Сильный удар"
+  FightActionPrecisePunch: "🎯 Точный удар"
   FightActionRunAway: "🏃 Убежать"
   FightRunAwaySuccess: "Вы успешно сбежали 🏃"
   
