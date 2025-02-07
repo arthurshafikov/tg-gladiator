@@ -30,6 +30,10 @@ func (s *EnemyService) getRandomEnemy(ctx *types.Context) (*models.Enemy, error)
 		return nil, errors.ErrServerError
 	}
 
+	if enemies == nil || len(*enemies) < 1 {
+		return nil, errors.ErrEmpty
+	}
+
 	randomEnemyIndex, err := rand.Int(rand.Reader, big.NewInt(int64(len(*enemies))))
 	if err != nil {
 		s.logger.Error(err)
