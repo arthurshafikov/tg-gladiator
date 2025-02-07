@@ -49,18 +49,18 @@ type Messages struct {
 
 	HeroNameWithStats string
 
-	FightOverview           string
-	FightChooseAction       string
-	FightActionPunch        string
-	FightActionStrongPunch  string
-	FightActionPrecisePunch string
-	FightActionRunAway      string
-	FightRunAwaySuccess     string
+	FightOverview            string
+	FightChooseAction        string
+	FightActionSimpleStrike  string
+	FightActionStrongStrike  string
+	FightActionPreciseStrike string
+	FightActionRunAway       string
+	FightRunAwaySuccess      string
 
 	FightTurnOverview                    string
-	FightActionInfoDealtSimplePunch      string
-	FightActionInfoDealtStrongPunch      string
-	FightActionInfoDealtPrecisePunch     string
+	FightActionInfoDealtSimpleStrike     string
+	FightActionInfoDealtStrongStrike     string
+	FightActionInfoDealtPreciseStrike    string
 	FightActionInfoDealtSimpleAttack     string
 	FightActionInfoCritical              string
 	FightActionInfoOpponentHPLost        string
@@ -292,12 +292,12 @@ func (m *Messages) FightEvents(fight *models.Fight, fightEvents *models.FightEve
 func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models.Fighter) string {
 	var actionInfo string
 	switch fightEvent.ActionType {
-	case enums.FightActionPunch:
-		actionInfo = m.FightActionInfoDealtSimplePunch // @todo strike
-	case enums.FightActionStrongPunch:
-		actionInfo = m.FightActionInfoDealtStrongPunch
-	case enums.FightActionPrecisePunch:
-		actionInfo = m.FightActionInfoDealtPrecisePunch
+	case enums.FightActionSimpleStrike:
+		actionInfo = m.FightActionInfoDealtSimpleStrike // @todo strike
+	case enums.FightActionStrongStrike:
+		actionInfo = m.FightActionInfoDealtStrongStrike
+	case enums.FightActionPreciseStrike:
+		actionInfo = m.FightActionInfoDealtPreciseStrike
 	}
 
 	var criticalInfo string

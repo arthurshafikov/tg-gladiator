@@ -13,7 +13,7 @@ const (
 	FighterTypeHero     FighterType = "hero"
 	FighterTypeOpponent FighterType = "opponent"
 
-	FightActionPunch        FightActionType = "FightActionPunch"
-	FightActionStrongPunch  FightActionType = "FightActionStrongPunch"
-	FightActionPrecisePunch FightActionType = "FightActionPrecisePunch"
+	FightActionSimpleStrike  FightActionType = "FightActionSimpleStrike"
+	FightActionStrongStrike  FightActionType = "FightActionStrongStrike"
+	FightActionPreciseStrike FightActionType = "FightActionPreciseStrike"
 )

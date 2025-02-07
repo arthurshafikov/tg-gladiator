@@ -39,9 +39,9 @@ type QueryHandler interface {
 	HandleHeroCreationSelectClass(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
 	HandleStartTournamentFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
-	HandleFightActionPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
-	HandleFightActionStrongPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
-	HandleFightActionPrecisePunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleFightActionSimpleStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleFightActionStrongStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleFightActionPreciseStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
 	HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 }

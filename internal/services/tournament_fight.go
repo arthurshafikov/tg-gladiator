@@ -100,7 +100,7 @@ func (s *TournamentFightService) MakeTurn(
 		return nil, nil, err
 	}
 
-	events.OpponentFightEvent, err = s.getFighterFightEvent(enums.FightActionPunch, fight.Opponent, fight.Hero)
+	events.OpponentFightEvent, err = s.getFighterFightEvent(enums.FightActionSimpleStrike, fight.Opponent, fight.Hero)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -221,7 +221,7 @@ func (s *TournamentFightService) calculateDamageDealt(
 		baseDamage = fighter.GetMinAttack()
 	}
 
-	damageDealt := s.calculatePunchTypeModificatorDamage(actionType, baseDamage)
+	damageDealt := s.calculateStrikeTypeModificatorDamage(actionType, baseDamage)
 
 	isCritical, err := s.calculateRandomChance(fighter.GetCriticalChancePercent())
 	if err != nil {
@@ -240,11 +240,11 @@ func (s *TournamentFightService) calculateIfTheStrikeWasEvaded(
 ) (bool, int, error) {
 	var additionalEvasionPercentBasedOnActionType int
 	switch actionType {
-	case enums.FightActionPunch:
+	case enums.FightActionSimpleStrike:
 		additionalEvasionPercentBasedOnActionType = 0
-	case enums.FightActionStrongPunch:
+	case enums.FightActionStrongStrike:
 		additionalEvasionPercentBasedOnActionType = 20
-	case enums.FightActionPrecisePunch:
+	case enums.FightActionPreciseStrike:
 		additionalEvasionPercentBasedOnActionType = -25 // @todo should be propotional instead of raw deduction
 	}
 
@@ -257,7 +257,7 @@ func (s *TournamentFightService) calculateIfTheStrikeWasEvaded(
 	return wasEvaded, evasionChance, nil
 }
 
-func (s *TournamentFightService) calculatePunchTypeModificatorDamage(
+func (s *TournamentFightService) calculateStrikeTypeModificatorDamage(
 	actionType enums.FightActionType,
 	baseDamage int,
 ) int {
@@ -267,11 +267,11 @@ func (s *TournamentFightService) calculatePunchTypeModificatorDamage(
 
 	var damageDealt int
 	switch actionType {
-	case enums.FightActionPunch:
+	case enums.FightActionSimpleStrike:
 		damageDealt = baseDamage
-	case enums.FightActionStrongPunch:
+	case enums.FightActionStrongStrike:
 		damageDealt = int(math.Round(float64(baseDamage) * 1.5))
-	case enums.FightActionPrecisePunch:
+	case enums.FightActionPreciseStrike:
 		damageDealt = int(math.Round(float64(baseDamage) * 0.7))
 	}
 

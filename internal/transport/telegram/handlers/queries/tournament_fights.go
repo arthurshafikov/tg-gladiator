@@ -30,16 +30,16 @@ func (h *Handler) HandleStartTournamentFight(ctx *types.Context, query *tgbotapi
 	return h.sendFightOverviewMessage(ctx, fight, query)
 }
 
-func (h *Handler) HandleFightActionPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
-	return h.tournamentTurn(ctx, query, payload, enums.FightActionPunch)
+func (h *Handler) HandleFightActionSimpleStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	return h.tournamentTurn(ctx, query, payload, enums.FightActionSimpleStrike)
 }
 
-func (h *Handler) HandleFightActionStrongPunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
-	return h.tournamentTurn(ctx, query, payload, enums.FightActionStrongPunch)
+func (h *Handler) HandleFightActionStrongStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	return h.tournamentTurn(ctx, query, payload, enums.FightActionStrongStrike)
 }
 
-func (h *Handler) HandleFightActionPrecisePunch(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
-	return h.tournamentTurn(ctx, query, payload, enums.FightActionPrecisePunch)
+func (h *Handler) HandleFightActionPreciseStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	return h.tournamentTurn(ctx, query, payload, enums.FightActionPreciseStrike)
 }
 
 func (h *Handler) tournamentTurn(
@@ -116,16 +116,16 @@ func (h *Handler) sendFightOverviewMessage(ctx *types.Context, fight *models.Fig
 	if !fight.HasEnded() {
 		buttons := []telegram.KeyboardButton{
 			{
-				CallbackQuery: queries.FightActionPunch.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionPunch,
+				CallbackQuery: queries.FightActionSimpleStrike.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionSimpleStrike,
 			},
 			{
-				CallbackQuery: queries.FightActionStrongPunch.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionStrongPunch, // @todo should decrease hero's armor
+				CallbackQuery: queries.FightActionStrongStrike.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionStrongStrike, // @todo should decrease hero's armor
 			},
 			{
-				CallbackQuery: queries.FightActionPrecisePunch.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionPrecisePunch,
+				CallbackQuery: queries.FightActionPreciseStrike.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionPreciseStrike,
 			},
 			{
 				CallbackQuery: queries.OpenMyHero.WithID(fight.HeroID),
