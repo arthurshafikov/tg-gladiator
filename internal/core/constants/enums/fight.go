@@ -17,3 +17,11 @@ const (
 	FightActionStrongStrike  FightActionType = "FightActionStrongStrike"
 	FightActionPreciseStrike FightActionType = "FightActionPreciseStrike"
 )
+
+func FightActionTypeAll() []FightActionType {
+	return []FightActionType{
+		FightActionSimpleStrike,
+		FightActionStrongStrike,
+		FightActionPreciseStrike,
+	}
+}

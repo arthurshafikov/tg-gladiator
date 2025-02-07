@@ -123,8 +123,7 @@ func (s *TournamentFightService) MakeTurn(
 		return nil, nil, err
 	}
 
-	events.OpponentFightEvent, err = s.tournamentFightEventsService.getFightEventFor(
-		enums.FightActionSimpleStrike, // @todo randomize the strike
+	events.OpponentFightEvent, err = s.tournamentFightEventsService.getRandomFightEventFor(
 		fight.Opponent,
 		fight.Hero,
 	)

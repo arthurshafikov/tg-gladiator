@@ -49,6 +49,24 @@ func (s *TournamentFightEventsService) getFightEventFor(
 	return fighterEvent, nil
 }
 
+func (s *TournamentFightEventsService) getRandomFightEventFor(
+	fighter models.Fighter,
+	opponent models.Fighter,
+) (models.FightEvent, error) {
+	allFightActionTypes := enums.FightActionTypeAll()
+
+	randomIndex, err := s.generateRandomNumberInRange(0, (len(allFightActionTypes) - 1))
+	if err != nil {
+		return models.FightEvent{}, err
+	}
+
+	return s.getFightEventFor(
+		allFightActionTypes[randomIndex],
+		fighter,
+		opponent,
+	)
+}
+
 func (s *TournamentFightEventsService) calculateDamageDealt(
 	actionType enums.FightActionType,
 	fighter models.Fighter,
