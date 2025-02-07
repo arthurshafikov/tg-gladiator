@@ -76,14 +76,22 @@ func NewServices(deps Deps) *Services {
 
 	enemyService := newEnemyService(deps.Logger, deps.Repository.Enemy)
 
+	tournamentFightEventsService := newTournamentFightEventsService(deps.Logger)
+
 	return &Services{
 		Chat: newChatService(
 			deps.Logger,
 			deps.Repository.Chat,
 		),
-		Interactions:    newInteractionService(deps.Logger, deps.Repository.Chat),
-		Hero:            heroService,
-		Heroes:          newHeroesService(deps.Logger, deps.Repository.Hero),
-		TournamentFight: newTournamentFightService(deps.Logger, deps.Repository.Fight, heroService, enemyService),
+		Interactions: newInteractionService(deps.Logger, deps.Repository.Chat),
+		Hero:         heroService,
+		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
+		TournamentFight: newTournamentFightService(
+			deps.Logger,
+			deps.Repository.Fight,
+			heroService,
+			enemyService,
+			tournamentFightEventsService,
+		),
 	}
 }
