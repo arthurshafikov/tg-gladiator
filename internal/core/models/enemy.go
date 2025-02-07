@@ -35,6 +35,10 @@ func (e *Enemy) GetHP() int {
 	return e.HP
 }
 
+func (e *Enemy) HasAttackRange() bool {
+	return e.GetMaxAttack() != e.GetMinAttack()
+}
+
 func (e *Enemy) GetMinAttack() int {
 	return e.MinAttack
 }

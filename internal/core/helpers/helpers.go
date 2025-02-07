@@ -29,3 +29,12 @@ func GenerateRandomString(length int) (string, error) {
 
 	return string(b), nil
 }
+
+func GenerateRandomNumberInRange(min, max int) (int, error) {
+	random, err := rand.Int(rand.Reader, big.NewInt(int64(max-min+1)))
+	if err != nil {
+		return 0, err
+	}
+
+	return int(random.Int64()) + min, nil
+}

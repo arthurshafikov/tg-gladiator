@@ -39,6 +39,10 @@ func (h *Hero) GetHP() int {
 	return h.CurrentHP
 }
 
+func (h *Hero) HasAttackRange() bool {
+	return h.GetMaxAttack() != h.GetMinAttack()
+}
+
 func (h *Hero) GetMinAttack() int {
 	return h.Class.GetCharacteristics().Attack
 }

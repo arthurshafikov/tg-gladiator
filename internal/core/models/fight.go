@@ -53,6 +53,7 @@ type Fighter interface {
 	GetType() enums.FighterType
 	GetName() string
 	GetHP() int
+	HasAttackRange() bool
 	GetMinAttack() int
 	GetMaxAttack() int
 	GetDefense() int
@@ -62,6 +63,7 @@ type Fighter interface {
 	GetMaxReward() int
 }
 
+// @todo DTO?
 type FightEvent struct {
 	ActionType         enums.FightActionType
 	DamageDealt        int

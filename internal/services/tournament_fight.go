@@ -1,14 +1,13 @@
 package services
 
 import (
-	"crypto/rand"
 	"fmt"
 	"math"
-	"math/big"
 	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/helpers"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"github.com/arthurshafikov/tg-gladiator/internal/repository"
@@ -84,13 +83,27 @@ func (s *TournamentFightService) FindActiveByHeroID(ctx *types.Context, heroID i
 	return fight, nil
 }
 
+func (s *TournamentFightService) RunAwayAsHero(ctx *types.Context, fightID int64) error {
+	// @todo check access
+	// @todo energy - 1
+	if _, err := s.repo.Update(ctx.GetContext(), fightID, &models.Fight{
+		Status: enums.FightStatusFleed,
+	}); err != nil {
+		s.logger.Error(err)
+
+		return errors.ErrServerError
+	}
+
+	return nil
+}
+
 // @todo refactor this method to many sub-methods
 func (s *TournamentFightService) MakeTurn(
 	ctx *types.Context,
 	fight *models.Fight,
 	actionType enums.FightActionType,
 ) (*models.Fight, *models.FightEvents, error) {
-	fields := map[string]interface{}{}
+	updateFields := map[string]interface{}{}
 
 	events := &models.FightEvents{}
 
@@ -111,7 +124,7 @@ func (s *TournamentFightService) MakeTurn(
 			opponentHP = 0
 		}
 
-		fields[models.FightFieldOpponentHP] = opponentHP
+		updateFields[models.FightFieldOpponentHP] = opponentHP
 	}
 
 	if events.OpponentFightEvent.DamageDealt > 0 {
@@ -120,19 +133,19 @@ func (s *TournamentFightService) MakeTurn(
 			heroHP = 0
 		}
 
-		fields[models.FightFieldHeroHP] = heroHP
+		updateFields[models.FightFieldHeroHP] = heroHP
 	}
 
-	if fields[models.FightFieldOpponentHP] == 0 || fields[models.FightFieldHeroHP] == 0 {
-		fields[models.FightFieldStatus] = enums.FightStatusEnded
+	if updateFields[models.FightFieldOpponentHP] == 0 || updateFields[models.FightFieldHeroHP] == 0 {
+		updateFields[models.FightFieldStatus] = enums.FightStatusEnded
 
-		if fields[models.FightFieldOpponentHP] == 0 {
+		if updateFields[models.FightFieldOpponentHP] == 0 {
 			goldReward, err := s.calculateGoldReward(fight.Opponent)
 			if err != nil {
 				return nil, nil, err
 			}
 
-			fields[models.FightFieldGoldReward] = goldReward
+			updateFields[models.FightFieldGoldReward] = goldReward
 
 			if err := s.heroService.RewardGold(ctx, fight.HeroID, goldReward); err != nil {
 				return nil, nil, err
@@ -140,7 +153,7 @@ func (s *TournamentFightService) MakeTurn(
 		}
 	}
 
-	fight, err = s.repo.UpdateMap(ctx.GetContext(), fight.ID, fields)
+	fight, err = s.repo.UpdateMap(ctx.GetContext(), fight.ID, updateFields)
 	if err != nil {
 		if errors.Is(err, errors.ErrNotFound) {
 			return nil, nil, errors.ErrNotFound
@@ -152,19 +165,6 @@ func (s *TournamentFightService) MakeTurn(
 	}
 
 	return fight, events, nil
-}
-
-func (s *TournamentFightService) RunAwayAsHero(ctx *types.Context, fightID int64) error {
-	// @todo check access
-	if _, err := s.repo.Update(ctx.GetContext(), fightID, &models.Fight{
-		Status: enums.FightStatusFleed,
-	}); err != nil {
-		s.logger.Error(err)
-
-		return errors.ErrServerError
-	}
-
-	return nil
 }
 
 func (s *TournamentFightService) getFighterFightEvent(
@@ -202,21 +202,14 @@ func (s *TournamentFightService) calculateDamageDealt(
 	fighter models.Fighter,
 ) (int, bool, error) {
 	var baseDamage int
-	if fighter.GetMaxAttack() != fighter.GetMinAttack() {
-		damageDealt, err := rand.Int(
-			rand.Reader,
-			big.NewInt(
-				int64(fighter.GetMaxAttack()-fighter.GetMinAttack()),
-			),
-		)
+	var err error
+	if fighter.HasAttackRange() {
+		baseDamage, err = s.generateRandomNumberInRange(fighter.GetMinAttack(), fighter.GetMaxAttack())
 		if err != nil {
 			s.logger.Error(err)
 
 			return 0, false, errors.ErrServerError
 		}
-		damageDealtInt := int(damageDealt.Int64())
-		damageDealtInt += 1 + fighter.GetMinAttack()
-		baseDamage = damageDealtInt
 	} else {
 		baseDamage = fighter.GetMinAttack()
 	}
@@ -243,7 +236,7 @@ func (s *TournamentFightService) calculateIfTheStrikeWasEvaded(
 	case enums.FightActionSimpleStrike:
 		additionalEvasionPercentBasedOnActionType = 0
 	case enums.FightActionStrongStrike:
-		additionalEvasionPercentBasedOnActionType = 20
+		additionalEvasionPercentBasedOnActionType = 20 // @todo should vary
 	case enums.FightActionPreciseStrike:
 		additionalEvasionPercentBasedOnActionType = -25 // @todo should be propotional instead of raw deduction
 	}
@@ -270,7 +263,7 @@ func (s *TournamentFightService) calculateStrikeTypeModificatorDamage(
 	case enums.FightActionSimpleStrike:
 		damageDealt = baseDamage
 	case enums.FightActionStrongStrike:
-		damageDealt = int(math.Round(float64(baseDamage) * 1.5))
+		damageDealt = int(math.Round(float64(baseDamage) * 1.5)) // @todo range for variety
 	case enums.FightActionPreciseStrike:
 		damageDealt = int(math.Round(float64(baseDamage) * 0.7))
 	}
@@ -284,21 +277,6 @@ func (s *TournamentFightService) calculateReceivedDamage(defense, damageDealt in
 	blockedDamage := int(math.Round(float64(damageDealt) * damageReductionMultiplier))
 
 	return damageDealt - blockedDamage, blockedDamage
-}
-
-func (s *TournamentFightService) calculateRandomChance(desiredChance int) (bool, error) {
-	if desiredChance < 1 {
-		return false, nil
-	}
-
-	random, err := rand.Int(rand.Reader, big.NewInt(100))
-	if err != nil {
-		s.logger.Error(err)
-
-		return false, errors.ErrServerError
-	}
-
-	return (random.Int64() + 1) <= int64(desiredChance), nil
 }
 
 func (s *TournamentFightService) calculateGoldReward(opponent models.Fighter) (int, error) {
@@ -315,14 +293,28 @@ func (s *TournamentFightService) calculateGoldReward(opponent models.Fighter) (i
 	return s.generateRandomNumberInRange(opponent.GetMinReward(), opponent.GetMaxReward())
 }
 
-// @todo helper
+func (s *TournamentFightService) calculateRandomChance(desiredChance int) (bool, error) {
+	if desiredChance < 1 {
+		return false, nil
+	}
+
+	random, err := s.generateRandomNumberInRange(1, 100)
+	if err != nil {
+		s.logger.Error(err)
+
+		return false, errors.ErrServerError
+	}
+
+	return random <= desiredChance, nil
+}
+
 func (s *TournamentFightService) generateRandomNumberInRange(min, max int) (int, error) {
-	random, err := rand.Int(rand.Reader, big.NewInt(int64(max-min+1)))
+	random, err := helpers.GenerateRandomNumberInRange(min, max)
 	if err != nil {
 		s.logger.Error(err)
 
 		return 0, errors.ErrServerError
 	}
 
-	return int(random.Int64()) + min, nil
+	return random, nil
 }
