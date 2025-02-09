@@ -43,6 +43,11 @@ type Heroes interface {
 	GetMy(ctx *types.Context) (*[]models.Hero, error)
 }
 
+type HeroShopItem interface {
+	BuyItem(ctx *types.Context, heroID, itemID int64) (*models.HeroShopItem, error)
+	FindMy(ctx *types.Context, heroID, itemID int64) (*models.HeroShopItem, error)
+}
+
 type TournamentFight interface {
 	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
 	FindActiveByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error)
@@ -64,6 +69,7 @@ type Services struct {
 	Interactions
 	Hero
 	Heroes
+	HeroShopItem
 	TournamentFight
 	Shop
 }
@@ -84,6 +90,15 @@ func NewServices(deps Deps) *Services {
 
 	tournamentFightEventsService := newTournamentFightEventsService(deps.Logger)
 
+	heroItemService := newHeroItemService(deps.Repository.HeroItem)
+
+	heroShopItemService := newHeroShopItemService(
+		deps.Repository.HeroShopItem,
+		deps.Repository.HeroShop,
+		heroService,
+		heroItemService,
+	)
+
 	return &Services{
 		Chat: newChatService(
 			deps.Logger,
@@ -92,6 +107,7 @@ func NewServices(deps Deps) *Services {
 		Interactions: newInteractionService(deps.Logger, deps.Repository.Chat),
 		Hero:         heroService,
 		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
+		HeroShopItem: heroShopItemService,
 		TournamentFight: newTournamentFightService(
 			deps.Logger,
 			deps.Repository.Fight,
@@ -99,7 +115,7 @@ func NewServices(deps Deps) *Services {
 			enemyService,
 			tournamentFightEventsService,
 		),
-		Shop: NewShopService(
+		Shop: newShopService(
 			deps.Repository.Item,
 			deps.Repository.HeroShop,
 			deps.Repository.HeroShopItem,

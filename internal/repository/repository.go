@@ -52,6 +52,10 @@ type Item interface {
 	GetBy(ctx context.Context, fields *models.Item) ([]models.Item, error)
 }
 
+type HeroItem interface {
+	Create(ctx context.Context, heroItem models.HeroItem) (*models.HeroItem, error)
+}
+
 type HeroShop interface {
 	Create(ctx context.Context, heroShop models.HeroShop) (*models.HeroShop, error)
 	FindBy(ctx context.Context, heroShop *models.HeroShop) (*models.HeroShop, error)
@@ -61,6 +65,7 @@ type HeroShop interface {
 type HeroShopItem interface {
 	Create(ctx context.Context, heroShopItem models.HeroShopItem) (*models.HeroShopItem, error)
 	DeleteBy(ctx context.Context, fields *models.HeroShopItem) error
+	FindBy(ctx context.Context, fields *models.HeroShopItem) (*models.HeroShopItem, error)
 	GetBy(ctx context.Context, fields *models.HeroShopItem) ([]models.HeroShopItem, error)
 }
 
@@ -70,6 +75,7 @@ type Repository struct {
 	Fight
 	Enemy
 	Item
+	HeroItem
 	HeroShop
 	HeroShopItem
 }
@@ -83,6 +89,7 @@ func NewRepository(db *gorm.DB) *Repository {
 		Fight:        pgsql.NewFightRepository(*baseRepo),
 		Enemy:        pgsql.NewEnemyRepository(*baseRepo),
 		Item:         pgsql.NewItemRepository(*baseRepo),
+		HeroItem:     pgsql.NewHeroItemRepository(*baseRepo),
 		HeroShop:     pgsql.NewHeroShopRepository(*baseRepo),
 		HeroShopItem: pgsql.NewHeroShopItemRepository(*baseRepo),
 	}

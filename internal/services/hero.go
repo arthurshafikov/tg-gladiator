@@ -133,3 +133,18 @@ func (s *HeroService) RewardGold(ctx *types.Context, id int64, amount int) error
 
 	return nil
 }
+
+func (s *HeroService) decreaseGold(ctx *types.Context, heroID int64, amount int) error {
+	hero, err := s.FindMy(ctx, heroID)
+	if err != nil {
+		return err
+	}
+
+	if _, err := s.repo.UpdateMap(ctx.GetContext(), heroID, map[string]interface{}{
+		models.HeroFieldCurrentGold: hero.CurrentGold - amount,
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}

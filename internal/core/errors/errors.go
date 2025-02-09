@@ -16,9 +16,12 @@ var (
 	ErrUndefinedInteraction   = errors.New("undefined_interaction")
 	ErrUndefinedCallbackQuery = errors.New("undefined_callbackQuery")
 
-	ErrInvalidHeroClass = errors.New("invalid_hero_class")
-	ErrHasActiveFight   = errors.New("has_active_fight")
-	ErrEmpty            = errors.New("empty")
+	ErrInvalidHeroClass      = errors.New("invalid_hero_class")
+	ErrHasActiveFight        = errors.New("has_active_fight")
+	ErrShopNotExists         = errors.New("shop_not_exists")
+	ErrHeroShopItemNotExists = errors.New("hero_shop_item_not_exists")
+	ErrInsufficientGold      = errors.New("insufficient_gold")
+	ErrEmpty                 = errors.New("empty")
 )
 
 func Is(err, target error) bool {

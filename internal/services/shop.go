@@ -20,7 +20,7 @@ type ShopService struct {
 	heroShopItemsRepo repository.HeroShopItem
 }
 
-func NewShopService(
+func newShopService(
 	itemsRepo repository.Item,
 	heroShopRepo repository.HeroShop,
 	heroShopItemsRepo repository.HeroShopItem,

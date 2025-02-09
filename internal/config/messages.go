@@ -73,8 +73,12 @@ type Messages struct {
 	FightResultOpponentWon string
 	FightResultBackButton  string
 
-	ShopIntro string
-	ShopYourBalance string
+	ShopIntro               string
+	ShopYourBalance         string
+	ShopBuyItemConfirmation string
+	ShopBuyItemConfirm      string
+	ShopBackButton          string
+	ShopBuyItemSuccess      string
 
 	HeroClasses map[string]string
 	Errors      map[string]string

@@ -34,6 +34,22 @@ func (r *HeroShopItem) DeleteBy(ctx context.Context, fields *models.HeroShopItem
 	return nil
 }
 
+func (r *HeroShopItem) FindBy(ctx context.Context, fields *models.HeroShopItem) (*models.HeroShopItem, error) {
+	var heroShopItem models.HeroShopItem
+	if err := r.getDBInstance(ctx).
+		Preload("Item").
+		Where(fields).
+		First(&heroShopItem).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		return nil, err
+	}
+
+	return &heroShopItem, nil
+}
+
 func (r *HeroShopItem) GetBy(ctx context.Context, fields *models.HeroShopItem) ([]models.HeroShopItem, error) {
 	var heroShopItems []models.HeroShopItem
 	if err := r.getDBInstance(ctx).

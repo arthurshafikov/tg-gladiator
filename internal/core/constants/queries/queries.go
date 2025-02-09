@@ -15,9 +15,11 @@ const (
 	HeroCreationStart       Query = "HeroCreationStart"
 	HeroCreationSelectClass Query = "HeroCreationSelectClass"
 
-	StartTournamentFight Query = "StartTournamentFight"
-	OpenShop             Query = "OpenShop"
+	OpenShop           Query = "OpenShop"
+	ShopBuyItem        Query = "ShopBuyItem"
+	ShopBuyItemConfirm Query = "ShopBuyItemConfirm"
 
+	StartTournamentFight     Query = "StartTournamentFight"
 	FightActionSimpleStrike  Query = "FightActionSimpleStrike"
 	FightActionStrongStrike  Query = "FightActionStrongStrike"
 	FightActionPreciseStrike Query = "FightActionPreciseStrike"

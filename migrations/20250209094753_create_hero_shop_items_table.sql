@@ -6,7 +6,9 @@ CREATE TABLE hero_shop_items (
     price INT NOT NULL CHECK (price >= 0),
 
     FOREIGN KEY (hero_shop_id) REFERENCES hero_shops(id) ON DELETE CASCADE,
-    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
+    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
+
+    PRIMARY KEY (hero_shop_id, item_id)
 );
 -- +goose StatementEnd
 
