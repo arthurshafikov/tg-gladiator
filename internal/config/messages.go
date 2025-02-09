@@ -83,6 +83,7 @@ type Messages struct {
 	HeroClasses    map[string]string
 	ItemCategories map[enums.ItemCategory]string
 	ItemEquipsOn   map[enums.ItemEquipsOn]string
+	ItemNames      map[string]string
 	Errors         map[string]string
 }
 
@@ -360,7 +361,7 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models
 func (m *Messages) ItemDescription(item models.Item) string {
 	msg := "\n"
 
-	msg += fmt.Sprintf("Название: %s\n", item.Name)
+	msg += fmt.Sprintf("Название: %s\n", m.ItemNames[item.Name])
 	msg += fmt.Sprintf("Категория: %s\n", m.ItemCategories[item.Category])
 	msg += fmt.Sprintf("Одевается на: %s\n", m.ItemEquipsOn[item.EquipsOn])
 

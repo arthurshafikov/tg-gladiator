@@ -50,7 +50,7 @@ func (h *Handler) HandleShopBuyItem(ctx *types.Context, query *tgbotapi.Callback
 		"%s\n%s\n\n%s",
 		fmt.Sprintf(
 			ctx.Messages().ShopBuyItemConfirmation,
-			shopItem.Item.Name,
+			ctx.Messages().ItemNames[shopItem.Item.Name],
 			shopItem.Price,
 		),
 		ctx.Messages().ItemDescription(shopItem.Item),
@@ -98,7 +98,7 @@ func (h *Handler) HandleShopBuyItemConfirm(ctx *types.Context, query *tgbotapi.C
 
 	msgText := fmt.Sprintf(
 		ctx.Messages().ShopBuyItemSuccess,
-		shopItem.Item.Name,
+		ctx.Messages().ItemNames[shopItem.Item.Name],
 	)
 	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, msgText)
 	if err := h.Helper.Send(msg); err != nil {
@@ -156,13 +156,13 @@ func (h *Handler) openShop(ctx *types.Context, heroID int64, query ...*tgbotapi.
 		for _, shopItem := range shopItems {
 			shopItemsText += fmt.Sprintf(
 				"\n- %s (%s)💰%v",
-				shopItem.Item.Name,
+				ctx.Messages().ItemNames[shopItem.Item.Name],
 				shopItem.Item.GetShortCharacteristicsText(),
 				shopItem.Price,
 			)
 			shopItemsButtons = append(shopItemsButtons, telegram.KeyboardButton{
 				CallbackQuery: queries.ShopBuyItem.WithID(heroID).WithID(shopItem.ItemID),
-				Text:          shopItem.Item.Name,
+				Text:          ctx.Messages().ItemNames[shopItem.Item.Name],
 			})
 		}
 	}
