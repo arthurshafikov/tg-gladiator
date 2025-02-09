@@ -6,6 +6,7 @@ import (
 
 type Query string
 
+// @todo prior to launch replace these text values with numbers 0-999
 const (
 	OpenMenu     Query = "OpenMenu"
 	OpenMyHeroes Query = "OpenMyHeroes"
@@ -15,6 +16,7 @@ const (
 	HeroCreationSelectClass Query = "HeroCreationSelectClass"
 
 	StartTournamentFight Query = "StartTournamentFight"
+	OpenShop             Query = "OpenShop"
 
 	FightActionSimpleStrike  Query = "FightActionSimpleStrike"
 	FightActionStrongStrike  Query = "FightActionStrongStrike"

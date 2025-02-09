@@ -67,6 +67,9 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 	case queries.FightActionRunAway:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionRunAway)
 
+	case queries.OpenShop:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenShop)
+
 	case queries.HeroDelete:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroDelete)
 

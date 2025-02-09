@@ -55,12 +55,17 @@ type TournamentFight interface {
 	RunAwayAsHero(ctx *types.Context, fightID int64) error
 }
 
+type Shop interface {
+	GetShopItemsFor(ctx *types.Context, heroID int64) ([]models.HeroShopItem, error)
+}
+
 type Services struct {
 	Chat
 	Interactions
 	Hero
 	Heroes
 	TournamentFight
+	Shop
 }
 
 type Deps struct {
@@ -93,6 +98,11 @@ func NewServices(deps Deps) *Services {
 			heroService,
 			enemyService,
 			tournamentFightEventsService,
+		),
+		Shop: NewShopService(
+			deps.Repository.Item,
+			deps.Repository.HeroShop,
+			deps.Repository.HeroShopItem,
 		),
 	}
 }

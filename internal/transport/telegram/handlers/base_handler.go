@@ -198,6 +198,10 @@ func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ..
 			Text:          ctx.Messages().MenuItemStartTournamentFight,
 		},
 		telegram.KeyboardButton{
+			CallbackQuery: queries.OpenShop.WithID(hero.ID),
+			Text:          ctx.Messages().MenuItemShop,
+		},
+		telegram.KeyboardButton{
 			CallbackQuery: queries.HeroDelete.WithID(hero.ID),
 			Text:          ctx.Messages().MenuItemDeleteHero,
 		},

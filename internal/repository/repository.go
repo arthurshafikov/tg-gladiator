@@ -48,20 +48,42 @@ type Enemy interface {
 	// UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Chat, error)
 }
 
+type Item interface {
+	GetBy(ctx context.Context, fields *models.Item) ([]models.Item, error)
+}
+
+type HeroShop interface {
+	Create(ctx context.Context, heroShop models.HeroShop) (*models.HeroShop, error)
+	FindBy(ctx context.Context, heroShop *models.HeroShop) (*models.HeroShop, error)
+	Update(ctx context.Context, id int64, fields *models.HeroShop) (*models.HeroShop, error)
+}
+
+type HeroShopItem interface {
+	Create(ctx context.Context, heroShopItem models.HeroShopItem) (*models.HeroShopItem, error)
+	DeleteBy(ctx context.Context, fields *models.HeroShopItem) error
+	GetBy(ctx context.Context, fields *models.HeroShopItem) ([]models.HeroShopItem, error)
+}
+
 type Repository struct {
 	Chat
 	Hero
 	Fight
 	Enemy
+	Item
+	HeroShop
+	HeroShopItem
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	baseRepo := pgsql.NewBaseRepo(db)
 
 	return &Repository{
-		Chat:  pgsql.NewChatRepository(*baseRepo),
-		Hero:  pgsql.NewHeroRepository(*baseRepo),
-		Fight: pgsql.NewFightRepository(*baseRepo),
-		Enemy: pgsql.NewEnemyRepository(*baseRepo),
+		Chat:         pgsql.NewChatRepository(*baseRepo),
+		Hero:         pgsql.NewHeroRepository(*baseRepo),
+		Fight:        pgsql.NewFightRepository(*baseRepo),
+		Enemy:        pgsql.NewEnemyRepository(*baseRepo),
+		Item:         pgsql.NewItemRepository(*baseRepo),
+		HeroShop:     pgsql.NewHeroShopRepository(*baseRepo),
+		HeroShopItem: pgsql.NewHeroShopItemRepository(*baseRepo),
 	}
 }

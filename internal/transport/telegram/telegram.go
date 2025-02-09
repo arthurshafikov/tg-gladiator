@@ -50,6 +50,8 @@ type QueryHandler interface {
 	HandleFightActionPreciseStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionRunAway(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
+	HandleOpenShop(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+
 	HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 }
 

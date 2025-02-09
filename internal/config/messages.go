@@ -25,6 +25,7 @@ type Messages struct {
 	MyHeroesList     string
 
 	MenuItemStartTournamentFight string
+	MenuItemShop                 string
 	MenuItemDeleteHero           string
 	HeroDeleteConfirmationPrompt string
 	HeroDeleteCancelled          string
@@ -71,6 +72,9 @@ type Messages struct {
 	FightResultHeroWon     string
 	FightResultOpponentWon string
 	FightResultBackButton  string
+
+	ShopIntro string
+	ShopYourBalance string
 
 	HeroClasses map[string]string
 	Errors      map[string]string

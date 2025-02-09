@@ -11,6 +11,7 @@ RU:
   MyHeroesList: "Это лист ваших героев"
 
   MenuItemStartTournamentFight: "Учавствовать в Турнире"
+  MenuItemShop: "Магазин 💰"
   MenuItemDeleteHero: "❌ Удалить"
   HeroDeleteConfirmationPrompt: "⚠️ Пожалуйста, подтвердите удаление героя %s, для подтверждения отправьте сообщением текст '<code>%s</code>', для отмены нажмите на кнопку Назад."
   HeroDeleteCancelled: "Удаление героя было отменено."
@@ -57,6 +58,9 @@ RU:
   FightResultHeroWon: "Поздравляем, вы победили, ваша награда - %v💰!"
   FightResultOpponentWon: "К сожалению вы проиграли"
   FightResultBackButton: "Вернуться на страницу героя"
+
+  ShopIntro: "Предметы в магазине для вас:"
+  ShopYourBalance: "Ваш баланс"
 
   HeroClasses:
     swordsman: "⚔️ Мечник"
