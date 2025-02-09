@@ -100,6 +100,23 @@ func (s *HeroService) FindMy(ctx *types.Context, id int64) (*models.Hero, error)
 	return hero, nil
 }
 
+func (s *HeroService) GetMy(ctx *types.Context) (*[]models.Hero, error) {
+	heroes, err := s.repo.GetBy(ctx.GetContext(), &models.Hero{
+		ChatID: ctx.GetChat().ID,
+	})
+	if err != nil {
+		if errors.Is(errors.ErrNotFound, err) {
+			return nil, errors.ErrNotFound
+		}
+
+		s.logger.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	return heroes, nil
+}
+
 func (s *HeroService) RewardGold(ctx *types.Context, id int64, amount int) error {
 	hero, err := s.FindMy(ctx, id)
 	if err != nil {

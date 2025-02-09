@@ -58,6 +58,37 @@ func (r *Fight) FindBy(ctx context.Context, fields *models.Fight) (*models.Fight
 	return &fight, nil
 }
 
+func (r *Fight) FindByMap(ctx context.Context, fields map[string]interface{}) (*models.Fight, error) {
+	var fight models.Fight
+	if err := r.getDBInstance(ctx).
+		Preload("Hero").
+		Where(fields).
+		First(&fight).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		return nil, err
+	}
+
+	if fight.OpponentType == enums.OpponentTypeMob {
+		enemy := models.Enemy{
+			ID: fight.OpponentID,
+		}
+		if err := r.getDBInstance(ctx).Find(&enemy).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return nil, errors.ErrNotFound
+			}
+
+			return nil, err
+		}
+
+		fight.Opponent = &enemy
+	}
+
+	return &fight, nil
+}
+
 func (r *Fight) Create(ctx context.Context, fight models.Fight) (*models.Fight, error) {
 	if err := r.getDBInstance(ctx).
 		Where("hero_id = ?", fight.HeroID).

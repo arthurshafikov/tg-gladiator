@@ -56,6 +56,7 @@ type Messages struct {
 	FightActionPreciseStrike string
 	FightActionRunAway       string
 	FightRunAwaySuccess      string
+	PleaseFinishActiveFight  string
 
 	FightTurnOverview                    string
 	FightActionInfoDealtSimpleStrike     string

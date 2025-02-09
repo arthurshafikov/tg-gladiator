@@ -90,6 +90,35 @@ func (s *TournamentFightService) FindActiveByHeroID(ctx *types.Context, heroID i
 	return fight, nil
 }
 
+func (s *TournamentFightService) FindMyActive(ctx *types.Context) (*models.Fight, error) {
+	heroes, err := s.heroService.GetMy(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	heroIDs := make([]int64, 0, len(*heroes))
+	for _, hero := range *heroes {
+		heroIDs = append(heroIDs, hero.ID)
+	}
+
+	fight, err := s.repo.FindByMap(ctx.GetContext(), map[string]interface{}{
+		models.FightFieldHeroID: heroIDs,
+		models.FightFieldStatus: enums.FightStatusActive,
+	})
+	if err != nil {
+		if errors.Is(err, errors.ErrNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		s.logger.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	return fight, nil
+}
+
+// @todo where's the query for that?
 func (s *TournamentFightService) RunAwayAsHero(ctx *types.Context, fightID int64) error {
 	// @todo check access
 	// @todo energy - 1

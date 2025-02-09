@@ -25,12 +25,18 @@ type Bot struct {
 	helper handlers.TelegramHandlerHelper
 }
 
+type BaseHandler interface {
+	HandleShowActiveFightOverview(ctx *types.Context) error
+}
+
 type CommandsHandler interface {
+	BaseHandler
 	HandleStart(ctx *types.Context, message *tgbotapi.Message) error
 	HandleHelp(ctx *types.Context) error
 }
 
 type QueryHandler interface {
+	BaseHandler
 	HandleOpenMenu(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleOpenMyHero(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
@@ -47,6 +53,7 @@ type QueryHandler interface {
 }
 
 type InteractionHandler interface {
+	BaseHandler
 	HandleHeroCreationEnterName(ctx *types.Context, message *tgbotapi.Message, payload []string) error
 	HandleHeroDelete(ctx *types.Context, message *tgbotapi.Message, payload []string) error
 }

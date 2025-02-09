@@ -122,6 +122,65 @@ func (h *BaseHandler) GetIDFromString(str string) (int64, error) {
 	return IDInt64, nil
 }
 
+func (h *BaseHandler) HandleShowActiveFightOverview(ctx *types.Context) error {
+	if err := h.Helper.SendTextMessage(ctx.GetChatID(), ctx.Messages().PleaseFinishActiveFight); err != nil {
+		return err
+	}
+
+	fight, err := h.Services.TournamentFight.FindMyActive(ctx)
+	if err != nil {
+		return err
+	}
+
+	return h.SendFightOverviewMessage(ctx, fight)
+}
+
+func (h *BaseHandler) SendFightOverviewMessage(ctx *types.Context, fight *models.Fight, query ...*tgbotapi.CallbackQuery) error {
+	msgText, err := ctx.Messages().FightInfo(fight)
+	if err != nil {
+		h.Logger.Error(err)
+
+		return errors.ErrServerError
+	}
+
+	keyboard := &tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{},
+	}
+	if !fight.HasEnded() {
+		buttons := []telegram.KeyboardButton{
+			{
+				CallbackQuery: queries.FightActionSimpleStrike.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionSimpleStrike,
+			},
+			{
+				CallbackQuery: queries.FightActionStrongStrike.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionStrongStrike, // @todo should decrease hero's armor
+			},
+			{
+				CallbackQuery: queries.FightActionPreciseStrike.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionPreciseStrike,
+			},
+			{
+				CallbackQuery: queries.OpenMyHero.WithID(fight.HeroID),
+				Text:          ctx.Messages().FightActionRunAway, // @todo action should reduce double energy
+			},
+		}
+		keyboard = h.Helper.CreateKeyboard(buttons, 1)
+	}
+
+	if len(query) > 0 {
+		fightOverviewMsg := h.Helper.NewEditMessage(ctx.GetChatID(), query[0].Message.MessageID, msgText)
+		fightOverviewMsg.ReplyMarkup = keyboard
+
+		return h.Helper.Send(fightOverviewMsg)
+	}
+
+	fightOverviewMsg := h.Helper.NewMessage(ctx.GetChatID(), msgText)
+	fightOverviewMsg.ReplyMarkup = keyboard
+
+	return h.Helper.Send(fightOverviewMsg)
+}
+
 func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ...*tgbotapi.CallbackQuery) error {
 	ended, err := h.endExistingActiveFightIfExist(ctx, hero, query...)
 	if err != nil {

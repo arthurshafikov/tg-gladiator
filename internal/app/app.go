@@ -42,9 +42,10 @@ func Run() {
 	ctx := context.Background()
 	config := configPkg.NewConfig(envFolderPath, configFolderPath)
 	logger := logrus.New()
+	logrus.SetLevel(logrus.DebugLevel)
 	logger.SetReportCaller(true)
 	logger.SetOutput(os.Stdout)
-	logger.SetLevel(logrus.InfoLevel)
+	logger.SetLevel(logrus.DebugLevel)
 	logger.Info("Starting the app...")
 
 	if config.Sentry.DSN != "" {

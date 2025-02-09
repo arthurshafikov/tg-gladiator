@@ -42,6 +42,7 @@ RU:
   FightActionPreciseStrike: "🎯 Точный удар"
   FightActionRunAway: "🏃 Убежать"
   FightRunAwaySuccess: "Вы успешно сбежали 🏃"
+  PleaseFinishActiveFight: "Пожалуйста, закончите свою активную битву:"
   
   FightTurnOverview: "Ход боя"
   FightActionInfoDealtSimpleStrike: "Нанёс простым ударом %v урона"

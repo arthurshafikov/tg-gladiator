@@ -10,6 +10,7 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/middlewares"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/sirupsen/logrus"
 )
 
 func (b *Bot) handleCommand(ctx *types.Context, message *tgbotapi.Message) error {
@@ -33,39 +34,53 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 		payload = splittedData[1:]
 	}
 
-	middlewareChain := middlewares.NewQueryMiddlewareChain(
-		payloadQuery,
-		middlewares.QueryCheckIsActiveAccount,
+	middleware := middlewares.NewQueryMiddlewareChain(
+		b.services,
 	)
 
+	middlewareChain := middleware.Chain(
+		middleware.QueryCheckDontHaveActiveFight,
+	)
+
+	var err error
 	switch payloadQuery {
 	case queries.OpenMenu:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMenu)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMenu)
 	case queries.OpenMyHeroes:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMyHeroes)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMyHeroes)
 	case queries.OpenMyHero:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMyHero)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMyHero)
 
 	case queries.HeroCreationStart:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroCreationStart)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroCreationStart)
 	case queries.HeroCreationSelectClass:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroCreationSelectClass)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroCreationSelectClass)
 
 	case queries.StartTournamentFight:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleStartTournamentFight)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleStartTournamentFight)
 	case queries.FightActionSimpleStrike:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionSimpleStrike)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionSimpleStrike)
 	case queries.FightActionStrongStrike:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionStrongStrike)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionStrongStrike)
 	case queries.FightActionPreciseStrike:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionPreciseStrike)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionPreciseStrike)
 
 	case queries.HeroDelete:
-		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroDelete)
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroDelete)
 
 	default:
-		return errors.ErrUndefinedCallbackQuery
+		err = errors.ErrUndefinedCallbackQuery
 	}
+
+	if errors.Is(err, errors.ErrHasActiveFight) {
+		if err := b.helper.AnswerCallbackQueryNil(query.ID); err != nil {
+			logrus.Error(err)
+		}
+
+		err = b.queryHandler.HandleShowActiveFightOverview(ctx)
+	}
+
+	return err
 }
 
 func (b *Bot) handleInteraction(
@@ -85,15 +100,22 @@ func (b *Bot) handleInteraction(
 		middlewares.InteractionLogSomething,
 	)
 
+	var err error
 	switch payloadInteraction {
 	case interactions.HeroCreationEnterName:
-		return middlewareChain(ctx, message, payloadInteraction, payload, b.interactionHandler.HandleHeroCreationEnterName)
+		err = middlewareChain(ctx, message, payloadInteraction, payload, b.interactionHandler.HandleHeroCreationEnterName)
 
 	case interactions.HeroDelete:
-		return middlewareChain(ctx, message, payloadInteraction, payload, b.interactionHandler.HandleHeroDelete)
+		err = middlewareChain(ctx, message, payloadInteraction, payload, b.interactionHandler.HandleHeroDelete)
 	default:
-		return errors.ErrUndefinedInteraction
+		err = errors.ErrUndefinedInteraction
 	}
+
+	if errors.Is(err, errors.ErrHasActiveFight) {
+		err = b.interactionHandler.HandleShowActiveFightOverview(ctx)
+	}
+
+	return err
 }
 
 func (b *Bot) handleMessage(ctx *types.Context) error {

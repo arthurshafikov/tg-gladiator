@@ -17,6 +17,7 @@ var (
 	ErrUndefinedCallbackQuery = errors.New("undefined_callbackQuery")
 
 	ErrInvalidHeroClass = errors.New("invalid_hero_class")
+	ErrHasActiveFight   = errors.New("has_active_fight")
 	ErrEmpty            = errors.New("empty")
 )
 

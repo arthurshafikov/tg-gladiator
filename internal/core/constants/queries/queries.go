@@ -42,3 +42,11 @@ func (i Query) With(additionalFields ...string) Query {
 func (i Query) WithID(id int64) Query {
 	return i + Query(fmt.Sprintf("%s%v", SpecialDelimeterInQueryCallback, id))
 }
+
+func FightQueries() []Query {
+	return []Query{
+		FightActionSimpleStrike,
+		FightActionStrongStrike,
+		FightActionPreciseStrike,
+	}
+}

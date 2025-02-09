@@ -6,8 +6,6 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
-	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
-	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -27,7 +25,7 @@ func (h *Handler) HandleStartTournamentFight(ctx *types.Context, query *tgbotapi
 		return err
 	}
 
-	return h.sendFightOverviewMessage(ctx, fight, query)
+	return h.SendFightOverviewMessage(ctx, fight, query)
 }
 
 func (h *Handler) HandleFightActionSimpleStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
@@ -73,7 +71,7 @@ func (h *Handler) tournamentTurn(
 		return err
 	}
 
-	if err := h.sendFightOverviewMessage(ctx, fight); err != nil {
+	if err := h.SendFightOverviewMessage(ctx, fight); err != nil {
 		return err
 	}
 
@@ -100,50 +98,4 @@ func (h *Handler) tournamentTurn(
 	}
 
 	return nil
-}
-
-func (h *Handler) sendFightOverviewMessage(ctx *types.Context, fight *models.Fight, query ...*tgbotapi.CallbackQuery) error {
-	msgText, err := ctx.Messages().FightInfo(fight)
-	if err != nil {
-		h.Logger.Error(err)
-
-		return errors.ErrServerError
-	}
-
-	keyboard := &tgbotapi.InlineKeyboardMarkup{
-		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{},
-	}
-	if !fight.HasEnded() {
-		buttons := []telegram.KeyboardButton{
-			{
-				CallbackQuery: queries.FightActionSimpleStrike.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionSimpleStrike,
-			},
-			{
-				CallbackQuery: queries.FightActionStrongStrike.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionStrongStrike, // @todo should decrease hero's armor
-			},
-			{
-				CallbackQuery: queries.FightActionPreciseStrike.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionPreciseStrike,
-			},
-			{
-				CallbackQuery: queries.OpenMyHero.WithID(fight.HeroID),
-				Text:          ctx.Messages().FightActionRunAway, // @todo action should reduce double energy
-			},
-		}
-		keyboard = h.Helper.CreateKeyboard(buttons, 1)
-	}
-
-	if len(query) > 0 {
-		fightOverviewMsg := h.Helper.NewEditMessage(ctx.GetChatID(), query[0].Message.MessageID, msgText)
-		fightOverviewMsg.ReplyMarkup = keyboard
-
-		return h.Helper.Send(fightOverviewMsg)
-	}
-
-	fightOverviewMsg := h.Helper.NewMessage(ctx.GetChatID(), msgText)
-	fightOverviewMsg.ReplyMarkup = keyboard
-
-	return h.Helper.Send(fightOverviewMsg)
 }

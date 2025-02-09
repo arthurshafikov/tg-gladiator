@@ -1,8 +1,12 @@
 package middlewares
 
 import (
+	"slices"
+
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
+	"github.com/arthurshafikov/tg-gladiator/internal/services"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -16,7 +20,17 @@ type QueryMiddlewareFunc func(
 	next QueryHandlerFunc,
 ) error
 
-func NewQueryMiddlewareChain(payloadQuery queries.Query, middlewares ...QueryMiddlewareFunc) QueryMiddlewareFunc {
+type QueryMiddlewareChain struct {
+	services *services.Services
+}
+
+func NewQueryMiddlewareChain(services *services.Services) *QueryMiddlewareChain {
+	return &QueryMiddlewareChain{
+		services: services,
+	}
+}
+
+func (m *QueryMiddlewareChain) Chain(middlewares ...QueryMiddlewareFunc) QueryMiddlewareFunc {
 	return func(
 		ctx *types.Context,
 		query *tgbotapi.CallbackQuery,
@@ -38,18 +52,29 @@ func NewQueryMiddlewareChain(payloadQuery queries.Query, middlewares ...QueryMid
 			payloadQuery,
 			payload,
 			func(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
-				return NewQueryMiddlewareChain(payloadQuery, rest...)(ctx, query, payloadQuery, payload, next)
+				return m.Chain(rest...)(ctx, query, payloadQuery, payload, next)
 			},
 		)
 	}
 }
 
-func QueryCheckIsActiveAccount(
+func (m *QueryMiddlewareChain) QueryCheckDontHaveActiveFight(
 	ctx *types.Context,
 	query *tgbotapi.CallbackQuery,
 	payloadQuery queries.Query,
 	payload []string,
 	next QueryHandlerFunc,
 ) error {
+	if !slices.Contains[[]queries.Query, queries.Query](queries.FightQueries(), payloadQuery) {
+		activeFight, err := m.services.TournamentFight.FindMyActive(ctx)
+		if err != nil && !errors.Is(err, errors.ErrNotFound) {
+			return err
+		}
+
+		if activeFight != nil {
+			return errors.ErrHasActiveFight
+		}
+	}
+
 	return next(ctx, query, payload)
 }

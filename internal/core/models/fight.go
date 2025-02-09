@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	FightFieldHeroID     = "hero_id"
 	FightFieldStatus     = "status"
 	FightFieldOpponentHP = "opponent_hp"
 	FightFieldHeroHP     = "hero_hp"
