@@ -74,6 +74,16 @@ RU:
     armor: "🛡 Броня"
     accessory: "📿 Аксессуары"
 
+  ItemEquipsOn:
+    hand: "Руку"
+    two_hands: "Две руки"
+    hands: "Ладони"
+    body: "Тело"
+    head: "Голову"
+    neck: "Шею"
+    feet: "Ноги"
+    finger: "Палец"
+
   Errors:
     403_forbidden: "⛔️ Ошибка: недостаточно прав для выполнения действия"
     404_not_found: "🔍 Ошибка: не найдено"

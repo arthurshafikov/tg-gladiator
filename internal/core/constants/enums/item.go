@@ -1,17 +1,17 @@
 package enums
 
+type ItemEquipsOn string
 type ItemCategory string
 
 const (
-	ItemEquipsOnHand     = "hand"      // a sword
-	ItemEquipsOnTwoHands = "two_hands" // battle axe
-	ItemEquipsOnHands    = "hands"     // gloves
-	ItemEquipsOnBody     = "body"
-	ItemEquipsOnHead     = "head"
-	ItemEquipsOnNeck     = "neck"
-	ItemEquipsOnFeet     = "feet"
-	ItemEquipsOnFinger   = "finger" // maximum 2 per hero
-	ItemEquipsOnWaist    = "waist"
+	ItemEquipsOnHand     ItemEquipsOn = "hand"      // a sword
+	ItemEquipsOnTwoHands ItemEquipsOn = "two_hands" // battle axe
+	ItemEquipsOnHands    ItemEquipsOn = "hands"     // gloves
+	ItemEquipsOnBody     ItemEquipsOn = "body"
+	ItemEquipsOnHead     ItemEquipsOn = "head"
+	ItemEquipsOnNeck     ItemEquipsOn = "neck"
+	ItemEquipsOnFeet     ItemEquipsOn = "feet"
+	ItemEquipsOnFinger   ItemEquipsOn = "finger" // maximum 2 per hero
 
 	ItemCategoryWeapon    ItemCategory = "weapon"
 	ItemCategoryArmor     ItemCategory = "armor"

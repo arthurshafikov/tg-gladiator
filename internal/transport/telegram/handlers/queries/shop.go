@@ -47,12 +47,13 @@ func (h *Handler) HandleShopBuyItem(ctx *types.Context, query *tgbotapi.Callback
 	}
 
 	msgText := fmt.Sprintf(
-		"%s\n\n%s",
+		"%s\n%s\n\n%s",
 		fmt.Sprintf(
 			ctx.Messages().ShopBuyItemConfirmation,
 			shopItem.Item.Name,
 			shopItem.Price,
 		),
+		ctx.Messages().ItemDescription(shopItem.Item),
 		fmt.Sprintf(
 			"%s - 💰%v",
 			ctx.Messages().ShopYourBalance,
@@ -127,19 +128,9 @@ func (h *Handler) openShop(ctx *types.Context, heroID int64, query ...*tgbotapi.
 		)
 	}
 
-	// for category, shopItemsByCategoryElement := range shopItemsByCategories {
-	// 	slices.SortFunc(shopItemsByCategoryElement[category], func(a, b models.HeroShopItem) int {
-	// 		if a.Price < b.Price {
-	// 			return -1
-	// 		} else if a.Price > b.Price {
-	// 			return 1
-	// 		}
-
-	// 		return 0
-	// 	})
-	// }
-
 	shopItemsText := ctx.Messages().ShopIntro
+
+	shopItemsButtons := make([]telegram.KeyboardButton, 0, len(shopItems)+1)
 
 	for _, itemCategory := range enums.ItemCategoryAll() {
 		if len(shopItemsByCategories[itemCategory]) < 1 {
@@ -169,24 +160,20 @@ func (h *Handler) openShop(ctx *types.Context, heroID int64, query ...*tgbotapi.
 				shopItem.Item.GetShortCharacteristicsText(),
 				shopItem.Price,
 			)
+			shopItemsButtons = append(shopItemsButtons, telegram.KeyboardButton{
+				CallbackQuery: queries.ShopBuyItem.WithID(heroID).WithID(shopItem.ItemID),
+				Text:          shopItem.Item.Name,
+			})
 		}
 	}
 
 	// @todo updates at in text?
 	shopItemsText += fmt.Sprintf("\n\n%s - 💰%v", ctx.Messages().ShopYourBalance, hero.CurrentGold)
 
-	shopItemsButtons := make([]telegram.KeyboardButton, 0, len(shopItems)+1)
-	for _, shopItem := range shopItems {
-		shopItemsButtons = append(shopItemsButtons, telegram.KeyboardButton{
-			CallbackQuery: queries.ShopBuyItem.WithID(heroID).WithID(shopItem.ItemID),
-			Text:          shopItem.Item.Name,
-		})
-	}
 	shopItemsButtons = append(shopItemsButtons, telegram.KeyboardButton{
 		CallbackQuery: queries.OpenMyHero.WithID(heroID),
 		Text:          ctx.Messages().DefaultBackBtn,
 	})
-
 	keyboard := h.Helper.CreateKeyboard(shopItemsButtons, 2)
 
 	if len(query) > 0 {

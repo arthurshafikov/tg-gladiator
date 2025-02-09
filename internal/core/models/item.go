@@ -9,7 +9,7 @@ import (
 type Item struct {
 	ID                         int64              `json:"id"`
 	Category                   enums.ItemCategory `json:"category"`
-	EquipsOn                   string             `json:"equips_on"`
+	EquipsOn                   enums.ItemEquipsOn `json:"equips_on"`
 	Name                       string             `json:"name"`
 	AttackBonus                int                `json:"attack_bonus"`
 	DefenseBonus               int                `json:"defense_bonus"`

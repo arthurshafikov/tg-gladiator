@@ -82,6 +82,7 @@ type Messages struct {
 
 	HeroClasses    map[string]string
 	ItemCategories map[enums.ItemCategory]string
+	ItemEquipsOn   map[enums.ItemEquipsOn]string
 	Errors         map[string]string
 }
 
@@ -354,4 +355,43 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models
 		criticalInfo,
 		opponentReactionInfo,
 	)
+}
+
+func (m *Messages) ItemDescription(item models.Item) string {
+	msg := "\n"
+
+	msg += fmt.Sprintf("Название: %s\n", item.Name)
+	msg += fmt.Sprintf("Категория: %s\n", m.ItemCategories[item.Category])
+	msg += fmt.Sprintf("Одевается на: %s\n", m.ItemEquipsOn[item.EquipsOn])
+
+	if item.AttackBonus != 0 {
+		if item.AttackBonus < 0 {
+			msg += fmt.Sprintf("Бонус к атаке: %v💪\n", item.AttackBonus)
+		} else {
+			msg += fmt.Sprintf("Бонус к атаке: +%v💪\n", item.AttackBonus)
+		}
+	}
+	if item.DefenseBonus != 0 {
+		if item.DefenseBonus < 0 {
+			msg += fmt.Sprintf("Бонус к защите: %v🛡\n", item.DefenseBonus)
+		} else {
+			msg += fmt.Sprintf("Бонус к защите: +%v🛡\n", item.DefenseBonus)
+		}
+	}
+	if item.CriticalChancePercentBonus != 0 {
+		if item.CriticalChancePercentBonus < 0 {
+			msg += fmt.Sprintf("Бонус к шансу критического удара: %v%%💥\n", item.CriticalChancePercentBonus)
+		} else {
+			msg += fmt.Sprintf("Бонус к шансу критического удара: +%v%%💥\n", item.CriticalChancePercentBonus)
+		}
+	}
+	if item.EvasionPercentBonus != 0 {
+		if item.EvasionPercentBonus < 0 {
+			msg += fmt.Sprintf("Бонус к шансу уклонения: %v%%🍀\n", item.EvasionPercentBonus)
+		} else {
+			msg += fmt.Sprintf("Бонус к шансу уклонения: +%v%%🍀\n", item.EvasionPercentBonus)
+		}
+	}
+
+	return msg
 }
