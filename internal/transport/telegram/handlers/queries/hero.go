@@ -34,7 +34,7 @@ func (h *Handler) HandleOpenMyHero(ctx *types.Context, query *tgbotapi.CallbackQ
 	)
 }
 
-func (h *Handler) HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.CallbackQuery) error {
+func (h *Handler) HandleHeroCreationStart(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
 	msgText := ctx.Messages().HeroCreationSelectClass
 
 	keyboardButtons := make([]telegram.KeyboardButton, 0, len(enums.GetHeroClasses()))

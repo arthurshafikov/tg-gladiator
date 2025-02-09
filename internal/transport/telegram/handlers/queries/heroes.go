@@ -8,7 +8,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func (h *Handler) HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.CallbackQuery) error {
+func (h *Handler) HandleOpenMyHeroes(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
 	heroes, err := h.Services.Heroes.GetMy(ctx)
 	if err != nil {
 		return err

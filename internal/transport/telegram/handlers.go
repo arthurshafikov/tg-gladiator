@@ -8,6 +8,7 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
+	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/middlewares"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -26,32 +27,41 @@ func (b *Bot) handleCommand(ctx *types.Context, message *tgbotapi.Message) error
 func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQuery) error {
 	splittedData := strings.Split(query.Data, queries.SpecialDelimeterInQueryCallback)
 
-	payload := splittedData[1:]
+	payloadQuery := queries.Query(splittedData[0])
+	payload := []string{}
+	if len(splittedData) > 1 {
+		payload = splittedData[1:]
+	}
 
-	switch queries.Query(splittedData[0]) {
+	middlewareChain := middlewares.NewQueryMiddlewareChain(
+		payloadQuery,
+		middlewares.QueryCheckIsActiveAccount,
+	)
+
+	switch payloadQuery {
 	case queries.OpenMenu:
-		return b.queryHandler.HandleOpenMenu(ctx, query)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMenu)
 	case queries.OpenMyHeroes:
-		return b.queryHandler.HandleOpenMyHeroes(ctx, query)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMyHeroes)
 	case queries.OpenMyHero:
-		return b.queryHandler.HandleOpenMyHero(ctx, query, payload)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenMyHero)
 
 	case queries.HeroCreationStart:
-		return b.queryHandler.HandleHeroCreationStart(ctx, query)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroCreationStart)
 	case queries.HeroCreationSelectClass:
-		return b.queryHandler.HandleHeroCreationSelectClass(ctx, query, payload)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroCreationSelectClass)
 
 	case queries.StartTournamentFight:
-		return b.queryHandler.HandleStartTournamentFight(ctx, query, payload)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleStartTournamentFight)
 	case queries.FightActionSimpleStrike:
-		return b.queryHandler.HandleFightActionSimpleStrike(ctx, query, payload)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionSimpleStrike)
 	case queries.FightActionStrongStrike:
-		return b.queryHandler.HandleFightActionStrongStrike(ctx, query, payload)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionStrongStrike)
 	case queries.FightActionPreciseStrike:
-		return b.queryHandler.HandleFightActionPreciseStrike(ctx, query, payload)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionPreciseStrike)
 
 	case queries.HeroDelete:
-		return b.queryHandler.HandleHeroDelete(ctx, query, payload)
+		return middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroDelete)
 
 	default:
 		return errors.ErrUndefinedCallbackQuery
@@ -65,14 +75,22 @@ func (b *Bot) handleInteraction(
 ) error {
 	splittedData := strings.Split(string(*interaction), interactions.SpecialDelimeterForInteractions)
 
-	payload := splittedData[1:]
+	payloadInteraction := interactions.Interaction(splittedData[0])
+	payload := []string{}
+	if len(splittedData) > 1 {
+		payload = splittedData[1:]
+	}
 
-	switch interactions.Interaction(splittedData[0]) {
+	middlewareChain := middlewares.NewInteractionMiddlewareChain(
+		middlewares.InteractionLogSomething,
+	)
+
+	switch payloadInteraction {
 	case interactions.HeroCreationEnterName:
-		return b.interactionHandler.HandleHeroCreationEnterName(ctx, message, payload)
+		return middlewareChain(ctx, message, payloadInteraction, payload, b.interactionHandler.HandleHeroCreationEnterName)
 
 	case interactions.HeroDelete:
-		return b.interactionHandler.HandleHeroDelete(ctx, message, payload)
+		return middlewareChain(ctx, message, payloadInteraction, payload, b.interactionHandler.HandleHeroDelete)
 	default:
 		return errors.ErrUndefinedInteraction
 	}
