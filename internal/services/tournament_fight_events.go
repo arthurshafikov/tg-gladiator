@@ -102,11 +102,15 @@ func (s *TournamentFightEventsService) calculateIfTheStrikeWasEvaded(
 	opponent models.Fighter,
 ) (bool, int, error) {
 	var additionalEvasionPercentBasedOnActionType int
+	var err error
 	switch actionType {
 	case enums.FightActionSimpleStrike:
 		additionalEvasionPercentBasedOnActionType = 0
 	case enums.FightActionStrongStrike:
-		additionalEvasionPercentBasedOnActionType = 20 // @todo should vary
+		additionalEvasionPercentBasedOnActionType, err = s.generateRandomNumberInRange(15, 25)
+		if err != nil {
+			return false, 0, err
+		}
 	case enums.FightActionPreciseStrike:
 		additionalEvasionPercentBasedOnActionType = -25 // @todo should be propotional instead of raw deduction
 	}
