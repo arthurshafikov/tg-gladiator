@@ -33,7 +33,7 @@ RU:
   HeroGold: "💰 Золото"
 
   HeroName: "Имя"
-  HeroNameWithStats: "%s - ❤️ %v, 💰 %v"
+  HeroNameWithStats: "%s - ❤️%v 💰%v"
 
   FightOverview: "⚔️ Битва ⚔️"
   FightChooseAction: "Выберите действие:"

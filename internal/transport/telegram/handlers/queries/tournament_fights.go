@@ -6,6 +6,7 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -38,6 +39,37 @@ func (h *Handler) HandleFightActionStrongStrike(ctx *types.Context, query *tgbot
 
 func (h *Handler) HandleFightActionPreciseStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
 	return h.tournamentTurn(ctx, query, payload, enums.FightActionPreciseStrike)
+}
+
+func (h *Handler) HandleFightActionRunAway(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	heroID, err := h.GetIDFromString(payload[0])
+	if err != nil {
+		return err
+	}
+
+	hero, err := h.Services.Hero.FindMy(ctx, heroID)
+	if err != nil {
+		return err
+	}
+
+	fight, err := h.Services.TournamentFight.FindActiveByHeroID(ctx, hero.ID)
+	if err != nil && !errors.Is(err, errors.ErrNotFound) {
+		return err
+	}
+
+	if err := h.Services.TournamentFight.RunAwayAsHero(ctx, fight.ID); err != nil {
+		return err
+	}
+
+	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, ctx.Messages().FightRunAwaySuccess)
+	if err := h.Helper.Send(msg); err != nil {
+		return err
+	}
+
+	return h.OpenMyHero(
+		ctx,
+		hero,
+	)
 }
 
 func (h *Handler) tournamentTurn(

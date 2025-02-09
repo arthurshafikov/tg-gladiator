@@ -5,7 +5,7 @@ type FightActionType string
 
 const (
 	FightStatusActive = "active"
-	FightStatusFleed  = "fleed"
+	FightStatusFleed  = "fleed" // @todo "fled"
 	FightStatusEnded  = "ended"
 
 	OpponentTypeMob = "mob"

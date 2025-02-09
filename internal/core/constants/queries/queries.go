@@ -19,6 +19,7 @@ const (
 	FightActionSimpleStrike  Query = "FightActionSimpleStrike"
 	FightActionStrongStrike  Query = "FightActionStrongStrike"
 	FightActionPreciseStrike Query = "FightActionPreciseStrike"
+	FightActionRunAway       Query = "FightActionRunAway"
 
 	HeroDelete Query = "HeroDelete"
 
@@ -48,5 +49,6 @@ func FightQueries() []Query {
 		FightActionSimpleStrike,
 		FightActionStrongStrike,
 		FightActionPreciseStrike,
+		FightActionRunAway,
 	}
 }

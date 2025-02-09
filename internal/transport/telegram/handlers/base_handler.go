@@ -161,7 +161,7 @@ func (h *BaseHandler) SendFightOverviewMessage(ctx *types.Context, fight *models
 				Text:          ctx.Messages().FightActionPreciseStrike,
 			},
 			{
-				CallbackQuery: queries.OpenMyHero.WithID(fight.HeroID),
+				CallbackQuery: queries.FightActionRunAway.WithID(fight.HeroID),
 				Text:          ctx.Messages().FightActionRunAway, // @todo action should reduce double energy
 			},
 		}
@@ -182,14 +182,6 @@ func (h *BaseHandler) SendFightOverviewMessage(ctx *types.Context, fight *models
 }
 
 func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ...*tgbotapi.CallbackQuery) error {
-	ended, err := h.endExistingActiveFightIfExist(ctx, hero, query...)
-	if err != nil {
-		return err
-	}
-	if ended {
-		query = nil
-	}
-
 	heroInfo, err := ctx.Messages().GetHeroInfo(hero)
 	if err != nil {
 		h.Logger.Error(err)
@@ -234,35 +226,4 @@ func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ..
 
 		return h.Helper.Send(msg)
 	}
-}
-
-func (h *BaseHandler) endExistingActiveFightIfExist(ctx *types.Context, hero *models.Hero, query ...*tgbotapi.CallbackQuery) (bool, error) {
-	fight, err := h.Services.TournamentFight.FindActiveByHeroID(ctx, hero.ID)
-	if err != nil {
-		if errors.Is(err, errors.ErrNotFound) {
-			return false, nil
-		}
-
-		return false, err
-	}
-
-	if err := h.Services.TournamentFight.RunAwayAsHero(ctx, fight.ID); err != nil {
-		return false, err
-	}
-
-	msgText := ctx.Messages().FightRunAwaySuccess
-
-	if len(query) > 0 {
-		msg := h.Helper.NewEditMessage(ctx.GetChatID(), query[0].Message.MessageID, msgText)
-
-		if err := h.Helper.Send(msg); err != nil {
-			return false, err
-		}
-	} else {
-		if err := h.Helper.SendTextMessage(ctx.GetChatID(), msgText); err != nil {
-			return false, err
-		}
-	}
-
-	return true, nil
 }
