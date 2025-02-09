@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
@@ -117,25 +118,58 @@ func (h *Handler) openShop(ctx *types.Context, heroID int64, query ...*tgbotapi.
 		return err
 	}
 
-	slices.SortFunc(shopItems, func(a, b models.HeroShopItem) int {
-		if a.Price < b.Price {
-			return -1
-		} else if a.Price > b.Price {
-			return 1
-		}
+	shopItemsByCategories := make(map[enums.ItemCategory][]models.HeroShopItem, len(enums.ItemCategoryAll()))
 
-		return 0
-	})
+	for _, shopItem := range shopItems {
+		shopItemsByCategories[shopItem.Item.Category] = append(
+			shopItemsByCategories[shopItem.Item.Category],
+			shopItem,
+		)
+	}
+
+	// for category, shopItemsByCategoryElement := range shopItemsByCategories {
+	// 	slices.SortFunc(shopItemsByCategoryElement[category], func(a, b models.HeroShopItem) int {
+	// 		if a.Price < b.Price {
+	// 			return -1
+	// 		} else if a.Price > b.Price {
+	// 			return 1
+	// 		}
+
+	// 		return 0
+	// 	})
+	// }
 
 	shopItemsText := ctx.Messages().ShopIntro
 
-	for _, shopItem := range shopItems {
+	for _, itemCategory := range enums.ItemCategoryAll() {
+		if len(shopItemsByCategories[itemCategory]) < 1 {
+			continue
+		}
+
 		shopItemsText += fmt.Sprintf(
-			"\n\n- %s (%s)💰%v",
-			shopItem.Item.Name,
-			shopItem.Item.GetShortCharacteristicsText(),
-			shopItem.Price,
+			"\n\n%s:",
+			ctx.Messages().ItemCategories[itemCategory],
 		)
+
+		shopItems := shopItemsByCategories[itemCategory]
+		slices.SortFunc(shopItems, func(a, b models.HeroShopItem) int {
+			if a.Price < b.Price {
+				return -1
+			} else if a.Price > b.Price {
+				return 1
+			}
+
+			return 0
+		})
+
+		for _, shopItem := range shopItems {
+			shopItemsText += fmt.Sprintf(
+				"\n- %s (%s)💰%v",
+				shopItem.Item.Name,
+				shopItem.Item.GetShortCharacteristicsText(),
+				shopItem.Price,
+			)
+		}
 	}
 
 	// @todo updates at in text?

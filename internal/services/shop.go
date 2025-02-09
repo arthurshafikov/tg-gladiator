@@ -59,14 +59,14 @@ func (s *ShopService) GetShopItemsFor(ctx *types.Context, heroID int64) ([]model
 		}
 	}
 
-	heroShopItems, err := s.heroShopItemsRepo.GetBy(ctx.GetContext(), &models.HeroShopItem{
+	shopItems, err := s.heroShopItemsRepo.GetBy(ctx.GetContext(), &models.HeroShopItem{
 		HeroShopID: heroShop.ID,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return heroShopItems, nil
+	return shopItems, nil
 }
 
 func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) error {

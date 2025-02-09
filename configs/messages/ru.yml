@@ -69,6 +69,11 @@ RU:
   HeroClasses:
     swordsman: "⚔️ Мечник"
 
+  ItemCategories:
+    weapon: "🗡 Оружие"
+    armor: "🛡 Броня"
+    accessory: "📿 Аксессуары"
+
   Errors:
     403_forbidden: "⛔️ Ошибка: недостаточно прав для выполнения действия"
     404_not_found: "🔍 Ошибка: не найдено"

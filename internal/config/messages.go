@@ -80,8 +80,9 @@ type Messages struct {
 	ShopBackButton          string
 	ShopBuyItemSuccess      string
 
-	HeroClasses map[string]string
-	Errors      map[string]string
+	HeroClasses    map[string]string
+	ItemCategories map[enums.ItemCategory]string
+	Errors         map[string]string
 }
 
 func (m *Messages) GetHeroNameWithStats(hero *models.Hero) string {
