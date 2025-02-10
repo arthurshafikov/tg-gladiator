@@ -7,7 +7,6 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/helpers"
-	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -42,14 +41,9 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 		return err
 	}
 
-	// heroEquipment, err := getHeroEquipment
-	heroEquipment := map[enums.ItemEquipsOn]models.Item{
-		enums.ItemEquipsOnBody: {
-			Name: "Шлем!",
-		},
-		enums.ItemEquipsOnFinger: {
-			Name: "Кольцо",
-		},
+	heroEquipment, err := h.Services.HeroItem.GetHeroEquipment(ctx, heroID)
+	if err != nil {
+		return err
 	}
 
 	var equipmentText string
@@ -57,7 +51,11 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 		itemEquippedText := "-"
 
 		if _, ok := heroEquipment[itemEquipsOn]; ok {
-			itemEquippedText = heroEquipment[itemEquipsOn].Name
+			itemEquippedText = fmt.Sprintf(
+				"%s (%s)",
+				ctx.Messages().GetItemNameWithIcon(heroEquipment[itemEquipsOn]),
+				heroEquipment[itemEquipsOn].GetShortCharacteristicsText(),
+			)
 		}
 
 		equipmentText += fmt.Sprintf(

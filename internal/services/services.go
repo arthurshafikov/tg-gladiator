@@ -55,6 +55,7 @@ type HeroItem interface {
 		heroID int64,
 		page int,
 	) (*models.PaginatedHeroItem, error)
+	GetHeroEquipment(ctx *types.Context, heroID int64) (models.HeroEquipment, error)
 	Equip(ctx *types.Context, heroID, itemID int64) error
 	Unequip(ctx *types.Context, heroID, itemID int64) error
 }

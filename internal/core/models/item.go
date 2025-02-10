@@ -19,7 +19,7 @@ type Item struct {
 }
 
 // @todo should it be here?
-func (i *Item) GetShortCharacteristicsText() string {
+func (i Item) GetShortCharacteristicsText() string {
 	text := ""
 
 	if i.AttackBonus != 0 {

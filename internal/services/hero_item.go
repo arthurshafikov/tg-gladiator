@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -83,11 +84,36 @@ func (s *HeroItemService) GetPaginatedForHero(
 	return heroItemsPaginated, nil
 }
 
+func (s *HeroItemService) GetHeroEquipment(ctx *types.Context, heroID int64) (models.HeroEquipment, error) {
+	heroItems, err := s.repo.GetBy(ctx.GetContext(), &models.HeroItem{
+		HeroID:     heroID,
+		IsEquipped: true,
+	})
+	if err != nil {
+		logrus.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	heroEquipment := models.HeroEquipment{}
+	for _, itemEquipsOn := range enums.ItemEquipsOnAll() {
+		for _, heroItem := range heroItems.Rows {
+			if heroItem.Item.EquipsOn == itemEquipsOn {
+				heroEquipment[itemEquipsOn] = heroItem.Item
+			}
+		}
+	}
+
+	return heroEquipment, nil
+}
+
 func (s *HeroItemService) Equip(ctx *types.Context, heroID, itemID int64) error {
 	heroItem, err := s.FindMy(ctx, heroID, itemID)
 	if err != nil {
 		return err
 	}
+
+	// @todo validate that the item can be equipped
 
 	if _, err := s.repo.UpdateMap(ctx.GetContext(), heroItem, map[string]interface{}{
 		"is_equipped": true,

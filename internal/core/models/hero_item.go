@@ -1,11 +1,15 @@
 package models
 
+import "github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+
 type HeroItem struct {
 	Item       Item  `gorm:"->"`
 	HeroID     int64 `json:"hero_id"`
 	ItemID     int64 `json:"item_id"`
 	IsEquipped bool  `json:"is_equipped"`
 }
+
+type HeroEquipment map[enums.ItemEquipsOn]Item
 
 type PaginatedHeroItem struct {
 	Rows       []HeroItem
