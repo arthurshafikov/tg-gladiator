@@ -8,6 +8,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const HeroItemsPerPage = 10
+
 type HeroItemService struct {
 	repo repository.HeroItem
 }
@@ -30,4 +32,24 @@ func (s *HeroItemService) Create(ctx *types.Context, heroID int64, itemID int64)
 	}
 
 	return heroItem, nil
+}
+
+func (s *HeroItemService) GetPaginatedForHero(
+	ctx *types.Context,
+	heroID int64,
+	page int,
+) (*models.PaginatedHeroItem, error) {
+	heroItemsPaginated, err := s.repo.GetBy(ctx.GetContext(), &models.HeroItem{
+		HeroID: heroID,
+	}, &types.Pagination{
+		Page:    page,
+		PerPage: HeroItemsPerPage,
+	})
+	if err != nil {
+		logrus.Error(err)
+
+		return nil, err
+	}
+
+	return heroItemsPaginated, nil
 }

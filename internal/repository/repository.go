@@ -54,6 +54,11 @@ type Item interface {
 
 type HeroItem interface {
 	Create(ctx context.Context, heroItem models.HeroItem) (*models.HeroItem, error)
+	GetBy(
+		ctx context.Context,
+		fields *models.HeroItem,
+		pagination ...*types.Pagination,
+	) (*models.PaginatedHeroItem, error)
 }
 
 type HeroShop interface {

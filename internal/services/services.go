@@ -48,6 +48,14 @@ type HeroShopItem interface {
 	FindMy(ctx *types.Context, heroID, itemID int64) (*models.HeroShopItem, error)
 }
 
+type HeroItem interface {
+	GetPaginatedForHero(
+		ctx *types.Context,
+		heroID int64,
+		page int,
+	) (*models.PaginatedHeroItem, error)
+}
+
 type TournamentFight interface {
 	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
 	FindActiveByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error)
@@ -70,6 +78,7 @@ type Services struct {
 	Hero
 	Heroes
 	HeroShopItem
+	HeroItem
 	TournamentFight
 	Shop
 }
@@ -108,6 +117,7 @@ func NewServices(deps Deps) *Services {
 		Hero:         heroService,
 		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
 		HeroShopItem: heroShopItemService,
+		HeroItem:     newHeroItemService(deps.Repository.HeroItem),
 		TournamentFight: newTournamentFightService(
 			deps.Logger,
 			deps.Repository.Fight,

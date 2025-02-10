@@ -18,6 +18,19 @@ const (
 	ItemCategoryAccessory ItemCategory = "accessory"
 )
 
+func ItemEquipsOnAll() []ItemEquipsOn {
+	return []ItemEquipsOn{
+		ItemEquipsOnHand,
+		ItemEquipsOnTwoHands,
+		ItemEquipsOnHands,
+		ItemEquipsOnBody,
+		ItemEquipsOnHead,
+		ItemEquipsOnNeck,
+		ItemEquipsOnFeet,
+		ItemEquipsOnFinger,
+	}
+}
+
 func ItemCategoryAll() []ItemCategory {
 	return []ItemCategory{
 		ItemCategoryWeapon,

@@ -25,6 +25,7 @@ type Messages struct {
 	MyHeroesList     string
 
 	MenuItemStartTournamentFight string
+	MenuItemOpenHeroEquipment    string
 	MenuItemShop                 string
 	MenuItemDeleteHero           string
 	HeroDeleteConfirmationPrompt string
@@ -79,6 +80,12 @@ type Messages struct {
 	ShopBuyItemConfirm      string
 	ShopBackButton          string
 	ShopBuyItemSuccess      string
+
+	HeroEquipmentOverview   string
+	HeroEquipmentChooseItem string
+
+	PreviousPage string
+	NextPage     string
 
 	HeroClasses    map[string]string
 	ItemCategories map[enums.ItemCategory]string
@@ -395,4 +402,18 @@ func (m *Messages) ItemDescription(item models.Item) string {
 	}
 
 	return msg
+}
+
+func (m *Messages) GetItemNameWithIcon(item models.Item) string {
+	icon := ""
+	switch item.Category {
+	case enums.ItemCategoryWeapon:
+		icon = "🗡"
+	case enums.ItemCategoryArmor:
+		icon = "🛡"
+	case enums.ItemCategoryAccessory:
+		icon = "📿"
+	}
+
+	return fmt.Sprintf("%s %s", icon, m.ItemNames[item.Name])
 }

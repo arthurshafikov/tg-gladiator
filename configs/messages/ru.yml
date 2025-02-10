@@ -10,9 +10,10 @@ RU:
   MenuItemMyHeroes: "Мои герои"
   MyHeroesList: "Это лист ваших героев"
 
-  MenuItemStartTournamentFight: "Учавствовать в Турнире"
-  MenuItemShop: "Магазин 💰"
-  MenuItemDeleteHero: "❌ Удалить"
+  MenuItemStartTournamentFight: "⚔️ Учавствовать в Турнире "
+  MenuItemOpenHeroEquipment: "🎒 Экипировка "
+  MenuItemShop: "💰 Магазин"
+  MenuItemDeleteHero: "❌ Удалить героя"
   HeroDeleteConfirmationPrompt: "⚠️ Пожалуйста, подтвердите удаление героя %s, для подтверждения отправьте сообщением текст '<code>%s</code>', для отмены нажмите на кнопку Назад."
   HeroDeleteCancelled: "Удаление героя было отменено."
   HeroDeleteSuccessful: "❌ Герой был успешно удалён."
@@ -65,6 +66,12 @@ RU:
   ShopBuyItemConfirm: "Подтвердить покупку"
   ShopBackButton: "Вернуться в магазин"
   ShopBuyItemSuccess: "Вы успешно приобрели %s!"
+
+  HeroEquipmentOverview: "Вот что на вас надето"
+  HeroEquipmentChooseItem: "Выберите предмет"
+
+  PreviousPage: "⬅️ Предыдущая стр."
+  NextPage: "Следующая стр. ➡️"
 
   HeroClasses:
     swordsman: "⚔️ Мечник"

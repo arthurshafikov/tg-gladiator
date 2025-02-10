@@ -3,7 +3,10 @@ package pgsql
 import (
 	"context"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
+	"gorm.io/gorm"
 )
 
 type HeroItem struct {
@@ -47,18 +50,44 @@ func (r *HeroItem) DeleteBy(ctx context.Context, fields *models.HeroItem) error 
 // 	return &heroItem, nil
 // }
 
-// func (r *HeroItem) GetBy(ctx context.Context, fields *models.HeroItem) ([]models.HeroItem, error) {
-// 	var heroItems []models.HeroItem
-// 	if err := r.getDBInstance(ctx).
-// 		Preload("Item").
-// 		Where(fields).
-// 		Find(&heroItems).Error; err != nil {
-// 		if errors.Is(err, gorm.ErrRecordNotFound) {
-// 			return nil, errors.ErrNotFound
-// 		}
+func (r *HeroItem) GetBy(
+	ctx context.Context,
+	fields *models.HeroItem,
+	pagination ...*types.Pagination,
+) (*models.PaginatedHeroItem, error) {
+	var paginationRequest *types.Pagination
+	if len(pagination) > 0 {
+		paginationRequest = pagination[0]
+	}
 
-// 		return nil, err
-// 	}
+	var paginatedResult models.PaginatedHeroItem
+	if paginationRequest != nil {
+		paginatedResult.Page = pagination[0].Page
+		paginatedResult.PerPage = pagination[0].PerPage
+	}
+	query := r.getDBInstance(ctx).Table("hero_items")
 
-// 	return heroItems, nil
-// }
+	var heroItems []models.HeroItem
+	if err := query.Session(&gorm.Session{}).
+		Preload("Item").
+		Where(fields).
+		Scopes(types.ApplyPagination(paginationRequest)).
+		Find(&heroItems).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		return nil, err
+	}
+	paginatedResult.Rows = heroItems
+
+	if paginationRequest != nil {
+		var totalCount int64
+		if err := query.Where(fields).Count(&totalCount).Error; err != nil {
+			return nil, err
+		}
+		paginatedResult.TotalCount = totalCount
+	}
+
+	return &paginatedResult, nil
+}
