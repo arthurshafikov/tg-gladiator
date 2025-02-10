@@ -81,15 +81,25 @@ type Messages struct {
 	ShopBackButton          string
 	ShopBuyItemSuccess      string
 
-	HeroEquipmentOverview   string
-	HeroEquipmentChooseItem string
+	HeroEquipmentOverview    string
+	HeroEquipmentChooseItem  string
+	HeroEquipmentEquipItem   string
+	HeroEquipmentUnequipItem string
+
+	ItemName         string
+	ItemCategory     string
+	ItemEquipsOn     string
+	ItemAttackBonus  string
+	ItemDefenseBonus string
+	ItemCritBonus    string
+	ItemEvasionBonus string
 
 	PreviousPage string
 	NextPage     string
 
 	HeroClasses    map[string]string
 	ItemCategories map[enums.ItemCategory]string
-	ItemEquipsOn   map[enums.ItemEquipsOn]string
+	ItemEquipsOns  map[enums.ItemEquipsOn]string
 	ItemNames      map[string]string
 	Errors         map[string]string
 }
@@ -368,36 +378,36 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, opponent models
 func (m *Messages) ItemDescription(item models.Item) string {
 	msg := "\n"
 
-	msg += fmt.Sprintf("Название: %s\n", m.ItemNames[item.Name])
-	msg += fmt.Sprintf("Категория: %s\n", m.ItemCategories[item.Category])
-	msg += fmt.Sprintf("Одевается на: %s\n", m.ItemEquipsOn[item.EquipsOn])
+	msg += fmt.Sprintf("%s: %s\n", m.ItemName, m.ItemNames[item.Name])
+	msg += fmt.Sprintf("%s: %s\n", m.ItemCategory, m.ItemCategories[item.Category])
+	msg += fmt.Sprintf("%s: %s\n", m.ItemEquipsOn, m.ItemEquipsOns[item.EquipsOn])
 
 	if item.AttackBonus != 0 {
 		if item.AttackBonus < 0 {
-			msg += fmt.Sprintf("Бонус к атаке: %v💪\n", item.AttackBonus)
+			msg += fmt.Sprintf("%s: %v💪\n", m.ItemAttackBonus, item.AttackBonus)
 		} else {
-			msg += fmt.Sprintf("Бонус к атаке: +%v💪\n", item.AttackBonus)
+			msg += fmt.Sprintf("%s: +%v💪\n", m.ItemAttackBonus, item.AttackBonus)
 		}
 	}
 	if item.DefenseBonus != 0 {
 		if item.DefenseBonus < 0 {
-			msg += fmt.Sprintf("Бонус к защите: %v🛡\n", item.DefenseBonus)
+			msg += fmt.Sprintf("%s: %v🛡\n", m.ItemDefenseBonus, item.DefenseBonus)
 		} else {
-			msg += fmt.Sprintf("Бонус к защите: +%v🛡\n", item.DefenseBonus)
+			msg += fmt.Sprintf("%s: +%v🛡\n", m.ItemDefenseBonus, item.DefenseBonus)
 		}
 	}
 	if item.CriticalChancePercentBonus != 0 {
 		if item.CriticalChancePercentBonus < 0 {
-			msg += fmt.Sprintf("Бонус к шансу критического удара: %v%%💥\n", item.CriticalChancePercentBonus)
+			msg += fmt.Sprintf("%s: %v%%💥\n", m.ItemCritBonus, item.CriticalChancePercentBonus)
 		} else {
-			msg += fmt.Sprintf("Бонус к шансу критического удара: +%v%%💥\n", item.CriticalChancePercentBonus)
+			msg += fmt.Sprintf("%s: +%v%%💥\n", m.ItemCritBonus, item.CriticalChancePercentBonus)
 		}
 	}
 	if item.EvasionPercentBonus != 0 {
 		if item.EvasionPercentBonus < 0 {
-			msg += fmt.Sprintf("Бонус к шансу уклонения: %v%%🍀\n", item.EvasionPercentBonus)
+			msg += fmt.Sprintf("%s: %v%%🍀\n", m.ItemEvasionBonus, item.EvasionPercentBonus)
 		} else {
-			msg += fmt.Sprintf("Бонус к шансу уклонения: +%v%%🍀\n", item.EvasionPercentBonus)
+			msg += fmt.Sprintf("%s: +%v%%🍀\n", m.ItemEvasionBonus, item.EvasionPercentBonus)
 		}
 	}
 

@@ -25,7 +25,10 @@ const (
 	FightActionPreciseStrike Query = "FightActionPreciseStrike"
 	FightActionRunAway       Query = "FightActionRunAway"
 
-	OpenHeroEquipment Query = "OpenHeroEquipment"
+	OpenHeroEquipment        Query = "OpenHeroEquipment"
+	HeroEquipmentOpenItem    Query = "HeroEquipmentOpenItem"
+	HeroEquipmentEquipItem   Query = "HeroEquipmentEquipItem"
+	HeroEquipmentUnequipItem Query = "HeroEquipmentUnequipItem"
 
 	HeroDelete Query = "HeroDelete"
 

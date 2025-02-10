@@ -35,20 +35,21 @@ func (r *HeroItem) DeleteBy(ctx context.Context, fields *models.HeroItem) error 
 	return nil
 }
 
-// func (r *HeroItem) FindBy(ctx context.Context, fields *models.HeroItem) (*models.HeroItem, error) {
-// 	var heroItem models.HeroItem
-// 	if err := r.getDBInstance(ctx).
-// 		Where(fields).
-// 		First(&heroItem).Error; err != nil {
-// 		if errors.Is(err, gorm.ErrRecordNotFound) {
-// 			return nil, errors.ErrNotFound
-// 		}
+func (r *HeroItem) FindBy(ctx context.Context, fields *models.HeroItem) (*models.HeroItem, error) {
+	var heroItem models.HeroItem
+	if err := r.getDBInstance(ctx).
+		Preload("Item").
+		Where(fields).
+		First(&heroItem).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.ErrNotFound
+		}
 
-// 		return nil, err
-// 	}
+		return nil, err
+	}
 
-// 	return &heroItem, nil
-// }
+	return &heroItem, nil
+}
 
 func (r *HeroItem) GetBy(
 	ctx context.Context,
@@ -90,4 +91,27 @@ func (r *HeroItem) GetBy(
 	}
 
 	return &paginatedResult, nil
+}
+
+func (r *HeroItem) UpdateMap(
+	ctx context.Context,
+	heroItem *models.HeroItem,
+	fields map[string]interface{},
+) (*models.HeroItem, error) {
+	if err := r.getDBInstance(ctx).Model(heroItem).Where(&models.HeroItem{
+		HeroID: heroItem.HeroID,
+		ItemID: heroItem.ItemID,
+	}).Updates(fields).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		return nil, err
+	}
+	heroItem, err := r.FindBy(ctx, heroItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return heroItem, nil
 }

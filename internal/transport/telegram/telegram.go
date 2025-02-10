@@ -53,8 +53,11 @@ type QueryHandler interface {
 	HandleOpenShop(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleShopBuyItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleShopBuyItemConfirm(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
-	
+
 	HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleHeroEquipmentOpenItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleHeroEquipmentUnequipItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleHeroEquipmentEquipItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
 	HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 }

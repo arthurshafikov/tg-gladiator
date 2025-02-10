@@ -62,7 +62,7 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 
 		equipmentText += fmt.Sprintf(
 			"\n%s: %s",
-			ctx.Messages().ItemEquipsOn[itemEquipsOn],
+			ctx.Messages().ItemEquipsOns[itemEquipsOn],
 			itemEquippedText,
 		)
 	}
@@ -77,17 +77,15 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, msgText)
 
 	itemsKeyboardButtons := []telegram.KeyboardButton{}
-
 	for _, heroItem := range heroItemsPaginated.Rows {
 		itemsKeyboardButtons = append(
 			itemsKeyboardButtons,
 			telegram.KeyboardButton{
-				CallbackQuery: queries.OpenMyHero.WithID(hero.ID),
+				CallbackQuery: queries.HeroEquipmentOpenItem.WithID(hero.ID).WithID(heroItem.ItemID),
 				Text:          ctx.Messages().GetItemNameWithIcon(heroItem.Item),
 			},
 		)
 	}
-
 	keyboard := h.Helper.CreateKeyboard(itemsKeyboardButtons, 2)
 
 	if heroItemsPaginated.HasNextPage() || heroItemsPaginated.HasPreviousPage() {
@@ -129,4 +127,104 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 	msg.ReplyMarkup = keyboard
 
 	return h.Helper.Send(msg)
+}
+
+func (h *Handler) HandleHeroEquipmentOpenItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	if err := h.ValidatePayloadLength(payload, 2); err != nil {
+		return err
+	}
+
+	heroID, err := h.GetIDFromString(payload[0])
+	if err != nil {
+		return err
+	}
+
+	itemID, err := h.GetIDFromString(payload[1])
+	if err != nil {
+		return err
+	}
+
+	heroItem, err := h.Services.HeroItem.FindMy(ctx, heroID, itemID)
+	if err != nil {
+		return err
+	}
+
+	msg := h.Helper.NewEditMessage(
+		ctx.GetChatID(),
+		query.Message.MessageID,
+		ctx.Messages().ItemDescription(heroItem.Item),
+	)
+
+	buttons := make([]telegram.KeyboardButton, 0, 2)
+
+	if heroItem.IsEquipped {
+		buttons = append(buttons, telegram.KeyboardButton{
+			CallbackQuery: queries.HeroEquipmentUnequipItem.WithID(heroID).WithID(itemID),
+			Text:          ctx.Messages().HeroEquipmentUnequipItem,
+		})
+	} else {
+		buttons = append(buttons, telegram.KeyboardButton{
+			CallbackQuery: queries.HeroEquipmentEquipItem.WithID(heroID).WithID(itemID),
+			Text:          ctx.Messages().HeroEquipmentEquipItem,
+		})
+	}
+	buttons = append(buttons, telegram.KeyboardButton{
+		CallbackQuery: queries.OpenHeroEquipment.WithID(heroID),
+		Text:          ctx.Messages().DefaultBackBtn,
+	})
+	msg.ReplyMarkup = h.Helper.CreateKeyboard(buttons, 1)
+
+	return h.Helper.Send(msg)
+}
+
+func (h *Handler) HandleHeroEquipmentUnequipItem(
+	ctx *types.Context,
+	query *tgbotapi.CallbackQuery,
+	payload []string,
+) error {
+	if err := h.ValidatePayloadLength(payload, 2); err != nil {
+		return err
+	}
+
+	heroID, err := h.GetIDFromString(payload[0])
+	if err != nil {
+		return err
+	}
+
+	itemID, err := h.GetIDFromString(payload[1])
+	if err != nil {
+		return err
+	}
+
+	if err := h.Services.HeroItem.Unequip(ctx, heroID, itemID); err != nil {
+		return err
+	}
+
+	return h.HandleHeroEquipmentOpenItem(ctx, query, payload)
+}
+
+func (h *Handler) HandleHeroEquipmentEquipItem(
+	ctx *types.Context,
+	query *tgbotapi.CallbackQuery,
+	payload []string,
+) error {
+	if err := h.ValidatePayloadLength(payload, 2); err != nil {
+		return err
+	}
+
+	heroID, err := h.GetIDFromString(payload[0])
+	if err != nil {
+		return err
+	}
+
+	itemID, err := h.GetIDFromString(payload[1])
+	if err != nil {
+		return err
+	}
+
+	if err := h.Services.HeroItem.Equip(ctx, heroID, itemID); err != nil {
+		return err
+	}
+
+	return h.HandleHeroEquipmentOpenItem(ctx, query, payload)
 }

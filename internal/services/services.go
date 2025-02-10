@@ -49,11 +49,14 @@ type HeroShopItem interface {
 }
 
 type HeroItem interface {
+	FindMy(ctx *types.Context, heroID, itemID int64) (*models.HeroItem, error)
 	GetPaginatedForHero(
 		ctx *types.Context,
 		heroID int64,
 		page int,
 	) (*models.PaginatedHeroItem, error)
+	Equip(ctx *types.Context, heroID, itemID int64) error
+	Unequip(ctx *types.Context, heroID, itemID int64) error
 }
 
 type TournamentFight interface {
@@ -99,7 +102,7 @@ func NewServices(deps Deps) *Services {
 
 	tournamentFightEventsService := newTournamentFightEventsService(deps.Logger)
 
-	heroItemService := newHeroItemService(deps.Repository.HeroItem)
+	heroItemService := newHeroItemService(deps.Repository.HeroItem, heroService)
 
 	heroShopItemService := newHeroShopItemService(
 		deps.Repository.HeroShopItem,
@@ -117,7 +120,7 @@ func NewServices(deps Deps) *Services {
 		Hero:         heroService,
 		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
 		HeroShopItem: heroShopItemService,
-		HeroItem:     newHeroItemService(deps.Repository.HeroItem),
+		HeroItem:     heroItemService,
 		TournamentFight: newTournamentFightService(
 			deps.Logger,
 			deps.Repository.Fight,

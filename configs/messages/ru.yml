@@ -28,7 +28,7 @@ RU:
   HeroClass: "Класс"
   Attack: "💪 Атака"
   Defense: "🛡 Защита"
-  CriticalChancePercent: "💥 Шанс критического урона"
+  CriticalChancePercent: "💥 Шанс крита"
   EvasionChancePercent: "🍀 Шанс уворота"
   HP: "❤️ Здоровье"
   HeroEnergy: "🏃‍♂️ Энергия"
@@ -69,6 +69,16 @@ RU:
 
   HeroEquipmentOverview: "Вот что на вас надето"
   HeroEquipmentChooseItem: "Выберите предмет"
+  HeroEquipmentEquipItem: "Надеть"
+  HeroEquipmentUnequipItem: "Снять"
+
+  ItemName: "Название"
+  ItemCategory: "Категория"
+  ItemEquipsOn: "Одевается на"
+  ItemAttackBonus: "Бонус к атаке"
+  ItemDefenseBonus: "Бонус к защите"
+  ItemCritBonus: "Бонус к шансу крита"
+  ItemEvasionBonus: "Бонус к шансу уклонения"
 
   PreviousPage: "⬅️ Предыдущая стр."
   NextPage: "Следующая стр. ➡️"
@@ -81,7 +91,7 @@ RU:
     armor: "🛡 Броня"
     accessory: "📿 Аксессуары"
 
-  ItemEquipsOn:
+  ItemEquipsOns:
     hand: "Руку"
     two_hands: "Две руки"
     hands: "Ладони"

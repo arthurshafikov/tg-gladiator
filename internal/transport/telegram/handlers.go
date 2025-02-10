@@ -76,6 +76,12 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 
 	case queries.OpenHeroEquipment:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenHeroEquipment)
+	case queries.HeroEquipmentOpenItem:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroEquipmentOpenItem)
+	case queries.HeroEquipmentUnequipItem:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroEquipmentUnequipItem)
+	case queries.HeroEquipmentEquipItem:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroEquipmentEquipItem)
 
 	case queries.HeroDelete:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroDelete)
@@ -130,7 +136,7 @@ func (b *Bot) handleInteraction(
 	return err
 }
 
-func (b *Bot) handleMessage(ctx *types.Context) error {
+func (b *Bot) handleMessage(_ *types.Context) error {
 	return nil
 }
 
