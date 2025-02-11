@@ -66,7 +66,7 @@ func (m *QueryMiddlewareChain) QueryCheckDontHaveActiveFight(
 	next QueryHandlerFunc,
 ) error {
 	if !slices.Contains[[]queries.Query, queries.Query](queries.FightQueries(), payloadQuery) {
-		activeFight, err := m.services.TournamentFight.FindMyActive(ctx)
+		activeFight, err := m.services.Fight.FindMyActive(ctx)
 		if err != nil && !errors.Is(err, errors.ErrNotFound) {
 			return err
 		}

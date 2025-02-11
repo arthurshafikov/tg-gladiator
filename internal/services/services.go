@@ -26,6 +26,11 @@ type Chat interface {
 	UpdateUsername(ctx *types.Context, username string) error
 }
 
+type Fight interface {
+	FindActiveByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error)
+	FindMyActive(ctx *types.Context) (*models.Fight, error)
+}
+
 type Interactions interface {
 	Find(ctx *types.Context) (*interactions.Interaction, error)
 	Set(ctx *types.Context, interaction interactions.Interaction) error
@@ -62,8 +67,6 @@ type HeroItem interface {
 
 type TournamentFight interface {
 	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
-	FindActiveByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error)
-	FindMyActive(ctx *types.Context) (*models.Fight, error)
 	MakeTurn(
 		ctx *types.Context,
 		fight *models.Fight,
@@ -79,6 +82,7 @@ type Shop interface {
 type Services struct {
 	Chat
 	Interactions
+	Fight
 	Hero
 	Heroes
 	HeroShopItem
@@ -101,6 +105,8 @@ func NewServices(deps Deps) *Services {
 
 	enemyService := newEnemyService(deps.Logger, deps.Repository.Enemy)
 
+	fightService := newFightService(deps.Repository.Fight, enemyService, heroService)
+
 	tournamentFightEventsService := newTournamentFightEventsService(deps.Logger)
 
 	heroItemService := newHeroItemService(deps.Repository.HeroItem, heroService)
@@ -118,13 +124,14 @@ func NewServices(deps Deps) *Services {
 			deps.Repository.Chat,
 		),
 		Interactions: newInteractionService(deps.Logger, deps.Repository.Chat),
+		Fight:        fightService,
 		Hero:         heroService,
 		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
 		HeroShopItem: heroShopItemService,
 		HeroItem:     heroItemService,
 		TournamentFight: newTournamentFightService(
 			deps.Logger,
-			deps.Repository.Fight,
+			fightService,
 			heroService,
 			enemyService,
 			tournamentFightEventsService,

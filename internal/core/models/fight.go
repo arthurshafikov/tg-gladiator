@@ -29,7 +29,7 @@ type Fight struct {
 
 	CreatedAt time.Time `json:"created_at"`
 
-	Hero     *Hero
+	Hero     Fighter `gorm:"-"`
 	Opponent Fighter `gorm:"-"`
 }
 

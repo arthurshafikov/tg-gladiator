@@ -127,7 +127,7 @@ func (h *BaseHandler) HandleShowActiveFightOverview(ctx *types.Context) error {
 		return err
 	}
 
-	fight, err := h.Services.TournamentFight.FindMyActive(ctx)
+	fight, err := h.Services.Fight.FindMyActive(ctx)
 	if err != nil {
 		return err
 	}

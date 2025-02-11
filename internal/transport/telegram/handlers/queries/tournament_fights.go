@@ -52,7 +52,7 @@ func (h *Handler) HandleFightActionRunAway(ctx *types.Context, query *tgbotapi.C
 		return err
 	}
 
-	fight, err := h.Services.TournamentFight.FindActiveByHeroID(ctx, hero.ID)
+	fight, err := h.Services.Fight.FindActiveByHeroID(ctx, hero.ID)
 	if err != nil && !errors.Is(err, errors.ErrNotFound) {
 		return err
 	}
@@ -87,7 +87,7 @@ func (h *Handler) tournamentTurn(
 		return err
 	}
 
-	fight, err := h.Services.TournamentFight.FindActiveByHeroID(ctx, heroID)
+	fight, err := h.Services.Fight.FindActiveByHeroID(ctx, heroID)
 	if err != nil {
 		return err
 	}

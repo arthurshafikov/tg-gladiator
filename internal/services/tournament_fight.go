@@ -9,12 +9,11 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/helpers"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
-	"github.com/arthurshafikov/tg-gladiator/internal/repository"
 )
 
 type TournamentFightService struct {
 	logger                       Logger
-	repo                         repository.Fight
+	fightService                 *FightService
 	heroService                  *HeroService
 	enemyService                 *EnemyService
 	tournamentFightEventsService *TournamentFightEventsService
@@ -22,14 +21,14 @@ type TournamentFightService struct {
 
 func newTournamentFightService(
 	logger Logger,
-	repo repository.Fight,
+	fightService *FightService,
 	heroService *HeroService,
 	enemyService *EnemyService,
 	tournamentFightEventsService *TournamentFightEventsService,
 ) *TournamentFightService {
 	return &TournamentFightService{
 		logger:                       logger,
-		repo:                         repo,
+		fightService:                 fightService,
 		heroService:                  heroService,
 		enemyService:                 enemyService,
 		tournamentFightEventsService: tournamentFightEventsService,
@@ -57,72 +56,18 @@ func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*mode
 		CreatedAt:    time.Now(),
 	}
 
-	fight, err = s.repo.Create(ctx.GetContext(), *fight)
-	if err != nil {
-		if errors.Is(err, errors.ErrAlreadyExists) {
-			return nil, errors.ErrAlreadyExists
-		}
-
-		s.logger.Error(err)
-
-		return nil, err
-	}
-
-	return fight, nil
-}
-
-func (s *TournamentFightService) FindActiveByHeroID(ctx *types.Context, heroID int64) (*models.Fight, error) {
-	// @todo check access
-	fight, err := s.repo.FindBy(ctx.GetContext(), &models.Fight{
-		HeroID: heroID,
-		Status: enums.FightStatusActive,
-	})
-	if err != nil {
-		if errors.Is(err, errors.ErrNotFound) {
-			return nil, errors.ErrNotFound
-		}
-
-		s.logger.Error(err)
-
-		return nil, errors.ErrServerError
-	}
-
-	return fight, nil
-}
-
-func (s *TournamentFightService) FindMyActive(ctx *types.Context) (*models.Fight, error) {
-	heroes, err := s.heroService.GetMy(ctx)
+	fight, err = s.fightService.create(ctx, *fight)
 	if err != nil {
 		return nil, err
 	}
 
-	heroIDs := make([]int64, 0, len(*heroes))
-	for _, hero := range *heroes {
-		heroIDs = append(heroIDs, hero.ID)
-	}
-
-	fight, err := s.repo.FindByMap(ctx.GetContext(), map[string]interface{}{
-		models.FightFieldHeroID: heroIDs,
-		models.FightFieldStatus: enums.FightStatusActive,
-	})
-	if err != nil {
-		if errors.Is(err, errors.ErrNotFound) {
-			return nil, errors.ErrNotFound
-		}
-
-		s.logger.Error(err)
-
-		return nil, errors.ErrServerError
-	}
-
 	return fight, nil
 }
 
-// @todo where's the query for that?
 func (s *TournamentFightService) RunAwayAsHero(ctx *types.Context, fightID int64) error {
 	// @todo check access
 	// @todo energy - 1
-	if _, err := s.repo.Update(ctx.GetContext(), fightID, &models.Fight{
+	if _, err := s.fightService.update(ctx, fightID, &models.Fight{
 		Status: enums.FightStatusFleed,
 	}); err != nil {
 		s.logger.Error(err)
@@ -195,15 +140,9 @@ func (s *TournamentFightService) MakeTurn(
 		}
 	}
 
-	fight, err = s.repo.UpdateMap(ctx.GetContext(), fight.ID, updateFields)
+	fight, err = s.fightService.updateMap(ctx, fight.ID, updateFields)
 	if err != nil {
-		if errors.Is(err, errors.ErrNotFound) {
-			return nil, nil, errors.ErrNotFound
-		}
-
-		s.logger.Error(err)
-
-		return nil, nil, errors.ErrServerError
+		return nil, nil, err
 	}
 
 	return fight, events, nil

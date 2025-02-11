@@ -8,6 +8,7 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"github.com/arthurshafikov/tg-gladiator/internal/repository"
+	"github.com/sirupsen/logrus"
 )
 
 type EnemyService struct {
@@ -20,6 +21,21 @@ func newEnemyService(logger Logger, repo repository.Enemy) *EnemyService {
 		logger: logger,
 		repo:   repo,
 	}
+}
+
+func (s *EnemyService) find(ctx *types.Context, id int64) (*models.Enemy, error) {
+	enemy, err := s.repo.Find(ctx.GetContext(), id)
+	if err != nil {
+		if errors.Is(err, errors.ErrNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		logrus.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	return enemy, nil
 }
 
 func (s *EnemyService) getRandomEnemy(ctx *types.Context) (*models.Enemy, error) {

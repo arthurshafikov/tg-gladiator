@@ -244,7 +244,7 @@ func (m *Messages) FightInfo(fight *models.Fight) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s 👤:\n%s\n\n%s:\n%s",
-		fight.Hero.Name,
+		fight.Hero.GetName(),
 		m.GetFightStatistics(fight, fight.Hero),
 		fight.Opponent.GetName(),
 		m.GetFightStatistics(fight, fight.Opponent),

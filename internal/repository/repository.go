@@ -33,11 +33,10 @@ type Hero interface {
 
 type Fight interface {
 	Create(ctx context.Context, fight models.Fight) (*models.Fight, error)
-	Find(ctx context.Context, id int64) (*models.Fight, error)
 	FindBy(ctx context.Context, fields *models.Fight) (*models.Fight, error)
 	FindByMap(ctx context.Context, fields map[string]interface{}) (*models.Fight, error)
-	Update(ctx context.Context, id int64, fields *models.Fight) (*models.Fight, error)
-	UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Fight, error)
+	Update(ctx context.Context, id int64, fields *models.Fight) error
+	UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) error
 }
 
 type Enemy interface {
