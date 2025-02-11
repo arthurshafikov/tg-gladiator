@@ -129,6 +129,10 @@ func (s *FightService) findBy(ctx *types.Context, fields interface{}) (*models.F
 		}
 
 		fight.Opponent = enemy
+	} else {
+		logrus.Error(fmt.Sprintf("unsupported opponent type: %s", fight.OpponentType))
+
+		return nil, errors.ErrServerError
 	}
 
 	fight.Hero, err = s.heroService.FindMy(ctx, fight.HeroID)
@@ -137,7 +141,6 @@ func (s *FightService) findBy(ctx *types.Context, fields interface{}) (*models.F
 
 		return nil, errors.ErrServerError
 	}
-	// @todo fill hero with required stats
 
 	return fight, nil
 }

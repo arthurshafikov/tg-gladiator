@@ -11,6 +11,15 @@ type HeroItem struct {
 
 type HeroEquipment map[enums.ItemEquipsOn][]Item
 
+func (he HeroEquipment) GetAllItems() []Item {
+	result := make([]Item, 0, len(he))
+	for _, items := range he {
+		result = append(result, items...)
+	}
+
+	return result
+}
+
 type PaginatedHeroItem struct {
 	Rows       []HeroItem
 	Page       int

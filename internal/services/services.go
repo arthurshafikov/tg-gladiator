@@ -101,7 +101,7 @@ type Deps struct {
 func NewServices(deps Deps) *Services {
 	validatorService := newValidatorService(deps.Logger)
 
-	heroService := newHeroService(deps.Logger, deps.Repository.Hero, validatorService)
+	heroService := newHeroService(deps.Logger, deps.Repository.Hero, validatorService, nil)
 
 	enemyService := newEnemyService(deps.Logger, deps.Repository.Enemy)
 
@@ -110,6 +110,7 @@ func NewServices(deps Deps) *Services {
 	tournamentFightEventsService := newTournamentFightEventsService(deps.Logger)
 
 	heroItemService := newHeroItemService(deps.Repository.HeroItem, heroService)
+	heroService.heroItemsService = heroItemService
 
 	heroShopItemService := newHeroShopItemService(
 		deps.Repository.HeroShopItem,

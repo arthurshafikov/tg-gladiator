@@ -18,17 +18,20 @@ type HeroService struct {
 	repo   repository.Hero
 
 	validatorService *ValidatorService
+	heroItemsService *HeroItemService
 }
 
 func newHeroService(
 	logger Logger,
 	repo repository.Hero,
 	validatorService *ValidatorService,
+	heroItemsService *HeroItemService,
 ) *HeroService {
 	return &HeroService{
 		logger:           logger,
 		repo:             repo,
 		validatorService: validatorService,
+		heroItemsService: heroItemsService,
 	}
 }
 
@@ -96,6 +99,12 @@ func (s *HeroService) FindMy(ctx *types.Context, id int64) (*models.Hero, error)
 	if hero.ChatID != ctx.GetChat().ID {
 		return nil, errors.ErrForbidden
 	}
+
+	heroEquipment, err := s.heroItemsService.GetHeroEquipment(ctx, hero.ID)
+	if err != nil {
+		return nil, err
+	}
+	hero.Equipment = heroEquipment.GetAllItems()
 
 	return hero, nil
 }

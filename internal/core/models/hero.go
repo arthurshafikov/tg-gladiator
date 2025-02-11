@@ -17,6 +17,8 @@ type Hero struct {
 	CurrentEnergy int             `json:"current_energy"`
 	CurrentGold   int             `json:"current_gold"`
 	CreatedAt     time.Time       `gorm:"->" json:"created_at"`
+
+	Equipment []Item `gorm:"-"`
 }
 
 func (Hero) TableName() string {
@@ -44,23 +46,55 @@ func (h *Hero) HasAttackRange() bool {
 }
 
 func (h *Hero) GetMinAttack() int {
-	return h.Class.GetCharacteristics().Attack
+	minAttack := h.Class.GetCharacteristics().Attack
+
+	if len(h.Equipment) > 0 {
+		for _, item := range h.Equipment {
+			minAttack += item.AttackBonus
+		}
+	}
+
+	return minAttack
 }
 
 func (h *Hero) GetMaxAttack() int {
-	return h.Class.GetCharacteristics().Attack
+	return h.GetMinAttack()
 }
 
 func (h *Hero) GetDefense() int {
-	return h.Class.GetCharacteristics().Defense
+	defense := h.Class.GetCharacteristics().Defense
+
+	if len(h.Equipment) > 0 {
+		for _, item := range h.Equipment {
+			defense += item.DefenseBonus
+		}
+	}
+
+	return defense
 }
 
 func (h *Hero) GetCriticalChancePercent() int {
-	return h.Class.GetCharacteristics().CriticalChancePercent
+	criticalChancePercent := h.Class.GetCharacteristics().CriticalChancePercent
+
+	if len(h.Equipment) > 0 {
+		for _, item := range h.Equipment {
+			criticalChancePercent += item.CriticalChancePercentBonus
+		}
+	}
+
+	return criticalChancePercent
 }
 
 func (h *Hero) GetEvasionChancePercent() int {
-	return h.Class.GetCharacteristics().EvasionChancePercent
+	evasionChancePercent := h.Class.GetCharacteristics().EvasionChancePercent
+
+	if len(h.Equipment) > 0 {
+		for _, item := range h.Equipment {
+			evasionChancePercent += item.EvasionPercentBonus
+		}
+	}
+
+	return evasionChancePercent
 }
 
 func (h *Hero) GetMinReward() int {
@@ -68,5 +102,5 @@ func (h *Hero) GetMinReward() int {
 }
 
 func (h *Hero) GetMaxReward() int {
-	return 0
+	return h.GetMinReward()
 }

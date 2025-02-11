@@ -179,7 +179,6 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	classCharacteristics := hero.Class.GetCharacteristics()
 
 	msg += fmt.Sprintf(
 		"%s: %s\n",
@@ -190,13 +189,13 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.Attack,
-		classCharacteristics.Attack,
+		hero.GetMinAttack(),
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.Defense,
-		classCharacteristics.Defense,
+		hero.GetDefense(),
 	)
 
 	msg += fmt.Sprintf(
@@ -208,13 +207,13 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	msg += fmt.Sprintf(
 		"%s: %v%%\n",
 		m.CriticalChancePercent,
-		classCharacteristics.CriticalChancePercent,
+		hero.GetCriticalChancePercent(),
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v%%\n",
 		m.EvasionChancePercent,
-		classCharacteristics.EvasionChancePercent,
+		hero.GetEvasionChancePercent(),
 	)
 
 	msg += fmt.Sprintf(
