@@ -87,11 +87,20 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 
 	itemsKeyboardButtons := []telegram.KeyboardButton{}
 	for _, heroItem := range heroItemsPaginated.Rows {
+		var equippedText string
+		if heroItem.IsEquipped {
+			equippedText = " (🎒)"
+		}
+
 		itemsKeyboardButtons = append(
 			itemsKeyboardButtons,
 			telegram.KeyboardButton{
 				CallbackQuery: queries.HeroEquipmentOpenItem.WithID(hero.ID).WithID(heroItem.ItemID),
-				Text:          ctx.Messages().GetItemNameWithIcon(heroItem.Item),
+				Text: fmt.Sprintf(
+					"%s%s",
+					ctx.Messages().GetItemNameWithIcon(heroItem.Item),
+					equippedText,
+				),
 			},
 		)
 	}
