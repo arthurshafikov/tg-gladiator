@@ -9,7 +9,7 @@ type HeroItem struct {
 	IsEquipped bool  `json:"is_equipped"`
 }
 
-type HeroEquipment map[enums.ItemEquipsOn]Item
+type HeroEquipment map[enums.ItemEquipsOn][]Item
 
 type PaginatedHeroItem struct {
 	Rows       []HeroItem

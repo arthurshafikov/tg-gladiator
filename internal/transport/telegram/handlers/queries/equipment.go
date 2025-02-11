@@ -48,20 +48,31 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 
 	var equipmentText string
 	for _, itemEquipsOn := range enums.ItemEquipsOnAll() {
-		itemEquippedText := "-"
+		itemsEquippedText := "-"
 
-		if _, ok := heroEquipment[itemEquipsOn]; ok {
-			itemEquippedText = fmt.Sprintf(
-				"%s (%s)",
-				ctx.Messages().GetItemNameWithIcon(heroEquipment[itemEquipsOn]),
-				heroEquipment[itemEquipsOn].GetShortCharacteristicsText(),
-			)
+		if equippedItems, ok := heroEquipment[itemEquipsOn]; ok && len(equippedItems) > 0 {
+			if len(equippedItems) == 1 {
+				itemsEquippedText = fmt.Sprintf(
+					"%s (%s)",
+					ctx.Messages().GetItemNameWithIcon(equippedItems[0]),
+					equippedItems[0].GetShortCharacteristicsText(),
+				)
+			} else {
+				itemsEquippedText = ""
+				for _, equippedItem := range equippedItems {
+					itemsEquippedText += fmt.Sprintf(
+						"\n - %s (%s)",
+						ctx.Messages().GetItemNameWithIcon(equippedItem),
+						equippedItem.GetShortCharacteristicsText(),
+					)
+				}
+			}
 		}
 
 		equipmentText += fmt.Sprintf(
 			"\n%s: %s",
 			ctx.Messages().ItemEquipsOns[itemEquipsOn],
-			itemEquippedText,
+			itemsEquippedText,
 		)
 	}
 

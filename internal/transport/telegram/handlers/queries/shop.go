@@ -162,7 +162,7 @@ func (h *Handler) openShop(ctx *types.Context, heroID int64, query ...*tgbotapi.
 			)
 			shopItemsButtons = append(shopItemsButtons, telegram.KeyboardButton{
 				CallbackQuery: queries.ShopBuyItem.WithID(heroID).WithID(shopItem.ItemID),
-				Text:          ctx.Messages().ItemNames[shopItem.Item.Name],
+				Text:          ctx.Messages().GetItemNameWithIcon(shopItem.Item),
 			})
 		}
 	}

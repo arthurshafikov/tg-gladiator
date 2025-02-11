@@ -99,7 +99,8 @@ func (s *HeroItemService) GetHeroEquipment(ctx *types.Context, heroID int64) (mo
 	for _, itemEquipsOn := range enums.ItemEquipsOnAll() {
 		for _, heroItem := range heroItems.Rows {
 			if heroItem.Item.EquipsOn == itemEquipsOn {
-				heroEquipment[itemEquipsOn] = heroItem.Item
+				// @todo additional validation on equipped items
+				heroEquipment[itemEquipsOn] = append(heroEquipment[itemEquipsOn], heroItem.Item)
 			}
 		}
 	}
@@ -113,7 +114,38 @@ func (s *HeroItemService) Equip(ctx *types.Context, heroID, itemID int64) error 
 		return err
 	}
 
-	// @todo validate that the item can be equipped
+	heroEquipment, err := s.GetHeroEquipment(ctx, heroID)
+	if err != nil {
+		return err
+	}
+
+	// @todo these values should be configurable
+	switch heroItem.Item.EquipsOn {
+	case enums.ItemEquipsOnHand:
+		if twoHandsItems, ok := heroEquipment[enums.ItemEquipsOnTwoHands]; ok && len(twoHandsItems) > 0 {
+			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+		}
+
+		if oneHandItems, ok := heroEquipment[heroItem.Item.EquipsOn]; ok && len(oneHandItems) > 1 {
+			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+		}
+	case enums.ItemEquipsOnTwoHands:
+		if twoHandsItems, ok := heroEquipment[enums.ItemEquipsOnTwoHands]; ok && len(twoHandsItems) > 0 {
+			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+		}
+
+		if oneHandItems, ok := heroEquipment[enums.ItemEquipsOnHand]; ok && len(oneHandItems) > 0 {
+			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+		}
+	case enums.ItemEquipsOnFinger:
+		if fingerItems, ok := heroEquipment[enums.ItemEquipsOnFinger]; ok && len(fingerItems) > 1 {
+			return errors.ErrTooMuchItemsEquippedAlready // @todo name of the item
+		}
+	default:
+		if _, ok := heroEquipment[heroItem.Item.EquipsOn]; ok {
+			return errors.ErrAlreadyHaveEquippedItem
+		}
+	}
 
 	if _, err := s.repo.UpdateMap(ctx.GetContext(), heroItem, map[string]interface{}{
 		"is_equipped": true,
