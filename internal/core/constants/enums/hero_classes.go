@@ -44,11 +44,11 @@ func (hc HeroClass) GetCharacteristics() *classCharacteristics {
 	switch hc {
 	case Swordsman:
 		return &classCharacteristics{
-			Attack:                10,
-			Defense:               5,
-			CriticalChancePercent: 10,
-			EvasionChancePercent:  5,
-			StartHP:               100,
+			Attack:                6,
+			Defense:               2,
+			CriticalChancePercent: 5,
+			EvasionChancePercent:  2,
+			StartHP:               70,
 		}
 	default:
 		panic(fmt.Errorf("undefined class for characteristics: '%s'", hc.ToString()))

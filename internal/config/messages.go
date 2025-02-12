@@ -188,26 +188,26 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 
 	msg += fmt.Sprintf(
 		"%s: %v\n",
-		m.Attack,
-		hero.GetMinAttack(),
-	)
-
-	msg += fmt.Sprintf(
-		"%s: %v\n",
-		m.Defense,
-		hero.GetDefense(),
-	)
-
-	msg += fmt.Sprintf(
-		"%s: %v\n",
 		m.HP,
 		hero.CurrentHP,
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v\n",
+		m.Attack,
+		hero.GetMinAttack(),
 	)
 
 	msg += fmt.Sprintf(
 		"%s: %v%%\n",
 		m.CriticalChancePercent,
 		hero.GetCriticalChancePercent(),
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v\n",
+		m.Defense,
+		hero.GetDefense(),
 	)
 
 	msg += fmt.Sprintf(
