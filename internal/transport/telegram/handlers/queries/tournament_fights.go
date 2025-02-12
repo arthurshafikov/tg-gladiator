@@ -92,18 +92,12 @@ func (h *Handler) tournamentTurn(
 		return err
 	}
 
-	fight, fightEvents, err := h.Services.TournamentFight.MakeTurn(ctx, fight, fightAction)
+	fight, err = h.Services.TournamentFight.MakeTurn(ctx, fight, fightAction)
 	if err != nil {
 		return err
 	}
 
-	fightEventsMsgText := ctx.Messages().FightEvents(fight, fightEvents)
-	msg := h.Helper.NewEditMessage(ctx.GetChatID(), query.Message.MessageID, fightEventsMsgText)
-	if err := h.Helper.Send(msg); err != nil {
-		return err
-	}
-
-	if err := h.SendFightOverviewMessage(ctx, fight); err != nil {
+	if err := h.SendFightOverviewMessage(ctx, fight, query); err != nil {
 		return err
 	}
 

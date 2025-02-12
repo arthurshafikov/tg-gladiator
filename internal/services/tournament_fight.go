@@ -82,7 +82,7 @@ func (s *TournamentFightService) MakeTurn(
 	ctx *types.Context,
 	fight *models.Fight,
 	actionType enums.FightActionType,
-) (*models.Fight, *models.FightEvents, error) {
+) (*models.Fight, error) {
 	updateFields := map[string]interface{}{}
 
 	events := &models.FightEvents{}
@@ -94,7 +94,7 @@ func (s *TournamentFightService) MakeTurn(
 		fight.Opponent,
 	)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	events.OpponentFightEvent, err = s.tournamentFightEventsService.getRandomFightEventFor(
@@ -102,7 +102,7 @@ func (s *TournamentFightService) MakeTurn(
 		fight.Hero,
 	)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	if events.HeroFightEvent.DamageReceived > 0 {
@@ -129,23 +129,25 @@ func (s *TournamentFightService) MakeTurn(
 		if updateFields[models.FightFieldOpponentHP] == 0 {
 			goldReward, err := s.calculateGoldReward(fight.Opponent)
 			if err != nil {
-				return nil, nil, err
+				return nil, err
 			}
 
 			updateFields[models.FightFieldGoldReward] = goldReward
 
 			if err := s.heroService.RewardGold(ctx, fight.HeroID, goldReward); err != nil {
-				return nil, nil, err
+				return nil, err
 			}
 		}
 	}
 
 	fight, err = s.fightService.updateMap(ctx, fight.ID, updateFields)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	return fight, events, nil
+	fight.Events = events
+
+	return fight, nil
 }
 
 func (s *TournamentFightService) calculateGoldReward(opponent models.Fighter) (int, error) {

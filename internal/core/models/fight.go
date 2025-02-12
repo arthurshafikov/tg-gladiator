@@ -31,6 +31,8 @@ type Fight struct {
 
 	Hero     Fighter `gorm:"-"`
 	Opponent Fighter `gorm:"-"`
+
+	Events *FightEvents `gorm:"-"`
 }
 
 func (f *Fight) GetCurrentHPFor(fighter Fighter) int {

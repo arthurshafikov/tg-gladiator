@@ -71,7 +71,7 @@ type TournamentFight interface {
 		ctx *types.Context,
 		fight *models.Fight,
 		actionType enums.FightActionType,
-	) (*models.Fight, *models.FightEvents, error)
+	) (*models.Fight, error)
 	RunAwayAsHero(ctx *types.Context, fightID int64) error
 }
 
