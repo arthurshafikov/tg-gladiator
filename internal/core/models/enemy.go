@@ -4,6 +4,7 @@ import "github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 
 type Enemy struct {
 	ID                    int64  `gorm:"->" json:"id"`
+	Level                 int    `json:"level"`
 	Name                  string `json:"name"`
 	HP                    int    `json:"hp"`
 	MinAttack             int    `json:"min_attack"`
