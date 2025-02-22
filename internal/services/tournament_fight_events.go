@@ -101,21 +101,26 @@ func (s *TournamentFightEventsService) calculateIfTheStrikeWasEvaded(
 	actionType enums.FightActionType,
 	opponent models.Fighter,
 ) (bool, int, error) {
-	var additionalEvasionPercentBasedOnActionType int
-	var err error
+	evasionChance := opponent.GetEvasionChancePercent() // e.g. 20
 	switch actionType {
 	case enums.FightActionSimpleStrike:
-		additionalEvasionPercentBasedOnActionType = 0
+		evasionChance += 0
 	case enums.FightActionStrongStrike:
-		additionalEvasionPercentBasedOnActionType, err = s.generateRandomNumberInRange(15, 25)
+		additionalEvasionPercentBasedOnActionType, err := s.generateRandomNumberInRange(27, 40)
 		if err != nil {
 			return false, 0, err
 		}
+
+		evasionChance += additionalEvasionPercentBasedOnActionType
 	case enums.FightActionPreciseStrike:
-		additionalEvasionPercentBasedOnActionType = -25 // @todo should be propotional instead of raw deduction
+		evasionKoefficient := 0.5
+		c := float64(evasionChance) * (1 - evasionKoefficient*(1-float64(evasionChance)/100))
+		evasionChance = int(math.Round(c))
 	}
 
-	evasionChance := opponent.GetEvasionChancePercent() + additionalEvasionPercentBasedOnActionType
+	if evasionChance < 0 {
+		evasionChance = 0
+	}
 	wasEvaded, err := s.calculateRandomChance(evasionChance)
 	if err != nil {
 		return false, 0, err
@@ -139,7 +144,7 @@ func (s *TournamentFightEventsService) calculateStrikeTypeModificatorDamage(
 	case enums.FightActionStrongStrike:
 		damageDealt = int(math.Round(float64(baseDamage) * 1.5)) // @todo range for variety
 	case enums.FightActionPreciseStrike:
-		damageDealt = int(math.Round(float64(baseDamage) * 0.7))
+		damageDealt = int(math.Round(float64(baseDamage) * 0.8))
 	}
 
 	return damageDealt
