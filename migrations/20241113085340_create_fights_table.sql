@@ -9,6 +9,7 @@ CREATE TABLE fights (
     opponent_id BIGINT NOT NULL,
     opponent_hp INT NOT NULL CHECK (opponent_hp >= 0),
     gold_reward INT NULL,
+    xp_reward INT NULL,
     
     created_at TIMESTAMP NULL DEFAULT NOW(),
 

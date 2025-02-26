@@ -145,6 +145,29 @@ func (s *HeroService) RewardGold(ctx *types.Context, id int64, amount int) error
 	return nil
 }
 
+func (s *HeroService) RewardXP(ctx *types.Context, id int64, amount int) error {
+	hero, err := s.FindMy(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	fields := map[string]interface{}{
+		models.HeroFieldXP: hero.XP + amount,
+	}
+
+	if hero.Level < hero.CalculateLevelForXP(hero.XP + amount) {
+		fields[models.HeroFieldLevel] = hero.Level + 1
+
+		// @todo allow to upgrade stats
+	}
+
+	if _, err := s.repo.UpdateMap(ctx.GetContext(), id, fields); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *HeroService) decreaseGold(ctx *types.Context, heroID int64, amount int) error {
 	hero, err := s.FindMy(ctx, heroID)
 	if err != nil {

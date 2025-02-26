@@ -137,6 +137,18 @@ func (s *TournamentFightService) MakeTurn(
 			if err := s.heroService.RewardGold(ctx, fight.HeroID, goldReward); err != nil {
 				return nil, err
 			}
+
+			xpReward, err := s.calculateXPReward(fight.Opponent)
+			if err != nil {
+				return nil, err
+			}
+
+			updateFields[models.FightFieldXPReward] = xpReward
+
+			// @todo show msg about new level
+			if err := s.heroService.RewardXP(ctx, fight.HeroID, xpReward); err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -151,7 +163,7 @@ func (s *TournamentFightService) MakeTurn(
 }
 
 func (s *TournamentFightService) calculateGoldReward(opponent models.Fighter) (int, error) {
-	if opponent.GetMaxReward() < opponent.GetMinReward() {
+	if opponent.GetMaxGoldReward() < opponent.GetMinGoldReward() {
 		s.logger.Error(fmt.Errorf(
 			"gold reward max cannot be less than min, enemy id: %s - %v",
 			opponent.GetType(),
@@ -161,7 +173,21 @@ func (s *TournamentFightService) calculateGoldReward(opponent models.Fighter) (i
 		return 0, errors.ErrServerError
 	}
 
-	return s.generateRandomNumberInRange(opponent.GetMinReward(), opponent.GetMaxReward())
+	return s.generateRandomNumberInRange(opponent.GetMinGoldReward(), opponent.GetMaxGoldReward())
+}
+
+func (s *TournamentFightService) calculateXPReward(opponent models.Fighter) (int, error) {
+	if opponent.GetMaxXPReward() < opponent.GetMinXPReward() {
+		s.logger.Error(fmt.Errorf(
+			"xp reward max cannot be less than min, enemy id: %s - %v",
+			opponent.GetType(),
+			opponent.GetID(),
+		))
+
+		return 0, errors.ErrServerError
+	}
+
+	return s.generateRandomNumberInRange(opponent.GetMinXPReward(), opponent.GetMaxXPReward())
 }
 
 func (s *TournamentFightService) generateRandomNumberInRange(min, max int) (int, error) {

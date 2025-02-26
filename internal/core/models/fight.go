@@ -13,6 +13,7 @@ const (
 	FightFieldOpponentHP = "opponent_hp"
 	FightFieldHeroHP     = "hero_hp"
 	FightFieldGoldReward = "gold_reward"
+	FightFieldXPReward   = "xp_reward"
 
 	FightArmorDamageReductionModificator = 40 // the more - the less % of damage will get blocked
 )
@@ -26,6 +27,7 @@ type Fight struct {
 	OpponentID   int64  `json:"opponent_id"`
 	OpponentHP   int    `json:"opponent_hp"`
 	GoldReward   int    `json:"gold_reward"`
+	XPReward     int    `json:"xp_reward"`
 
 	CreatedAt time.Time `json:"created_at"`
 
@@ -62,8 +64,10 @@ type Fighter interface {
 	GetDefense() int
 	GetCriticalChancePercent() int
 	GetEvasionChancePercent() int
-	GetMinReward() int
-	GetMaxReward() int
+	GetMinGoldReward() int
+	GetMaxGoldReward() int
+	GetMinXPReward() int
+	GetMaxXPReward() int
 }
 
 // @todo DTO?

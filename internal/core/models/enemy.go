@@ -61,10 +61,18 @@ func (e *Enemy) GetEvasionChancePercent() int {
 	return e.EvasionChancePercent
 }
 
-func (e *Enemy) GetMinReward() int {
+func (e *Enemy) GetMinGoldReward() int {
 	return e.GoldRewardMin
 }
 
-func (e *Enemy) GetMaxReward() int {
+func (e *Enemy) GetMaxGoldReward() int {
 	return e.GoldRewardMax
+}
+
+func (e *Enemy) GetMinXPReward() int {
+	return e.XpRewardMin
+}
+
+func (e *Enemy) GetMaxXPReward() int {
+	return e.XpRewardMax
 }

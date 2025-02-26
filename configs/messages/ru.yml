@@ -26,6 +26,8 @@ RU:
 
   HeroOverview: "Ваш герой:"
   HeroClass: "Класс"
+  Level: "⭐ Уровень"
+  XPForNextLevelLeft: "до след. уровня"
   Attack: "💪 Атака"
   Defense: "🛡 Защита"
   CriticalChancePercent: "💥 Шанс крита"

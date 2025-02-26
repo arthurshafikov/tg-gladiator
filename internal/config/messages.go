@@ -41,6 +41,8 @@ type Messages struct {
 	HeroOverview          string
 	HeroName              string
 	HeroClass             string
+	Level                 string
+	XPForNextLevelLeft    string
 	Attack                string
 	Defense               string
 	CriticalChancePercent string
@@ -183,6 +185,14 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 		"%s: %s\n",
 		m.HeroClass,
 		heroClass,
+	)
+
+	msg += fmt.Sprintf(
+		"%s: %v (%s - %v XP)\n",
+		m.Level,
+		hero.Level,
+		m.XPForNextLevelLeft,
+		hero.GetXPForNextLevelLeft(),
 	)
 
 	msg += fmt.Sprintf(
