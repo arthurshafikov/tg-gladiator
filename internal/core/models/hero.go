@@ -13,6 +13,8 @@ type Hero struct {
 	ChatID        int64           `json:"chat_id"`
 	Name          string          `json:"name"`
 	Class         enums.HeroClass `json:"class"`
+	XP            int             `json:"xp"`
+	Level         int             `json:"level"`
 	CurrentHP     int             `json:"current_hp"`
 	CurrentEnergy int             `json:"current_energy"`
 	CurrentGold   int             `json:"current_gold"`

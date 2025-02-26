@@ -52,6 +52,8 @@ func (s *HeroService) Create(ctx *types.Context, name, class string) (*models.He
 		ChatID:        ctx.GetChat().ID,
 		Name:          name,
 		Class:         heroClass,
+		XP:            0,
+		Level:         1,
 		CurrentHP:     classCharacteristics.StartHP,
 		CurrentEnergy: StartEnergy,
 		CurrentGold:   StartGold,

@@ -14,6 +14,8 @@ type Enemy struct {
 	EvasionChancePercent  int    `json:"evasion_chance_percent"`
 	GoldRewardMin         int    `json:"gold_reward_min"`
 	GoldRewardMax         int    `json:"gold_reward_max"`
+	XpRewardMin           int    `json:"xp_reward_min"`
+	XpRewardMax           int    `json:"xp_reward_max"`
 }
 
 func (Enemy) TableName() string {

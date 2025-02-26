@@ -13,7 +13,10 @@ CREATE TABLE enemies (
     evasion_chance_percent INT NOT NULL CHECK (evasion_chance_percent >= 0),
 
     gold_reward_min INT NOT NULL CHECK (gold_reward_min >= 0),
-    gold_reward_max INT NOT NULL CHECK (gold_reward_max >= 0)
+    gold_reward_max INT NOT NULL CHECK (gold_reward_max >= 0),
+
+    xp_reward_min INT NOT NULL CHECK (xp_reward_min >= 0),
+    xp_reward_max INT NOT NULL CHECK (xp_reward_max >= 0)
 );
 -- +goose StatementEnd
 

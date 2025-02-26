@@ -5,6 +5,8 @@ CREATE TABLE heroes (
     chat_id BIGINT NOT NULL,
     name VARCHAR(50) NOT NULL,
     class VARCHAR(20) NOT NULL,
+    xp INT NOT NULL,
+    level INT NOT NULL,
     current_hp INT NOT NULL CHECK (current_hp >= 0),
     current_energy INT NOT NULL CHECK (current_energy >= 0),
     current_gold INT NOT NULL CHECK (current_gold >= 0),
