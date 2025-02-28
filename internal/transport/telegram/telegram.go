@@ -7,6 +7,7 @@ import (
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/commands"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"github.com/arthurshafikov/tg-gladiator/internal/services"
 	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram/handlers"
@@ -69,6 +70,7 @@ type InteractionHandler interface {
 }
 
 type NotificationsHandler interface {
+	NotifyAboutHeroLevelUp(ctx *types.Context, hero *models.Hero) error
 }
 
 type Deps struct {

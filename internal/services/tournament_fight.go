@@ -145,7 +145,6 @@ func (s *TournamentFightService) MakeTurn(
 
 			updateFields[models.FightFieldXPReward] = xpReward
 
-			// @todo show msg about new level
 			if err := s.heroService.RewardXP(ctx, fight.HeroID, xpReward); err != nil {
 				return nil, err
 			}

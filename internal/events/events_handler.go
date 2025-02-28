@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants"
 	"github.com/arthurshafikov/tg-gladiator/internal/events/listeners"
 	"github.com/arthurshafikov/tg-gladiator/internal/services"
 	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram"
@@ -46,6 +47,11 @@ func NewHandler(
 }
 
 func (h *Handler) InitEvents(deps *Deps) {
+	h.subscribe(constants.EventHeroLevelUp, listeners.NewHeroLevelUpListener(
+		deps.NotificationsHandler,
+		deps.Services.Chat,
+		&deps.Config.MessagesBag,
+	))
 }
 
 func (h *Handler) Dispatch(eventName string, params ...any) {

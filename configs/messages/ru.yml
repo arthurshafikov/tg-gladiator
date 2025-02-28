@@ -81,6 +81,8 @@ RU:
   ItemCritBonus: "Бонус к шансу крита"
   ItemEvasionBonus: "Бонус к шансу уклонения"
 
+  HeroLevelUpNotification: "Ваш герой %s получил %v уровень ⭐️!"
+
   PreviousPage: "⬅️ Предыдущая стр."
   NextPage: "Следующая стр. ➡️"
 

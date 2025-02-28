@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
@@ -19,6 +20,8 @@ type HeroService struct {
 
 	validatorService *ValidatorService
 	heroItemsService *HeroItemService
+
+	eventsHandler EventsHandler
 }
 
 func newHeroService(
@@ -26,12 +29,14 @@ func newHeroService(
 	repo repository.Hero,
 	validatorService *ValidatorService,
 	heroItemsService *HeroItemService,
+	eventsHandler EventsHandler,
 ) *HeroService {
 	return &HeroService{
 		logger:           logger,
 		repo:             repo,
 		validatorService: validatorService,
 		heroItemsService: heroItemsService,
+		eventsHandler:    eventsHandler,
 	}
 }
 
@@ -155,14 +160,20 @@ func (s *HeroService) RewardXP(ctx *types.Context, id int64, amount int) error {
 		models.HeroFieldXP: hero.XP + amount,
 	}
 
-	if hero.Level < hero.CalculateLevelForXP(hero.XP + amount) {
-		fields[models.HeroFieldLevel] = hero.Level + 1
+	var newLevel = false
+	if hero.Level < hero.CalculateLevelForXP(hero.XP+amount) {
+		hero.Level = hero.Level + 1
+		fields[models.HeroFieldLevel] = hero.Level
 
-		// @todo allow to upgrade stats
+		newLevel = true
 	}
 
 	if _, err := s.repo.UpdateMap(ctx.GetContext(), id, fields); err != nil {
 		return err
+	}
+
+	if newLevel {
+		s.eventsHandler.Dispatch(constants.EventHeroLevelUp, *hero)
 	}
 
 	return nil

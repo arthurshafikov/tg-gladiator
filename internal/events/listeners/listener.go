@@ -2,6 +2,9 @@ package listeners
 
 import (
 	"context"
+
+	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 )
 
 type Listener interface {
@@ -9,4 +12,5 @@ type Listener interface {
 }
 
 type NotificationsHandler interface {
+	NotifyAboutHeroLevelUp(ctx *types.Context, hero *models.Hero) error
 }

@@ -26,6 +26,23 @@ func newChatService(
 	}
 }
 
+func (s *ChatService) FindByID(ctx context.Context, id int64) (*models.Chat, error) {
+	chat, err := s.repo.FindBy(ctx, &models.Chat{
+		ID: id,
+	})
+	if err != nil {
+		if !errors.Is(err, errors.ErrNotFound) {
+			s.logger.Error(err)
+
+			return nil, errors.ErrServerError
+		}
+
+		return nil, errors.ErrNotFound
+	}
+
+	return chat, nil
+}
+
 func (s *ChatService) FindByChatID(ctx context.Context, chatID int64) (*models.Chat, error) {
 	chat, err := s.repo.FindBy(ctx, &models.Chat{
 		ChatID: chatID,

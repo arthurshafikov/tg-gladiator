@@ -95,6 +95,8 @@ type Messages struct {
 	ItemCritBonus    string
 	ItemEvasionBonus string
 
+	HeroLevelUpNotification string
+
 	PreviousPage string
 	NextPage     string
 

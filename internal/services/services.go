@@ -20,6 +20,7 @@ type EventsHandler interface {
 }
 
 type Chat interface {
+	FindByID(ctx context.Context, id int64) (*models.Chat, error)
 	FindByChatID(ctx context.Context, chatID int64) (*models.Chat, error)
 	FirstOrCreate(ctx context.Context, chat models.Chat) (*models.Chat, bool, error)
 	UpdateLatestActiveAt(ctx *types.Context)
@@ -101,7 +102,7 @@ type Deps struct {
 func NewServices(deps Deps) *Services {
 	validatorService := newValidatorService(deps.Logger)
 
-	heroService := newHeroService(deps.Logger, deps.Repository.Hero, validatorService, nil)
+	heroService := newHeroService(deps.Logger, deps.Repository.Hero, validatorService, nil, deps.EventsHandler)
 
 	enemyService := newEnemyService(deps.Logger, deps.Repository.Enemy)
 
