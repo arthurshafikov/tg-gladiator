@@ -10,6 +10,15 @@ CREATE TABLE heroes (
     current_hp INT NOT NULL CHECK (current_hp >= 0),
     current_energy INT NOT NULL CHECK (current_energy >= 0),
     current_gold INT NOT NULL CHECK (current_gold >= 0),
+
+    attack_bonus INT NOT NULL CHECK (attack_bonus >= 0),
+    defense_bonus INT NOT NULL CHECK (defense_bonus >= 0),
+    hp_bonus INT NOT NULL CHECK (hp_bonus >= 0),
+    critical_chance_percent_bonus INT NOT NULL CHECK (critical_chance_percent_bonus >= 0),
+    evasion_chance_percent_bonus INT NOT NULL CHECK (evasion_chance_percent_bonus >= 0),
+
+    level_up_bonuses_left INT NOT NULL CHECK (level_up_bonuses_left >= 0),
+    
     created_at TIMESTAMP NULL DEFAULT NOW(),
 
     FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE

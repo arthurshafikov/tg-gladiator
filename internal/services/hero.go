@@ -12,6 +12,8 @@ import (
 const (
 	StartEnergy = 10
 	StartGold   = 0
+
+	LevelUpStatsUpgradeAvailable = 5
 )
 
 type HeroService struct {
@@ -62,6 +64,12 @@ func (s *HeroService) Create(ctx *types.Context, name, class string) (*models.He
 		CurrentHP:     classCharacteristics.StartHP,
 		CurrentEnergy: StartEnergy,
 		CurrentGold:   StartGold,
+
+		AttackBonus:                0,
+		DefenseBonus:               0,
+		HpBonus:                    0,
+		CriticalChancePercentBonus: 0,
+		EvasionChancePercentBonus:  0,
 	})
 	if err != nil {
 		s.logger.Error(err)
@@ -164,6 +172,8 @@ func (s *HeroService) RewardXP(ctx *types.Context, id int64, amount int) error {
 	if hero.Level < hero.CalculateLevelForXP(hero.XP+amount) {
 		hero.Level = hero.Level + 1
 		fields[models.HeroFieldLevel] = hero.Level
+
+		fields[models.HeroFieldLevelUpBonusesLeft] = hero.LevelUpBonusesLeft + LevelUpStatsUpgradeAvailable
 
 		newLevel = true
 	}

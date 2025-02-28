@@ -10,6 +10,7 @@ import (
 const HeroFieldCurrentGold = "current_gold"
 const HeroFieldXP = "xp"
 const HeroFieldLevel = "level"
+const HeroFieldLevelUpBonusesLeft = "level_up_bonuses_left"
 const LevelUpRequiredXPKoefficient = 50
 
 type Hero struct {
@@ -22,7 +23,15 @@ type Hero struct {
 	CurrentHP     int             `json:"current_hp"`
 	CurrentEnergy int             `json:"current_energy"`
 	CurrentGold   int             `json:"current_gold"`
-	CreatedAt     time.Time       `gorm:"->" json:"created_at"`
+
+	AttackBonus                int `json:"attack_bonus"`
+	DefenseBonus               int `json:"defense_bonus"`
+	HpBonus                    int `json:"hp_bonus"`
+	CriticalChancePercentBonus int `json:"critical_chance_percent_bonus"`
+	EvasionChancePercentBonus  int `json:"evasion_chance_percent_bonus"`
+	LevelUpBonusesLeft         int `json:"level_up_bonuses_left"`
+
+	CreatedAt time.Time `gorm:"->" json:"created_at"`
 
 	Equipment []Item `gorm:"-"`
 }
@@ -121,6 +130,10 @@ func (h *Hero) GetMinXPReward() int {
 
 func (h *Hero) GetMaxXPReward() int {
 	return h.GetMinXPReward()
+}
+
+func (h *Hero) HasLevelUpBonuses() bool {
+	return h.LevelUpBonusesLeft > 0
 }
 
 func (h *Hero) GetXPForNextLevelLeft() int {
