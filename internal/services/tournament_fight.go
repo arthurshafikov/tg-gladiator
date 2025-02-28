@@ -36,12 +36,12 @@ func newTournamentFightService(
 }
 
 func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*models.Fight, error) {
-	enemy, err := s.enemyService.getRandomEnemy(ctx)
+	hero, err := s.heroService.FindMy(ctx, heroID)
 	if err != nil {
 		return nil, err
 	}
 
-	hero, err := s.heroService.FindMy(ctx, heroID)
+	enemy, err := s.enemyService.getRandomEnemy(ctx, hero.Level)
 	if err != nil {
 		return nil, err
 	}

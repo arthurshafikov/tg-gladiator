@@ -251,14 +251,13 @@ func (m *Messages) FightInfo(fight *models.Fight) (string, error) {
 	)
 
 	msg += fmt.Sprintf(
-		"%s 👤:\n%s\n\n%s:\n%s",
-		// "%s 👤:\n%s%s\n\n%s:\n%s%s",
+		"%s 👤 (%v ⭐):\n%s\n\n%s (%v ⭐):\n%s",
 		fight.Hero.GetName(),
+		fight.Hero.GetLevel(),
 		m.GetFightStatistics(fight, fight.Hero),
-		// heroStatisticsText,
 		fight.Opponent.GetName(),
+		fight.Opponent.GetLevel(),
 		m.GetFightStatistics(fight, fight.Opponent),
-		// opponentStatisticsText,
 	)
 
 	if fight.Events != nil {

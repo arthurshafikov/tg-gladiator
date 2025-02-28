@@ -38,8 +38,10 @@ func (s *EnemyService) find(ctx *types.Context, id int64) (*models.Enemy, error)
 	return enemy, nil
 }
 
-func (s *EnemyService) getRandomEnemy(ctx *types.Context) (*models.Enemy, error) {
-	enemies, err := s.repo.GetBy(ctx.GetContext(), &models.Enemy{})
+func (s *EnemyService) getRandomEnemy(ctx *types.Context, level int) (*models.Enemy, error) {
+	enemies, err := s.repo.GetBy(ctx.GetContext(), &models.Enemy{
+		Level: level,
+	})
 	if err != nil {
 		s.logger.Error(err)
 

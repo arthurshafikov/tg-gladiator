@@ -34,6 +34,10 @@ func (e *Enemy) GetName() string {
 	return e.Name
 }
 
+func (e *Enemy) GetLevel() int {
+	return e.Level
+}
+
 func (e *Enemy) GetHP() int {
 	return e.HP
 }
@@ -69,6 +73,10 @@ func (e *Enemy) GetMaxGoldReward() int {
 	return e.GoldRewardMax
 }
 
+// @todo calculate reward depending on the enemy level (with koefficient)
+// xpReward := int(math.Round(math.Pow(float64(enemy.Level), 1.5) * 10))
+// goldReward := int(math.Round(float64(enemy.Level) * (5 + rand.Float64()*5)))
+// dropChance := math.Min(0.1+0.02*float64(enemy.Level), 0.5) // до 50% шанс
 func (e *Enemy) GetMinXPReward() int {
 	return e.XpRewardMin
 }

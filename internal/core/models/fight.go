@@ -57,6 +57,7 @@ type Fighter interface {
 	GetID() int64
 	GetType() enums.FighterType
 	GetName() string
+	GetLevel() int
 	GetHP() int
 	HasAttackRange() bool
 	GetMinAttack() int

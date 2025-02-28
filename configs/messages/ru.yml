@@ -57,7 +57,7 @@ RU:
   FightActionInfoOpponentDamageBlocked: "(🛡-%v)"
   FightActionInfoOpponentEvaded: "и %s увернулся 🍀 (%v%%)"
 
-  FightResultHeroWon: "Поздравляем, вы победили, ваша награда - %v💰!"
+  FightResultHeroWon: "Поздравляем, вы победили, ваша награда - %v💰 и %v XP!"
   FightResultOpponentWon: "К сожалению вы проиграли"
   FightResultBackButton: "Вернуться на страницу героя"
 

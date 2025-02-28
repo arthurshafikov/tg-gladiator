@@ -107,6 +107,7 @@ func (h *Handler) tournamentTurn(
 			msgText = fmt.Sprintf(
 				ctx.Messages().FightResultHeroWon,
 				fight.GoldReward,
+				fight.XPReward,
 			)
 		} else {
 			msgText = ctx.Messages().FightResultOpponentWon

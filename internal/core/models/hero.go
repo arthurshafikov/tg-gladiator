@@ -43,6 +43,10 @@ func (h *Hero) GetName() string {
 	return h.Name
 }
 
+func (h *Hero) GetLevel() int {
+	return h.Level
+}
+
 func (h *Hero) GetHP() int {
 	return h.CurrentHP
 }
