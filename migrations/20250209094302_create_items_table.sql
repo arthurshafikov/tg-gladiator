@@ -9,6 +9,9 @@ CREATE TABLE items (
     defense_bonus INT NULL,
     critical_chance_percent_bonus INT NULL,
     evasion_percent_bonus INT NULL,
+    potion_effect_type TEXT NULL,
+    potion_effect_value INT NULL,
+    potion_effect_duration INT NULL,
     base_price INT NOT NULL CHECK (base_price >= 0)
 );
 -- +goose StatementEnd

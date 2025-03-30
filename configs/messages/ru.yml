@@ -82,6 +82,7 @@ RU:
   ItemDefenseBonus: "Бонус к защите"
   ItemCritBonus: "Бонус к шансу крита"
   ItemEvasionBonus: "Бонус к шансу уклонения"
+  ItemPotionEffect: "Действие"
 
   HeroLevelUpNotification: "Ваш герой %s получил %v уровень ⭐️!"
   HeroChooseWhereSpendLevelUpBonus: "Выберите куда направить статы: %v штук"
@@ -96,6 +97,7 @@ RU:
     weapon: "🗡 Оружие"
     armor: "🛡 Броня"
     accessory: "📿 Аксессуары"
+    potion: "🧪 Зелья"
 
   ItemEquipsOns:
     hand: "Руку"
@@ -146,6 +148,12 @@ RU:
     amulet_of_power: "Амулет силы"
     ancient_talisman: "Древний талисман"
     blood_ring: "Кровавое кольцо"
+    health_potion: "❤️ Зелье здоровья"
+    greater_health_potion: "❤️ Большое зелье здоровья"
+    strength_potion: "💪 Зелье силы"
+    defense_potion: "🛡️ Зелье защиты"
+    evasion_potion: "🍀 Зелье уклонения"
+    invisibility_potion: "🍀 Зелье невидимости"
 
   Errors:
     403_forbidden: "⛔️ Ошибка: недостаточно прав для выполнения действия"

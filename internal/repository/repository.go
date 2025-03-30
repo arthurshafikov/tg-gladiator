@@ -49,7 +49,7 @@ type Enemy interface {
 }
 
 type Item interface {
-	GetBy(ctx context.Context, fields *models.Item) ([]models.Item, error)
+	GetBy(ctx context.Context, where *types.WhereConditions) ([]models.Item, error)
 }
 
 type HeroItem interface {

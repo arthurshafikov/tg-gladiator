@@ -16,6 +16,12 @@ const (
 	ItemCategoryWeapon    ItemCategory = "weapon"
 	ItemCategoryArmor     ItemCategory = "armor"
 	ItemCategoryAccessory ItemCategory = "accessory"
+	ItemCategoryPotion    ItemCategory = "potion"
+
+	PotionEffectTypeHeal        = "heal"
+	PotionEffectTypeAttackBuff  = "attack_buff"
+	PotionEffectTypeDefenseBuff = "defense_buff"
+	PotionEffectTypeEvasionBuff = "evasion_buff"
 )
 
 func ItemEquipsOnAll() []ItemEquipsOn {
@@ -36,5 +42,6 @@ func ItemCategoryAll() []ItemCategory {
 		ItemCategoryWeapon,
 		ItemCategoryArmor,
 		ItemCategoryAccessory,
+		ItemCategoryPotion,
 	}
 }

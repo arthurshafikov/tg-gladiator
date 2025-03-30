@@ -5,6 +5,7 @@ import (
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"gorm.io/gorm"
 )
 
@@ -18,11 +19,11 @@ func NewItemRepository(baseRepo BaseRepo) *Item {
 	}
 }
 
-func (r *Item) GetBy(ctx context.Context, fields *models.Item) ([]models.Item, error) {
+func (r *Item) GetBy(ctx context.Context, where *types.WhereConditions) ([]models.Item, error) {
 	query := r.getDBInstance(ctx)
 
-	if fields != nil {
-		query = query.Where(fields)
+	if where != nil {
+		query = query.Scopes(types.ApplyWhereConditions(where))
 	}
 
 	var items []models.Item

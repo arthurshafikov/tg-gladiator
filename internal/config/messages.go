@@ -96,6 +96,7 @@ type Messages struct {
 	ItemDefenseBonus string
 	ItemCritBonus    string
 	ItemEvasionBonus string
+	ItemPotionEffect string
 
 	HeroLevelUpNotification          string
 	HeroChooseWhereSpendLevelUpBonus string
@@ -383,7 +384,10 @@ func (m *Messages) ItemDescription(item models.Item) string {
 
 	msg += fmt.Sprintf("%s: %s\n", m.ItemName, m.ItemNames[item.Name])
 	msg += fmt.Sprintf("%s: %s\n", m.ItemCategory, m.ItemCategories[item.Category])
-	msg += fmt.Sprintf("%s: %s\n", m.ItemEquipsOn, m.ItemEquipsOns[item.EquipsOn])
+
+	if string(item.EquipsOn) != "" {
+		msg += fmt.Sprintf("%s: %s\n", m.ItemEquipsOn, m.ItemEquipsOns[item.EquipsOn])
+	}
 
 	if item.AttackBonus != 0 {
 		if item.AttackBonus < 0 {
@@ -413,6 +417,9 @@ func (m *Messages) ItemDescription(item models.Item) string {
 			msg += fmt.Sprintf("%s: +%v%%🍀\n", m.ItemEvasionBonus, item.EvasionPercentBonus)
 		}
 	}
+	if item.PotionEffectType != "" {
+		msg += fmt.Sprintf("%s: %s", m.ItemPotionEffect, item.GetShortCharacteristicsText())
+	}
 
 	return msg
 }
@@ -426,6 +433,8 @@ func (m *Messages) GetItemNameWithIcon(item models.Item) string {
 		icon = "🛡"
 	case enums.ItemCategoryAccessory:
 		icon = "📿"
+	case enums.ItemCategoryPotion:
+		icon = ""
 	}
 
 	return fmt.Sprintf("%s %s", icon, m.ItemNames[item.Name])

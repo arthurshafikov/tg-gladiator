@@ -1,9 +1,11 @@
 package services
 
 import (
+	"fmt"
 	"slices"
 	"time"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/helpers"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
@@ -77,16 +79,26 @@ func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) 
 		return err
 	}
 
-	allItems, err := s.itemsRepo.GetBy(ctx.GetContext(), nil)
+	allItems, err := s.itemsRepo.GetBy(ctx.GetContext(), &types.WhereConditions{
+		Not: map[string]any{
+			models.ItemFieldCategory: enums.ItemCategoryPotion,
+		},
+	})
 	if err != nil {
 		return err
+	}
+
+	if len(allItems) < 1 {
+		logrus.Error(fmt.Errorf("empty items table error when trying to create a shop"))
+
+		return errors.ErrServerError
 	}
 
 	alreadyTakenItemIndexes := []int{}
 	for i := 0; i < 10; i++ {
 		var randomIndex int
 		for {
-			randomIndex, err = helpers.GenerateRandomNumberInRange(0, len(allItems)-1) // @todo helper func?
+			randomIndex, err = helpers.GenerateRandomNumberInRange(0, len(allItems)-1)
 			if err != nil {
 				return err
 			}
@@ -102,6 +114,25 @@ func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) 
 			ItemID:     item.ID,
 			HeroShopID: heroShopID,
 			Price:      item.BasePrice, // @todo randomize item price due to the priceCoefficient (discounts?)
+		}); err != nil {
+			return err
+		}
+	}
+
+	potionItems, err := s.itemsRepo.GetBy(ctx.GetContext(), &types.WhereConditions{
+		Where: map[string]any{
+			models.ItemFieldCategory: enums.ItemCategoryPotion,
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	for _, potionItem := range potionItems {
+		if _, err := s.heroShopItemsRepo.Create(ctx.GetContext(), models.HeroShopItem{
+			ItemID:     potionItem.ID,
+			HeroShopID: heroShopID,
+			Price:      potionItem.BasePrice,
 		}); err != nil {
 			return err
 		}
