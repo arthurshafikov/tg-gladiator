@@ -7,11 +7,18 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 )
 
-const HeroFieldCurrentGold = "current_gold"
-const HeroFieldXP = "xp"
-const HeroFieldLevel = "level"
-const HeroFieldLevelUpBonusesLeft = "level_up_bonuses_left"
-const LevelUpRequiredXPKoefficient = 50
+const (
+	HeroFieldCurrentGold                = "current_gold"
+	HeroFieldXP                         = "xp"
+	HeroFieldLevel                      = "level"
+	HeroFieldLevelUpBonusesLeft         = "level_up_bonuses_left"
+	LevelUpRequiredXPKoefficient        = 50
+	HeroFieldHealthBonus                = "hp_bonus"
+	HeroFieldAttackBonus                = "attack_bonus"
+	HeroFieldDefenseBonus               = "defense_bonus"
+	HeroFieldCriticalChancePercentBonus = "critical_chance_percent_bonus"
+	HeroFieldEvasionChancePercentBonus  = "evasion_chance_percent_bonus"
+)
 
 type Hero struct {
 	ID            int64           `gorm:"->" json:"id"`
@@ -57,7 +64,7 @@ func (h *Hero) GetLevel() int {
 }
 
 func (h *Hero) GetHP() int {
-	return h.CurrentHP
+	return h.CurrentHP + h.HpBonus
 }
 
 func (h *Hero) HasAttackRange() bool {
@@ -73,7 +80,7 @@ func (h *Hero) GetMinAttack() int {
 		}
 	}
 
-	return minAttack
+	return minAttack + h.AttackBonus
 }
 
 func (h *Hero) GetMaxAttack() int {
@@ -89,7 +96,7 @@ func (h *Hero) GetDefense() int {
 		}
 	}
 
-	return defense
+	return defense + h.DefenseBonus
 }
 
 func (h *Hero) GetCriticalChancePercent() int {
@@ -101,7 +108,7 @@ func (h *Hero) GetCriticalChancePercent() int {
 		}
 	}
 
-	return criticalChancePercent
+	return criticalChancePercent + h.CriticalChancePercentBonus
 }
 
 func (h *Hero) GetEvasionChancePercent() int {
@@ -113,7 +120,7 @@ func (h *Hero) GetEvasionChancePercent() int {
 		}
 	}
 
-	return evasionChancePercent
+	return evasionChancePercent + h.EvasionChancePercentBonus
 }
 
 func (h *Hero) GetMinGoldReward() int {

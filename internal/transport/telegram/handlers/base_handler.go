@@ -191,6 +191,16 @@ func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ..
 
 	keyboardButtons := make([]telegram.KeyboardButton, 0, 2)
 
+	if hero.HasLevelUpBonuses() {
+		keyboardButtons = append(
+			keyboardButtons,
+			telegram.KeyboardButton{
+				CallbackQuery: queries.OpenLevelUpBonusesOverview.WithID(hero.ID),
+				Text:          ctx.Messages().MenuItemHasLevelUpBonuses,
+			},
+		)
+	}
+
 	keyboardButtons = append(
 		keyboardButtons,
 		telegram.KeyboardButton{

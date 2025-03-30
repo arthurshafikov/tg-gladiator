@@ -59,6 +59,9 @@ type QueryHandler interface {
 	HandleHeroEquipmentOpenItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleHeroEquipmentUnequipItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleHeroEquipmentEquipItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	
+	HandleOpenLevelUpBonusesOverview(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleSpendLevelUpBonus(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
 	HandleHeroDelete(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 }

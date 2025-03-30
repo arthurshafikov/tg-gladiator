@@ -30,6 +30,9 @@ const (
 	HeroEquipmentEquipItem   Query = "HeroEquipmentEquipItem"
 	HeroEquipmentUnequipItem Query = "HeroEquipmentUnequipItem"
 
+	OpenLevelUpBonusesOverview Query = "OpenLevelUpBonusesOverview"
+	SpendLevelUpBonus          Query = "SpendLevelUpBonus"
+
 	HeroDelete Query = "HeroDelete"
 
 	Back Query = "Back"

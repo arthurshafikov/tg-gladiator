@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
@@ -187,6 +189,47 @@ func (s *HeroService) RewardXP(ctx *types.Context, id int64, amount int) error {
 	}
 
 	return nil
+}
+
+func (s *HeroService) SpendLevelUpBonus(ctx *types.Context, id int64, statName string) (*models.Hero, error) {
+	hero, err := s.FindMy(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	if hero.LevelUpBonusesLeft < 1 {
+		return nil, errors.ErrForbidden // @todo clearer error?
+	}
+
+	fields := make(map[string]any, 1)
+
+	switch statName {
+	case enums.StatsUpgradeHealth:
+		fields[models.HeroFieldHealthBonus] = hero.HpBonus + 10 // @todo all these values from config
+	case enums.StatsUpgradeAttack:
+		fields[models.HeroFieldAttackBonus] = hero.AttackBonus + 1
+	case enums.StatsUpgradeDefence:
+		fields[models.HeroFieldDefenseBonus] = hero.DefenseBonus + 1
+	case enums.StatsUpgradeCriticalChance:
+		fields[models.HeroFieldCriticalChancePercentBonus] = hero.CriticalChancePercentBonus + 1
+	case enums.StatsUpgradeEvasionChance:
+		fields[models.HeroFieldEvasionChancePercentBonus] = hero.EvasionChancePercentBonus + 1
+	default:
+		s.logger.Error(fmt.Errorf("statName unknown error: %s", statName))
+
+		return nil, errors.ErrServerError
+	}
+
+	fields[models.HeroFieldLevelUpBonusesLeft] = hero.LevelUpBonusesLeft - 1
+
+	hero, err = s.repo.UpdateMap(ctx.GetContext(), id, fields)
+	if err != nil {
+		s.logger.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	return hero, nil
 }
 
 func (s *HeroService) decreaseGold(ctx *types.Context, heroID int64, amount int) error {

@@ -43,6 +43,7 @@ type Hero interface {
 	Create(ctx *types.Context, name, class string) (*models.Hero, error)
 	DeleteMy(ctx *types.Context, id int64) error
 	FindMy(ctx *types.Context, id int64) (*models.Hero, error)
+	SpendLevelUpBonus(ctx *types.Context, id int64, statName string) (*models.Hero, error)
 }
 
 type Heroes interface {

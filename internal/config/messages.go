@@ -24,6 +24,7 @@ type Messages struct {
 	MenuItemMyHeroes string
 	MyHeroesList     string
 
+	MenuItemHasLevelUpBonuses    string
 	MenuItemStartTournamentFight string
 	MenuItemOpenHeroEquipment    string
 	MenuItemShop                 string
@@ -95,7 +96,8 @@ type Messages struct {
 	ItemCritBonus    string
 	ItemEvasionBonus string
 
-	HeroLevelUpNotification string
+	HeroLevelUpNotification          string
+	HeroChooseWhereSpendLevelUpBonus string
 
 	PreviousPage string
 	NextPage     string

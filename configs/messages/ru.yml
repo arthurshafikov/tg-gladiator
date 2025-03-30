@@ -10,6 +10,7 @@ RU:
   MenuItemMyHeroes: "Мои герои"
   MyHeroesList: "Это лист ваших героев"
 
+  MenuItemHasLevelUpBonuses: "⭐️ Новый уровень!"
   MenuItemStartTournamentFight: "⚔️ Учавствовать в Турнире "
   MenuItemOpenHeroEquipment: "🎒 Экипировка "
   MenuItemShop: "💰 Магазин"
@@ -82,6 +83,7 @@ RU:
   ItemEvasionBonus: "Бонус к шансу уклонения"
 
   HeroLevelUpNotification: "Ваш герой %s получил %v уровень ⭐️!"
+  HeroChooseWhereSpendLevelUpBonus: "Выберите куда направить статы: %v штук"
 
   PreviousPage: "⬅️ Предыдущая стр."
   NextPage: "Следующая стр. ➡️"
