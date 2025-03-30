@@ -114,6 +114,10 @@ func (s *HeroItemService) Equip(ctx *types.Context, heroID, itemID int64) error 
 		return err
 	}
 
+	if !heroItem.Item.IsEquippable() {
+		return errors.ErrServerError
+	}
+
 	heroEquipment, err := s.GetHeroEquipment(ctx, heroID)
 	if err != nil {
 		return err
@@ -123,23 +127,23 @@ func (s *HeroItemService) Equip(ctx *types.Context, heroID, itemID int64) error 
 	switch heroItem.Item.EquipsOn {
 	case enums.ItemEquipsOnHand:
 		if twoHandsItems, ok := heroEquipment[enums.ItemEquipsOnTwoHands]; ok && len(twoHandsItems) > 0 {
-			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item in each error case!!!
 		}
 
 		if oneHandItems, ok := heroEquipment[heroItem.Item.EquipsOn]; ok && len(oneHandItems) > 1 {
-			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+			return errors.ErrAlreadyHaveEquippedItem
 		}
 	case enums.ItemEquipsOnTwoHands:
 		if twoHandsItems, ok := heroEquipment[enums.ItemEquipsOnTwoHands]; ok && len(twoHandsItems) > 0 {
-			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+			return errors.ErrAlreadyHaveEquippedItem
 		}
 
 		if oneHandItems, ok := heroEquipment[enums.ItemEquipsOnHand]; ok && len(oneHandItems) > 0 {
-			return errors.ErrAlreadyHaveEquippedItem // @todo name of the item
+			return errors.ErrAlreadyHaveEquippedItem
 		}
 	case enums.ItemEquipsOnFinger:
 		if fingerItems, ok := heroEquipment[enums.ItemEquipsOnFinger]; ok && len(fingerItems) > 1 {
-			return errors.ErrTooMuchItemsEquippedAlready // @todo name of the item
+			return errors.ErrTooMuchItemsEquippedAlready
 		}
 	default:
 		if _, ok := heroEquipment[heroItem.Item.EquipsOn]; ok {

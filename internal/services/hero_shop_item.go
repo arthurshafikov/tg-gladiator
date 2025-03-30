@@ -56,11 +56,13 @@ func (s *HeroShopItemService) BuyItem(ctx *types.Context, heroID, itemID int64) 
 		return nil, err
 	}
 
-	if err := s.repo.DeleteBy(ctx.GetContext(), &models.HeroShopItem{
-		HeroShopID: shopItem.HeroShopID,
-		ItemID:     shopItem.ItemID,
-	}); err != nil {
-		return nil, err
+	if !shopItem.Item.IsPotion() {
+		if err := s.repo.DeleteBy(ctx.GetContext(), &models.HeroShopItem{
+			HeroShopID: shopItem.HeroShopID,
+			ItemID:     shopItem.ItemID,
+		}); err != nil {
+			return nil, err
+		}
 	}
 
 	return shopItem, nil

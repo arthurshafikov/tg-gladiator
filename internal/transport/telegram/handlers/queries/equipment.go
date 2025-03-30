@@ -175,16 +175,18 @@ func (h *Handler) HandleHeroEquipmentOpenItem(ctx *types.Context, query *tgbotap
 
 	buttons := make([]telegram.KeyboardButton, 0, 2)
 
-	if heroItem.IsEquipped {
-		buttons = append(buttons, telegram.KeyboardButton{
-			CallbackQuery: queries.HeroEquipmentUnequipItem.WithID(heroID).WithID(itemID),
-			Text:          ctx.Messages().HeroEquipmentUnequipItem,
-		})
-	} else {
-		buttons = append(buttons, telegram.KeyboardButton{
-			CallbackQuery: queries.HeroEquipmentEquipItem.WithID(heroID).WithID(itemID),
-			Text:          ctx.Messages().HeroEquipmentEquipItem,
-		})
+	if heroItem.Item.IsEquippable() {
+		if heroItem.IsEquipped {
+			buttons = append(buttons, telegram.KeyboardButton{
+				CallbackQuery: queries.HeroEquipmentUnequipItem.WithID(heroID).WithID(itemID),
+				Text:          ctx.Messages().HeroEquipmentUnequipItem,
+			})
+		} else {
+			buttons = append(buttons, telegram.KeyboardButton{
+				CallbackQuery: queries.HeroEquipmentEquipItem.WithID(heroID).WithID(itemID),
+				Text:          ctx.Messages().HeroEquipmentEquipItem,
+			})
+		}
 	}
 	buttons = append(buttons, telegram.KeyboardButton{
 		CallbackQuery: queries.OpenHeroEquipment.WithID(heroID),

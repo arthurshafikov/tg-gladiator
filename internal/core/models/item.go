@@ -23,6 +23,14 @@ type Item struct {
 	BasePrice                  int                `json:"base_price"`
 }
 
+func (i *Item) IsPotion() bool {
+	return i.Category == enums.ItemCategoryPotion
+}
+
+func (i *Item) IsEquippable() bool {
+	return string(i.EquipsOn) != ""
+}
+
 // @todo should it be here?
 func (i Item) GetShortCharacteristicsText() string {
 	text := ""
