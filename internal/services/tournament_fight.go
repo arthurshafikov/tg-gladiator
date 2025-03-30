@@ -51,7 +51,7 @@ func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*mode
 		HeroID:       hero.ID,
 		OpponentType: enums.OpponentTypeMob,
 		OpponentID:   enemy.ID,
-		HeroHP:       hero.CurrentHP,
+		HeroHP:       hero.GetHP(),
 		OpponentHP:   enemy.HP,
 		CreatedAt:    time.Now(),
 	}

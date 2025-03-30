@@ -113,7 +113,7 @@ func (m *Messages) GetHeroNameWithStats(hero *models.Hero) string {
 	return fmt.Sprintf(
 		m.HeroNameWithStats,
 		hero.Name,
-		hero.CurrentHP,
+		hero.GetHP(),
 		hero.CurrentGold,
 	)
 }
@@ -194,7 +194,7 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	msg += fmt.Sprintf(
 		"%s: %v (%s - %v XP)\n",
 		m.Level,
-		hero.Level,
+		hero.GetLevel(),
 		m.XPForNextLevelLeft,
 		hero.GetXPForNextLevelLeft(),
 	)
@@ -202,7 +202,7 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	msg += fmt.Sprintf(
 		"%s: %v\n",
 		m.HP,
-		hero.CurrentHP,
+		hero.GetHP(),
 	)
 
 	msg += fmt.Sprintf(
