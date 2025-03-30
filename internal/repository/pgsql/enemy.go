@@ -3,6 +3,7 @@ package pgsql
 import (
 	"context"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"gorm.io/gorm"
@@ -54,6 +55,30 @@ func (r *Enemy) GetByMap(ctx context.Context, fields map[string]any) (*[]models.
 	}
 
 	return &enemies, nil
+}
+
+func (r *Enemy) GetNextBossForHero(ctx context.Context, heroID int64) (*models.Enemy, error) {
+	var boss models.Enemy
+	if err := r.getDBInstance(ctx).
+		Joins(
+			"LEFT JOIN fights ON fights.hero_id = ? AND enemies.id = fights.opponent_id AND opponent_type = ?"+
+				" AND (fights.opponent_hp <= 0 AND fights.status = ?)",
+			heroID,
+			enums.OpponentTypeMob,
+			enums.FightStatusEnded,
+		).
+		Where("enemies.boss_type IS NOT null").
+		Where("fights.id IS null").
+		Order("enemies.level ASC").
+		First(&boss).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.ErrNotFound
+		}
+
+		return nil, err
+	}
+
+	return &boss, nil
 }
 
 // func (r *Enemy) Create(ctx context.Context, enemy models.Enemy) (*models.Enemy, error) {

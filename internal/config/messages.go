@@ -25,6 +25,7 @@ type Messages struct {
 	MyHeroesList     string
 
 	MenuItemHasLevelUpBonuses    string
+	MenuItemChallengeBoss        string
 	MenuItemStartTournamentFight string
 	MenuItemOpenHeroEquipment    string
 	MenuItemShop                 string

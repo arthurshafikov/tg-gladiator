@@ -56,6 +56,9 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 	case queries.HeroCreationSelectClass:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroCreationSelectClass)
 
+	case queries.ChallengeBoss:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleChallengeBoss)
+
 	case queries.StartTournamentFight:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleStartTournamentFight)
 	case queries.FightActionSimpleStrike:

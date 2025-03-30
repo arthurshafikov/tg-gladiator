@@ -204,6 +204,10 @@ func (h *BaseHandler) OpenMyHero(ctx *types.Context, hero *models.Hero, query ..
 	keyboardButtons = append(
 		keyboardButtons,
 		telegram.KeyboardButton{
+			CallbackQuery: queries.ChallengeBoss.WithID(hero.ID),
+			Text:          ctx.Messages().MenuItemChallengeBoss,
+		},
+		telegram.KeyboardButton{
 			CallbackQuery: queries.StartTournamentFight.WithID(hero.ID),
 			Text:          ctx.Messages().MenuItemStartTournamentFight,
 		},

@@ -67,6 +67,16 @@ type HeroItem interface {
 	Unequip(ctx *types.Context, heroID, itemID int64) error
 }
 
+type BossFight interface {
+	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
+	MakeTurn(
+		ctx *types.Context,
+		fight *models.Fight,
+		actionType enums.FightActionType,
+	) (*models.Fight, error)
+	RunAwayAsHero(ctx *types.Context, fightID int64) error
+}
+
 type TournamentFight interface {
 	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
 	MakeTurn(
@@ -89,6 +99,7 @@ type Services struct {
 	Heroes
 	HeroShopItem
 	HeroItem
+	BossFight
 	TournamentFight
 	Shop
 }
@@ -121,6 +132,14 @@ func NewServices(deps Deps) *Services {
 		heroItemService,
 	)
 
+	tournamentFightService := newTournamentFightService(
+		deps.Logger,
+		fightService,
+		heroService,
+		enemyService,
+		tournamentFightEventsService,
+	)
+
 	return &Services{
 		Chat: newChatService(
 			deps.Logger,
@@ -132,13 +151,14 @@ func NewServices(deps Deps) *Services {
 		Heroes:       newHeroesService(deps.Logger, deps.Repository.Hero),
 		HeroShopItem: heroShopItemService,
 		HeroItem:     heroItemService,
-		TournamentFight: newTournamentFightService(
+		BossFight: newBossFightService(
 			deps.Logger,
 			fightService,
 			heroService,
 			enemyService,
-			tournamentFightEventsService,
+			tournamentFightService,
 		),
+		TournamentFight: tournamentFightService,
 		Shop: newShopService(
 			deps.Repository.Item,
 			deps.Repository.HeroShop,

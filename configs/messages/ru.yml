@@ -11,7 +11,8 @@ RU:
   MyHeroesList: "Это лист ваших героев"
 
   MenuItemHasLevelUpBonuses: "⭐️ Новый уровень!"
-  MenuItemStartTournamentFight: "⚔️ Учавствовать в Турнире "
+  MenuItemChallengeBoss: "☠️ Вызвать на бой босса"
+  MenuItemStartTournamentFight: "⚔️ Учавствовать в Турнире"
   MenuItemOpenHeroEquipment: "🎒 Экипировка "
   MenuItemShop: "💰 Магазин"
   MenuItemDeleteHero: "❌ Удалить героя"

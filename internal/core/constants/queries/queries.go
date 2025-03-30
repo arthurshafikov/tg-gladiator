@@ -19,6 +19,7 @@ const (
 	ShopBuyItem        Query = "ShopBuyItem"
 	ShopBuyItemConfirm Query = "ShopBuyItemConfirm"
 
+	ChallengeBoss            Query = "ChallengeBoss"
 	StartTournamentFight     Query = "StartTournamentFight"
 	FightActionSimpleStrike  Query = "FightActionSimpleStrike"
 	FightActionStrongStrike  Query = "FightActionStrongStrike"

@@ -62,3 +62,18 @@ func (s *EnemyService) getRandomNonBossEnemy(ctx *types.Context, level int) (*mo
 
 	return &(*enemies)[randomEnemyIndex.Int64()], nil
 }
+
+func (s *EnemyService) getNextBossEnemy(ctx *types.Context, heroID int64) (*models.Enemy, error) {
+	boss, err := s.repo.GetNextBossForHero(ctx.GetContext(), heroID)
+	if err != nil {
+		if errors.Is(err, errors.ErrNotFound) {
+			return nil, err
+		}
+
+		s.logger.Error(err)
+
+		return nil, errors.ErrServerError
+	}
+
+	return boss, nil
+}
