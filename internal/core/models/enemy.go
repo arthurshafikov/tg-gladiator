@@ -2,6 +2,11 @@ package models
 
 import "github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 
+const (
+	EnemyFieldLevel    = "level"
+	EnemyFieldBossType = "boss_type"
+)
+
 type Enemy struct {
 	ID                    int64  `gorm:"->" json:"id"`
 	Level                 int    `json:"level"`
@@ -16,6 +21,7 @@ type Enemy struct {
 	GoldRewardMax         int    `json:"gold_reward_max"`
 	XpRewardMin           int    `json:"xp_reward_min"`
 	XpRewardMax           int    `json:"xp_reward_max"`
+	BossType              string `json:"boss_type"`
 }
 
 func (Enemy) TableName() string {

@@ -41,7 +41,7 @@ func (r *Enemy) FindBy(ctx context.Context, fields *models.Enemy) (*models.Enemy
 	return &enemy, nil
 }
 
-func (r *Enemy) GetBy(ctx context.Context, fields *models.Enemy) (*[]models.Enemy, error) {
+func (r *Enemy) GetByMap(ctx context.Context, fields map[string]any) (*[]models.Enemy, error) {
 	var enemies []models.Enemy
 	if err := r.getDBInstance(ctx).
 		Where(fields).

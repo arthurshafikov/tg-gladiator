@@ -16,7 +16,9 @@ CREATE TABLE enemies (
     gold_reward_max INT NOT NULL CHECK (gold_reward_max >= 0),
 
     xp_reward_min INT NOT NULL CHECK (xp_reward_min >= 0),
-    xp_reward_max INT NOT NULL CHECK (xp_reward_max >= 0)
+    xp_reward_max INT NOT NULL CHECK (xp_reward_max >= 0),
+
+    boss_type VARCHAR(50) NULL
 );
 -- +goose StatementEnd
 

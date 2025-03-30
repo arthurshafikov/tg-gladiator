@@ -38,9 +38,10 @@ func (s *EnemyService) find(ctx *types.Context, id int64) (*models.Enemy, error)
 	return enemy, nil
 }
 
-func (s *EnemyService) getRandomEnemy(ctx *types.Context, level int) (*models.Enemy, error) {
-	enemies, err := s.repo.GetBy(ctx.GetContext(), &models.Enemy{
-		Level: level,
+func (s *EnemyService) getRandomNonBossEnemy(ctx *types.Context, level int) (*models.Enemy, error) {
+	enemies, err := s.repo.GetByMap(ctx.GetContext(), map[string]any{
+		models.EnemyFieldLevel:    level,
+		models.EnemyFieldBossType: nil,
 	})
 	if err != nil {
 		s.logger.Error(err)

@@ -41,7 +41,7 @@ func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*mode
 		return nil, err
 	}
 
-	enemy, err := s.enemyService.getRandomEnemy(ctx, hero.Level)
+	enemy, err := s.enemyService.getRandomNonBossEnemy(ctx, hero.Level)
 	if err != nil {
 		return nil, err
 	}
