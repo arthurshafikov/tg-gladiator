@@ -61,6 +61,7 @@ func Run() {
 		sentryHook.StacktraceConfiguration.Enable = true
 		sentryHook.SetEnvironment(config.Env)
 		logger.Hooks.Add(sentryHook)
+		logrus.AddHook(sentryHook)
 	}
 
 	defer func() {
