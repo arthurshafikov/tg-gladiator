@@ -157,7 +157,7 @@ func (h *Hero) GetXPForNextLevelLeft() int {
 
 func (h *Hero) CalculateLevelForXP(xp int) int {
 	for level := 1; ; level++ {
-		requiredXPForTheNextLevel := level * level * LevelUpRequiredXPKoefficient
+		requiredXPForTheNextLevel := level * level * 50
 
 		xp = xp - requiredXPForTheNextLevel
 

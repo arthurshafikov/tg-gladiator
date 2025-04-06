@@ -106,14 +106,14 @@ func (s *TournamentFightEventsService) calculateIfTheStrikeWasEvaded(
 	case enums.FightActionSimpleStrike:
 		evasionChance += 0
 	case enums.FightActionStrongStrike:
-		additionalEvasionPercentBasedOnActionType, err := s.generateRandomNumberInRange(27, 40)
+		additionalEvasionPercentBasedOnActionType, err := s.generateRandomNumberInRange(10, 20)
 		if err != nil {
 			return false, 0, err
 		}
 
 		evasionChance += additionalEvasionPercentBasedOnActionType
 	case enums.FightActionPreciseStrike:
-		evasionKoefficient := 0.5
+		evasionKoefficient := 0.3
 		c := float64(evasionChance) * (1 - evasionKoefficient*(1-float64(evasionChance)/100))
 		evasionChance = int(math.Round(c))
 	}
@@ -121,6 +121,11 @@ func (s *TournamentFightEventsService) calculateIfTheStrikeWasEvaded(
 	if evasionChance < 0 {
 		evasionChance = 0
 	}
+
+	if evasionChance > 60 {
+		evasionChance = 60
+	}
+
 	wasEvaded, err := s.calculateRandomChance(evasionChance)
 	if err != nil {
 		return false, 0, err

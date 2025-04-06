@@ -5,9 +5,9 @@ VALUES
 
 -- Уровни 1-2
 ('Goblin', 1, 50, 3, 6, 2, 5, 5, 5, 10, 10, 20, null),
-('Wild Dog', 1, 45, 2, 5, 1, 3, 7, 4, 9, 10, 20, null),
+('Wild Dog', 1, 45, 3, 6, 1, 3, 7, 4, 9, 10, 20, null),
 ('Angry Peasant', 2, 55, 4, 7, 3, 6, 4, 6, 12, 15, 25, null),
-('Cave Rat', 2, 40, 3, 5, 2, 4, 8, 5, 10, 15, 25, null),
+('Cave Rat', 2, 40, 3, 5, 2, 4, 5, 5, 10, 15, 25, null),
 
 -- Уровни 3-4
 ('Orc', 3, 80, 5, 9, 4, 10, 3, 10, 20, 30, 50, null),
@@ -18,8 +18,8 @@ VALUES
 -- Уровни 5-6
 ('Troll', 5, 100, 8, 12, 6, 12, 3, 20, 30, 50, 80, null),
 ('Undead Knight', 5, 90, 7, 11, 5, 14, 4, 18, 25, 50, 80, null),
-('Elite Bandit', 6, 85, 8, 13, 5, 17, 7, 15, 28, 60, 90, null),
-('Dark Sorcerer', 6, 75, 6, 12, 3, 20, 10, 22, 30, 60, 90, null),
+('Elite Bandit', 6, 85, 7, 11, 5, 17, 7, 15, 28, 60, 90, null),
+('Dark Sorcerer', 6, 75, 6, 12, 3, 20, 7, 22, 30, 60, 90, null),
 
 -- Уровни 7-8
 ('Ogre', 7, 120, 10, 15, 7, 15, 2, 25, 40, 80, 120, null),
@@ -36,7 +36,7 @@ VALUES
 -- Начальные боссы (уровни 5-10)
 ('Goblin Warlord', 5, 200, 12, 18, 6, 10, 5, 50, 80, 100, 150, 'usual'),
 ('Undead Captain', 6, 220, 14, 20, 8, 12, 4, 55, 90, 120, 180, 'usual'),
-('Troll Berserker', 7, 250, 16, 22, 9, 15, 3, 60, 100, 140, 200, 'usual'),
+('Troll Berserker', 7, 270, 18, 26, 9, 15, 3, 60, 100, 140, 200, 'usual'),
 ('Shadow Assassin', 8, 180, 18, 24, 5, 25, 15, 70, 120, 160, 220, 'usual'),
 ('Dark Sorcerer Lord', 9, 230, 15, 25, 7, 20, 10, 80, 130, 180, 250, 'usual'),
 
@@ -51,9 +51,8 @@ VALUES
 ('Doom Bringer', 16, 450, 30, 45, 22, 25, 2, 160, 220, 350, 450, 'usual'),
 ('Chaos Behemoth', 17, 480, 32, 48, 24, 27, 1, 170, 240, 380, 480, 'usual'),
 ('Ancient Dragon', 18, 500, 35, 50, 26, 30, 1, 200, 250, 400, 500, 'usual'),
-('Archdemon', 19, 550, 38, 55, 28, 32, 0, 220, 280, 450, 550, 'usual'),
-('God of Destruction', 20, 600, 40, 60, 30, 35, 0, 250, 300, 500, 600, 'usual');
-
+('Archdemon', 19, 550, 42, 60, 28, 35, 0, 220, 280, 450, 550, 'usual'),
+('God of Destruction', 20, 650, 45, 65, 30, 38, 0, 250, 300, 500, 600, 'usual');
 
 TRUNCATE table items cascade;
 INSERT INTO "items" 
@@ -64,7 +63,7 @@ VALUES
 ('iron_sword', 'weapon', 'hand', 5, NULL, 2, NULL, 100),
 ('steel_sword', 'weapon', 'hand', 7, NULL, 3, NULL, 200),
 ('knights_blade', 'weapon', 'hand', 10, NULL, 5, NULL, 350),
-('shadow_dagger', 'weapon', 'hand', 4, NULL, 3, 2, 120),
+('shadow_dagger', 'weapon', 'hand', 4, NULL, 2, 1, 120),
 ('berserker_axe', 'weapon', 'two_hands', 12, NULL, 7, -2, 400),
 ('greatsword', 'weapon', 'two_hands', 15, NULL, 8, -3, 500),
 ('warhammer', 'weapon', 'two_hands', 18, NULL, 6, -4, 550),
@@ -80,27 +79,27 @@ VALUES
 ('shadow_cloak', 'armor', 'body', NULL, 4, NULL, 5, 200),
 ('dragon_scale_armor', 'armor', 'body', NULL, 12, NULL, -5, 600),
 ('reinforced_vest', 'armor', 'body', NULL, 6, NULL, 1, 180),
+('bronze_armor', 'armor', 'body', NULL, 4, NULL, 0, 100),
 ('iron_helmet', 'armor', 'head', NULL, 3, NULL, -1, 150),
 ('knights_helmet', 'armor', 'head', NULL, 5, NULL, -2, 300),
 ('shadow_hood', 'armor', 'head', NULL, 2, NULL, 3, 180),
 ('crown_of_thorns', 'armor', 'head', NULL, 4, 3, -1, 250),
 ('battle_mask', 'armor', 'head', NULL, 3, NULL, 2, 200),
 ('hunters_gloves', 'armor', 'hands', NULL, NULL, 3, 3, 160),
+('phantom_gloves', 'armor', 'hands', NULL, NULL, 4, 4, 270),
 ('titan_gauntlets', 'accessory', 'hands', 3, 3, NULL, -2, 180),
 ('agile_boots', 'armor', 'feet', NULL, NULL, NULL, 5, 120),
 ('boots_of_speed', 'armor', 'feet', NULL, NULL, NULL, 6, 200),
 ('elven_boots', 'armor', 'feet', NULL, NULL, NULL, 7, 280),
 ('dark_cloak', 'armor', 'body', NULL, 5, NULL, 5, 320),
-('phantom_gloves', 'armor', 'hands', NULL, NULL, 5, 5, 270),
 
 ('lucky_amulet', 'accessory', 'neck', NULL, NULL, 5, NULL, 100),
-('ring_of_protection', 'accessory', 'finger', NULL, 2, NULL, NULL, 90),
+('ring_of_protection', 'accessory', 'finger', NULL, 3, NULL, NULL, 90),
 ('ring_of_agility', 'accessory', 'finger', NULL, NULL, NULL, 4, 110),
 ('ring_of_strength', 'accessory', 'finger', 2, NULL, NULL, NULL, 130),
-('amulet_of_power', 'accessory', 'neck', 3, NULL, 4, NULL, 220),
+('amulet_of_power', 'accessory', 'neck', 3, NULL, 4, NULL, 180),
 ('ancient_talisman', 'accessory', 'neck', NULL, NULL, 7, 2, 300),
 ('blood_ring', 'accessory', 'finger', 4, NULL, NULL, -2, 150);
-
 
 -- Potions --
 INSERT INTO "items" 

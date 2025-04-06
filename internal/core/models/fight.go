@@ -15,7 +15,7 @@ const (
 	FightFieldGoldReward = "gold_reward"
 	FightFieldXPReward   = "xp_reward"
 
-	FightArmorDamageReductionModificator = 40 // the more - the less % of damage will get blocked
+	FightArmorDamageReductionModificator = 30 // the more - the less % of damage will get blocked
 )
 
 type Fight struct {
