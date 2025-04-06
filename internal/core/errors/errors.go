@@ -21,6 +21,7 @@ var (
 	ErrShopNotExists               = errors.New("shop_not_exists")
 	ErrHeroShopItemNotExists       = errors.New("hero_shop_item_not_exists")
 	ErrInsufficientGold            = errors.New("insufficient_gold")
+	ErrInsufficientEnergy          = errors.New("insufficient_energy")
 	ErrAlreadyHaveEquippedItem     = errors.New("already_have_equipped_item")
 	ErrTooMuchItemsEquippedAlready = errors.New("too_much_items_equipped_already")
 	ErrCannotConsumeEmptyQuantity  = errors.New("cannot_consume_empty_quantity")

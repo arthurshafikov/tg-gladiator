@@ -1,6 +1,8 @@
 package services
 
 import (
+	"context"
+
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -33,4 +35,14 @@ func (s *HeroesService) GetMy(ctx *types.Context) (*[]models.Hero, error) {
 	}
 
 	return heroes, nil
+}
+
+func (s *HeroesService) ReplenishHeroesEnergy(ctx context.Context) error {
+	if err := s.repo.ReplenishHeroesEnergy(ctx); err != nil {
+		s.logger.Error(err)
+
+		return errors.ErrServerError
+	}
+
+	return nil
 }

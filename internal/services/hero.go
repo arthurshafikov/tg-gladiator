@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	StartEnergy = 10
+	StartEnergy = models.HeroMaxEnergy
 	StartGold   = 0
 
 	LevelUpStatsUpgradeAvailable = 5
@@ -186,6 +186,27 @@ func (s *HeroService) RewardXP(ctx *types.Context, id int64, amount int) error {
 
 	if newLevel {
 		s.eventsHandler.Dispatch(constants.EventHeroLevelUp, *hero)
+	}
+
+	return nil
+}
+
+func (s *HeroService) DepleteEnergy(ctx *types.Context, id int64) error {
+	hero, err := s.FindMy(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if hero.CurrentEnergy < 1 {
+		return errors.ErrInsufficientEnergy
+	}
+
+	fields := map[string]interface{}{
+		models.HeroFieldEnergy: hero.CurrentEnergy - 1,
+	}
+
+	if _, err := s.repo.UpdateMap(ctx.GetContext(), id, fields); err != nil {
+		return err
 	}
 
 	return nil

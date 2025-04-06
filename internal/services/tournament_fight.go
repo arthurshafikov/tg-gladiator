@@ -41,6 +41,10 @@ func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*mode
 		return nil, err
 	}
 
+	if err := s.heroService.DepleteEnergy(ctx, heroID); err != nil {
+		return nil, err
+	}
+
 	enemy, err := s.enemyService.getRandomNonBossEnemy(ctx, hero.Level)
 	if err != nil {
 		return nil, err

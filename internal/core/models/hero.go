@@ -13,11 +13,14 @@ const (
 	HeroFieldLevel                      = "level"
 	HeroFieldLevelUpBonusesLeft         = "level_up_bonuses_left"
 	LevelUpRequiredXPKoefficient        = 50
+	HeroMaxEnergy                       = 15
+	HeroMinutesToRestoreEnergy          = 15
 	HeroFieldHealthBonus                = "hp_bonus"
 	HeroFieldAttackBonus                = "attack_bonus"
 	HeroFieldDefenseBonus               = "defense_bonus"
 	HeroFieldCriticalChancePercentBonus = "critical_chance_percent_bonus"
 	HeroFieldEvasionChancePercentBonus  = "evasion_chance_percent_bonus"
+	HeroFieldEnergy                     = "current_energy"
 )
 
 type Hero struct {

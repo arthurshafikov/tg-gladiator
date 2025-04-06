@@ -113,3 +113,19 @@ func (r *Hero) UpdateMap(ctx context.Context, id int64, fields map[string]interf
 
 	return Hero, nil
 }
+
+func (r *Hero) ReplenishHeroesEnergy(ctx context.Context) error {
+	if err := r.getDBInstance(ctx).
+		Exec(
+			"UPDATE heroes SET current_energy = current_energy + 1 WHERE current_energy < ?",
+			models.HeroMaxEnergy,
+		).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.ErrNotFound
+		}
+
+		return err
+	}
+
+	return nil
+}

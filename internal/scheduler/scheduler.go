@@ -2,11 +2,16 @@ package scheduler
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
+	"github.com/arthurshafikov/tg-gladiator/internal/scheduler/jobs"
 	"github.com/arthurshafikov/tg-gladiator/internal/services"
 	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram"
 	"github.com/go-co-op/gocron/v2"
+	"github.com/google/uuid"
 )
 
 type Deps struct {
@@ -65,4 +70,27 @@ func (s *Scheduler) Start() error {
 }
 
 func (s *Scheduler) initJobs() {
+	energyReplenishmentJob := jobs.NewEnergyReplenishmentJob(
+		s.ctx,
+		s.services,
+	)
+	if _, err := s.scheduler.NewJob(
+		gocron.DurationJob(time.Minute*models.HeroMinutesToRestoreEnergy),
+		gocron.NewTask(
+			func() {
+				energyReplenishmentJob.Handle()
+			},
+		),
+		gocron.WithEventListeners(
+			gocron.AfterJobRunsWithPanic(func(_ uuid.UUID, _ string, recoverData any) {
+				s.logger.Error(fmt.Errorf("energyReplenishmentJob panic: %s", recoverData))
+			}),
+			gocron.AfterJobRunsWithError(func(_ uuid.UUID, _ string, err error) {
+				s.logger.Error(fmt.Errorf("energyReplenishmentJob error: %w", err))
+			}),
+		),
+		gocron.WithSingletonMode(gocron.LimitModeReschedule),
+	); err != nil {
+		s.logger.Error(err)
+	}
 }

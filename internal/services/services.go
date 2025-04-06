@@ -47,6 +47,7 @@ type Hero interface {
 }
 
 type Heroes interface {
+	ReplenishHeroesEnergy(ctx context.Context) error
 	GetMy(ctx *types.Context) (*[]models.Hero, error)
 }
 

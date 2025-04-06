@@ -29,6 +29,7 @@ type Hero interface {
 	GetBy(ctx context.Context, fields *models.Hero) (*[]models.Hero, error)
 	// Update(ctx context.Context, id int64, fields *models.Chat) (*models.Chat, error)
 	UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Hero, error)
+	ReplenishHeroesEnergy(ctx context.Context) error
 }
 
 type Fight interface {

@@ -38,6 +38,10 @@ func (s *BossFightService) Create(ctx *types.Context, heroID int64) (*models.Fig
 		return nil, err
 	}
 
+	if err := s.heroService.DepleteEnergy(ctx, heroID); err != nil {
+		return nil, err
+	}
+
 	enemy, err := s.enemyService.getNextBossEnemy(ctx, hero.ID)
 	if err != nil {
 		return nil, err
