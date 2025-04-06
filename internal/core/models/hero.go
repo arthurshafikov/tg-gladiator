@@ -14,7 +14,7 @@ const (
 	HeroFieldLevelUpBonusesLeft         = "level_up_bonuses_left"
 	LevelUpRequiredXPKoefficient        = 50
 	HeroMaxEnergy                       = 15
-	HeroMinutesToRestoreEnergy          = 15
+	HeroMinutesToRestoreEnergy          = 5
 	HeroFieldHealthBonus                = "hp_bonus"
 	HeroFieldAttackBonus                = "attack_bonus"
 	HeroFieldDefenseBonus               = "defense_bonus"
