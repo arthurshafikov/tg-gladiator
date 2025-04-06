@@ -10,10 +10,10 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 
-ADD ./cmd ${CODE_DIR}/cmd
-ADD ./internal ${CODE_DIR}/internal
-ADD ./pkg ${CODE_DIR}/pkg
-ADD ./migrations ${CODE_DIR}/migrations
+ADD ./cmd ${CODE_DIR}cmd
+ADD ./internal ${CODE_DIR}internal
+# ADD ./pkg ${CODE_DIR}pkg
+ADD ./migrations ${CODE_DIR}migrations
 
 ARG LDFLAGS
 RUN CGO_ENABLED=0 go build \

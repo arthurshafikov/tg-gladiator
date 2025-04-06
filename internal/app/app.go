@@ -64,6 +64,8 @@ func Run() {
 		logrus.AddHook(sentryHook)
 	}
 
+	logrus.Error("Test erorr from prod")
+
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Panic(err)
