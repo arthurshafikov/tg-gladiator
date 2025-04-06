@@ -56,7 +56,7 @@ func (s *ShopService) GetShopItemsFor(ctx *types.Context, heroID int64) (*models
 	}
 
 	if heroShop.UpdatesAt.Before(time.Now()) {
-		if err := s.updateHeroShopItems(ctx, heroShop.ID); err != nil {
+		if heroShop, err = s.updateHeroShopItems(ctx, heroShop.ID); err != nil {
 			return nil, nil, err
 		}
 	}
@@ -71,12 +71,12 @@ func (s *ShopService) GetShopItemsFor(ctx *types.Context, heroID int64) (*models
 	return heroShop, shopItems, nil
 }
 
-func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) error {
+func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) (*models.HeroShop, error) {
 	// @todo transaction
 	if err := s.heroShopItemsRepo.DeleteBy(ctx.GetContext(), &models.HeroShopItem{
 		HeroShopID: heroShopID,
 	}); err != nil {
-		return err
+		return nil, err
 	}
 
 	allItems, err := s.itemsRepo.GetBy(ctx.GetContext(), &types.WhereConditions{
@@ -85,13 +85,13 @@ func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) 
 		},
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if len(allItems) < 1 {
 		logrus.Error(fmt.Errorf("empty items table error when trying to create a shop"))
 
-		return errors.ErrServerError
+		return nil, errors.ErrServerError
 	}
 
 	alreadyTakenItemIndexes := []int{}
@@ -100,7 +100,7 @@ func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) 
 		for {
 			randomIndex, err = helpers.GenerateRandomNumberInRange(0, len(allItems)-1)
 			if err != nil {
-				return err
+				return nil, err
 			}
 
 			if !slices.Contains(alreadyTakenItemIndexes, randomIndex) {
@@ -115,7 +115,7 @@ func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) 
 			HeroShopID: heroShopID,
 			Price:      item.BasePrice, // @todo randomize item price due to the priceCoefficient (discounts?)
 		}); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
@@ -125,7 +125,7 @@ func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) 
 		},
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	for _, potionItem := range potionItems {
@@ -134,15 +134,16 @@ func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) 
 			HeroShopID: heroShopID,
 			Price:      potionItem.BasePrice,
 		}); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	if _, err := s.heroShopRepo.Update(ctx.GetContext(), heroShopID, &models.HeroShop{
+	heroShop, err := s.heroShopRepo.Update(ctx.GetContext(), heroShopID, &models.HeroShop{
 		UpdatesAt: time.Now().Add(ShopItemsRefreshFrequency),
-	}); err != nil {
-		return err
+	})
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	return heroShop, nil
 }
