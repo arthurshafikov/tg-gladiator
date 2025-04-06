@@ -39,6 +39,10 @@ func (s *EnemyService) find(ctx *types.Context, id int64) (*models.Enemy, error)
 }
 
 func (s *EnemyService) getRandomNonBossEnemy(ctx *types.Context, level int) (*models.Enemy, error) {
+	if level > 10 {
+		level = 10
+	}
+
 	enemies, err := s.repo.GetByMap(ctx.GetContext(), map[string]any{
 		models.EnemyFieldLevel:    level,
 		models.EnemyFieldBossType: nil,
