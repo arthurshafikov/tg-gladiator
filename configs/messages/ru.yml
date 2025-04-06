@@ -74,6 +74,7 @@ RU:
   HeroEquipmentChooseItem: "Выберите предмет"
   HeroEquipmentEquipItem: "Надеть"
   HeroEquipmentUnequipItem: "Снять"
+  HeroEquipmentConsumeItem: "Применить"
 
   ItemName: "Название"
   ItemCategory: "Категория"
@@ -174,6 +175,7 @@ RU:
     insufficient_gold: "⚠️ Ошибка: недостаточно золота для покупки."
     already_have_equipped_item: "⚠️ Ошибка: уже есть надетый предмет на этот слот."
     too_much_items_equipped_already: "⚠️ Ошибка: слишком много предметов надето на этот слот."
+    cannot_consume_empty_quantity: "⚠️ Ошибка: количество этого предметы меньше 1."
     empty: "⚠️ Ошибка: пустое значение"
 
     too_long: "⚠️ Ошибка: значение слишком длинное, максимальное количество символов - %v"

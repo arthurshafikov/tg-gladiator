@@ -6,6 +6,7 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/queries"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/telegram"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/helpers"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -147,10 +148,22 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 		)
 	}
 
-	keyboard.InlineKeyboard = append(
-		keyboard.InlineKeyboard,
-		h.GetBackButtonKeyboardRow(ctx, queries.OpenMyHero.WithID(hero.ID)),
-	)
+	fight, err := h.Services.Fight.FindActiveByHeroID(ctx, heroID)
+	if err != nil && !errors.Is(err, errors.ErrNotFound) {
+		return err
+	}
+	if err == nil && fight != nil {
+		keyboard.InlineKeyboard = append(
+			keyboard.InlineKeyboard,
+			h.GetBackButtonKeyboardRow(ctx, queries.OpenActiveFight.WithID(hero.ID)),
+		)
+	} else {
+		keyboard.InlineKeyboard = append(
+			keyboard.InlineKeyboard,
+			h.GetBackButtonKeyboardRow(ctx, queries.OpenMyHero.WithID(hero.ID)),
+		)
+	}
+
 	msg.ReplyMarkup = keyboard
 
 	return h.Helper.Send(msg)
@@ -197,6 +210,23 @@ func (h *Handler) HandleHeroEquipmentOpenItem(ctx *types.Context, query *tgbotap
 			})
 		}
 	}
+
+	fight, err := h.Services.Fight.FindActiveByHeroID(ctx, heroID)
+	if err != nil && !errors.Is(err, errors.ErrNotFound) {
+		return err
+	}
+
+	if heroItem.Item.IsPotion() && fight != nil {
+		buttons = append(buttons, telegram.KeyboardButton{
+			CallbackQuery: queries.HeroEquipmentConsumeItem.WithID(heroID).WithID(itemID),
+			Text: fmt.Sprintf(
+				"%s (%s)",
+				ctx.Messages().HeroEquipmentConsumeItem,
+				heroItem.Item.GetShortCharacteristicsText(),
+			), // @todo show current hp/attack/buff value
+		})
+	}
+
 	buttons = append(buttons, telegram.KeyboardButton{
 		CallbackQuery: queries.OpenHeroEquipment.WithID(heroID),
 		Text:          ctx.Messages().DefaultBackBtn,
@@ -253,6 +283,39 @@ func (h *Handler) HandleHeroEquipmentEquipItem(
 
 	if err := h.Services.HeroItem.Equip(ctx, heroID, itemID); err != nil {
 		return err
+	}
+
+	return h.HandleHeroEquipmentOpenItem(ctx, query, payload)
+}
+
+func (h *Handler) HandleHeroEquipmentConsumeItem(
+	ctx *types.Context,
+	query *tgbotapi.CallbackQuery,
+	payload []string,
+) error {
+	if err := h.ValidatePayloadLength(payload, 2); err != nil {
+		return err
+	}
+
+	heroID, err := h.GetIDFromString(payload[0])
+	if err != nil {
+		return err
+	}
+
+	itemID, err := h.GetIDFromString(payload[1])
+	if err != nil {
+		return err
+	}
+
+	heroItem, err := h.Services.HeroItem.Consume(ctx, heroID, itemID)
+	if err != nil {
+		return err
+	}
+
+	if heroItem == nil {
+		return h.HandleOpenHeroEquipment(ctx, query, []string{
+			payload[0],
+		})
 	}
 
 	return h.HandleHeroEquipmentOpenItem(ctx, query, payload)

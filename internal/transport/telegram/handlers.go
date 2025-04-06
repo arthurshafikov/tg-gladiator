@@ -61,12 +61,16 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 
 	case queries.StartTournamentFight:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleStartTournamentFight)
+	case queries.OpenActiveFight:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenActiveFight)
 	case queries.FightActionSimpleStrike:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionSimpleStrike)
 	case queries.FightActionStrongStrike:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionStrongStrike)
 	case queries.FightActionPreciseStrike:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionPreciseStrike)
+	case queries.FightActionInventory:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenHeroEquipment)
 	case queries.FightActionRunAway:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleFightActionRunAway)
 
@@ -85,6 +89,8 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroEquipmentUnequipItem)
 	case queries.HeroEquipmentEquipItem:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroEquipmentEquipItem)
+	case queries.HeroEquipmentConsumeItem:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleHeroEquipmentConsumeItem)
 
 	case queries.OpenLevelUpBonusesOverview:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenLevelUpBonusesOverview)

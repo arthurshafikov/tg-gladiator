@@ -21,15 +21,18 @@ const (
 
 	ChallengeBoss            Query = "ChallengeBoss"
 	StartTournamentFight     Query = "StartTournamentFight"
+	OpenActiveFight          Query = "OpenActiveFight"
 	FightActionSimpleStrike  Query = "FightActionSimpleStrike"
 	FightActionStrongStrike  Query = "FightActionStrongStrike"
 	FightActionPreciseStrike Query = "FightActionPreciseStrike"
+	FightActionInventory     Query = "FightActionInventory"
 	FightActionRunAway       Query = "FightActionRunAway"
 
 	OpenHeroEquipment        Query = "OpenHeroEquipment"
 	HeroEquipmentOpenItem    Query = "HeroEquipmentOpenItem"
 	HeroEquipmentEquipItem   Query = "HeroEquipmentEquipItem"
 	HeroEquipmentUnequipItem Query = "HeroEquipmentUnequipItem"
+	HeroEquipmentConsumeItem Query = "HeroEquipmentConsumeItem"
 
 	OpenLevelUpBonusesOverview Query = "OpenLevelUpBonusesOverview"
 	SpendLevelUpBonus          Query = "SpendLevelUpBonus"
@@ -63,5 +66,13 @@ func FightQueries() []Query {
 		FightActionStrongStrike,
 		FightActionPreciseStrike,
 		FightActionRunAway,
+
+		OpenActiveFight,
+		FightActionInventory,
+		OpenHeroEquipment,
+		HeroEquipmentOpenItem,
+		HeroEquipmentEquipItem,
+		HeroEquipmentUnequipItem,
+		HeroEquipmentConsumeItem,
 	}
 }

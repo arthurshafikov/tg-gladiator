@@ -161,6 +161,10 @@ func (h *BaseHandler) SendFightOverviewMessage(ctx *types.Context, fight *models
 				Text:          ctx.Messages().FightActionPreciseStrike,
 			},
 			{
+				CallbackQuery: queries.FightActionInventory.WithID(fight.HeroID),
+				Text:          ctx.Messages().MenuItemOpenHeroEquipment,
+			},
+			{
 				CallbackQuery: queries.FightActionRunAway.WithID(fight.HeroID),
 				Text:          ctx.Messages().FightActionRunAway, // @todo action should reduce double energy
 			},

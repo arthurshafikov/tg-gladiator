@@ -54,6 +54,7 @@ type Item interface {
 
 type HeroItem interface {
 	Create(ctx context.Context, heroItem models.HeroItem) (*models.HeroItem, error)
+	DeleteBy(ctx context.Context, fields *models.HeroItem) error
 	FindBy(ctx context.Context, fields *models.HeroItem) (*models.HeroItem, error)
 	GetBy(
 		ctx context.Context,

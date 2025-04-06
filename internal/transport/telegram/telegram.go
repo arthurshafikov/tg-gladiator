@@ -46,8 +46,9 @@ type QueryHandler interface {
 	HandleHeroCreationSelectClass(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
 	HandleChallengeBoss(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
-	
+
 	HandleStartTournamentFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleOpenActiveFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionSimpleStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionStrongStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionPreciseStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
@@ -61,7 +62,8 @@ type QueryHandler interface {
 	HandleHeroEquipmentOpenItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleHeroEquipmentUnequipItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleHeroEquipmentEquipItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
-	
+	HandleHeroEquipmentConsumeItem(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+
 	HandleOpenLevelUpBonusesOverview(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleSpendLevelUpBonus(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 

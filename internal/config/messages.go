@@ -88,6 +88,7 @@ type Messages struct {
 	HeroEquipmentChooseItem  string
 	HeroEquipmentEquipItem   string
 	HeroEquipmentUnequipItem string
+	HeroEquipmentConsumeItem string
 
 	ItemName         string
 	ItemCategory     string

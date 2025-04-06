@@ -56,6 +56,7 @@ type HeroShopItem interface {
 }
 
 type HeroItem interface {
+	Consume(ctx *types.Context, heroID, itemID int64) (*models.HeroItem, error)
 	FindMy(ctx *types.Context, heroID, itemID int64) (*models.HeroItem, error)
 	GetPaginatedForHero(
 		ctx *types.Context,
@@ -122,7 +123,7 @@ func NewServices(deps Deps) *Services {
 
 	tournamentFightEventsService := newTournamentFightEventsService(deps.Logger)
 
-	heroItemService := newHeroItemService(deps.Repository.HeroItem, heroService)
+	heroItemService := newHeroItemService(deps.Repository.HeroItem, heroService, fightService)
 	heroService.heroItemsService = heroItemService
 
 	heroShopItemService := newHeroShopItemService(

@@ -29,6 +29,24 @@ func (h *Handler) HandleStartTournamentFight(ctx *types.Context, query *tgbotapi
 	return h.SendFightOverviewMessage(ctx, fight, query)
 }
 
+func (h *Handler) HandleOpenActiveFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	if err := h.ValidatePayloadLength(payload, 1); err != nil {
+		return err
+	}
+
+	heroID, err := h.GetIDFromString(payload[0])
+	if err != nil {
+		return err
+	}
+
+	fight, err := h.Services.Fight.FindActiveByHeroID(ctx, heroID)
+	if err != nil {
+		return err
+	}
+
+	return h.SendFightOverviewMessage(ctx, fight, query)
+}
+
 func (h *Handler) HandleFightActionSimpleStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
 	return h.tournamentTurn(ctx, query, payload, enums.FightActionSimpleStrike)
 }

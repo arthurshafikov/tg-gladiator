@@ -16,13 +16,74 @@ const HeroItemsPerPage = 10
 type HeroItemService struct {
 	repo repository.HeroItem
 
-	heroService *HeroService
+	heroService  *HeroService
+	fightService *FightService
 }
 
-func newHeroItemService(repo repository.HeroItem, heroService *HeroService) *HeroItemService {
+func newHeroItemService(repo repository.HeroItem, heroService *HeroService, fightService *FightService) *HeroItemService {
 	return &HeroItemService{
-		repo:        repo,
-		heroService: heroService,
+		repo:         repo,
+		heroService:  heroService,
+		fightService: fightService,
+	}
+}
+
+func (s *HeroItemService) Consume(ctx *types.Context, heroID, itemID int64) (*models.HeroItem, error) {
+	heroItem, err := s.repo.FindBy(ctx.GetContext(), &models.HeroItem{
+		HeroID: heroID,
+		ItemID: itemID,
+	})
+	if err != nil {
+		if errors.Is(err, errors.ErrNotFound) {
+			return nil, err
+		}
+
+		logrus.Error(fmt.Errorf("Consume find by err: %w", err))
+
+		return nil, errors.ErrServerError
+	}
+
+	if heroItem.Quantity < 1 {
+		return nil, errors.ErrCannotConsumeEmptyQuantity
+	}
+
+	fight, err := s.fightService.FindActiveByHeroID(ctx, heroID)
+	if err != nil {
+		return nil, err
+	}
+
+	if heroItem.Item.PotionEffectType == enums.PotionEffectTypeHeal {
+		newHeroHP := min(fight.HeroHP+heroItem.Item.PotionEffectValue, fight.Hero.GetHP())
+
+		// @todo strategy pattern should be different dependant on potion type to be OCP
+		_, err = s.fightService.updateMap(ctx, fight.ID, map[string]any{
+			models.FightFieldHeroHP: newHeroHP,
+		})
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	newQuantity := heroItem.Quantity - 1
+	if newQuantity > 0 {
+		heroItem, err = s.repo.UpdateMap(ctx.GetContext(), heroItem, map[string]any{
+			models.HeroItemFieldQuantity: newQuantity,
+		})
+		if err != nil {
+			logrus.Error(fmt.Errorf("heroItem UpdateMap err: %w", err))
+
+			return nil, errors.ErrServerError
+		}
+
+		return heroItem, nil
+	} else {
+		if err := s.repo.DeleteBy(ctx.GetContext(), heroItem); err != nil {
+			logrus.Error(fmt.Errorf("heroItem delete err: %w", err))
+
+			return nil, errors.ErrServerError
+		}
+
+		return nil, nil
 	}
 }
 
