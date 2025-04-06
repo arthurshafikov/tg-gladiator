@@ -89,7 +89,7 @@ type TournamentFight interface {
 }
 
 type Shop interface {
-	GetShopItemsFor(ctx *types.Context, heroID int64) ([]models.HeroShopItem, error)
+	GetShopItemsFor(ctx *types.Context, heroID int64) (*models.HeroShop, []models.HeroShopItem, error)
 }
 
 type Services struct {

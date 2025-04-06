@@ -83,6 +83,7 @@ type Messages struct {
 	ShopBuyItemConfirm      string
 	ShopBackButton          string
 	ShopBuyItemSuccess      string
+	ShopUpdatesIn           string
 
 	HeroEquipmentOverview    string
 	HeroEquipmentChooseItem  string

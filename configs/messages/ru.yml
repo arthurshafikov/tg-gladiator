@@ -71,6 +71,7 @@ RU:
   ShopBuyItemConfirm: "✅ Купить"
   ShopBackButton: "⬅️ Назад в магазин"
   ShopBuyItemSuccess: "✅ Вы купили %s!"
+  ShopUpdatesIn: "🧾 Ассортимент магазина обновится через %s"
 
   HeroEquipmentOverview: "🛡 Ваша экипировка"
   HeroEquipmentChooseItem: "Выберите предмет:"

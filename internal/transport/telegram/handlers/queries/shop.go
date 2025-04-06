@@ -114,7 +114,7 @@ func (h *Handler) openShop(ctx *types.Context, heroID int64, query ...*tgbotapi.
 		return err
 	}
 
-	shopItems, err := h.Services.Shop.GetShopItemsFor(ctx, heroID)
+	shop, shopItems, err := h.Services.Shop.GetShopItemsFor(ctx, heroID)
 	if err != nil {
 		return err
 	}
@@ -167,8 +167,15 @@ func (h *Handler) openShop(ctx *types.Context, heroID int64, query ...*tgbotapi.
 		}
 	}
 
-	// @todo updates at in text?
-	shopItemsText += fmt.Sprintf("\n\n%s - 💰%v", ctx.Messages().ShopYourBalance, hero.CurrentGold)
+	shopItemsText += fmt.Sprintf(
+		"\n\n%s",
+		fmt.Sprintf(
+			ctx.Messages().ShopUpdatesIn,
+			shop.GetUpdatesInText(),
+		),
+	)
+
+	shopItemsText += fmt.Sprintf("\n%s - 💰%v", ctx.Messages().ShopYourBalance, hero.CurrentGold)
 
 	shopItemsButtons = append(shopItemsButtons, telegram.KeyboardButton{
 		CallbackQuery: queries.OpenMyHero.WithID(heroID),

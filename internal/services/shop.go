@@ -34,14 +34,14 @@ func newShopService(
 	}
 }
 
-func (s *ShopService) GetShopItemsFor(ctx *types.Context, heroID int64) ([]models.HeroShopItem, error) {
+func (s *ShopService) GetShopItemsFor(ctx *types.Context, heroID int64) (*models.HeroShop, []models.HeroShopItem, error) {
 	heroShop, err := s.heroShopRepo.FindBy(ctx.GetContext(), &models.HeroShop{
 		HeroID: heroID,
 	})
 	if err != nil && !errors.Is(err, errors.ErrNotFound) {
 		logrus.Error(err)
 
-		return nil, errors.ErrServerError
+		return nil, nil, errors.ErrServerError
 	}
 
 	if heroShop == nil {
@@ -51,13 +51,13 @@ func (s *ShopService) GetShopItemsFor(ctx *types.Context, heroID int64) ([]model
 			CreatedAt: time.Now(),
 		})
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 	}
 
 	if heroShop.UpdatesAt.Before(time.Now()) {
 		if err := s.updateHeroShopItems(ctx, heroShop.ID); err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 	}
 
@@ -65,10 +65,10 @@ func (s *ShopService) GetShopItemsFor(ctx *types.Context, heroID int64) ([]model
 		HeroShopID: heroShop.ID,
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return shopItems, nil
+	return heroShop, shopItems, nil
 }
 
 func (s *ShopService) updateHeroShopItems(ctx *types.Context, heroShopID int64) error {
