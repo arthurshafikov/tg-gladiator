@@ -18,10 +18,15 @@ const (
 	ItemCategoryAccessory ItemCategory = "accessory"
 	ItemCategoryPotion    ItemCategory = "potion"
 
-	PotionEffectTypeHeal        = "heal"
-	PotionEffectTypeAttackBuff  = "attack_buff"
-	PotionEffectTypeDefenseBuff = "defense_buff"
-	PotionEffectTypeEvasionBuff = "evasion_buff"
+	// @todo what's left for potions
+	// using them in a fight with a unique effects
+	// allowing to have more than 1 potion in the bag (quantity column is possible + also to the shop table?)
+	// updating the potions list
+	// a separate shop section for potions?
+	PotionEffectTypeHeal = "heal"
+	// PotionEffectTypeAttackBuff  = "attack_buff"
+	// PotionEffectTypeDefenseBuff = "defense_buff"
+	// PotionEffectTypeEvasionBuff = "evasion_buff"
 )
 
 func ItemEquipsOnAll() []ItemEquipsOn {

@@ -97,6 +97,7 @@ type Messages struct {
 	ItemCritBonus    string
 	ItemEvasionBonus string
 	ItemPotionEffect string
+	ItemQuantity     string
 
 	HeroLevelUpNotification          string
 	HeroChooseWhereSpendLevelUpBonus string
@@ -379,7 +380,12 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, hero models.Fig
 	)
 }
 
-func (m *Messages) ItemDescription(item models.Item) string {
+func (m *Messages) ItemDescription(item models.Item, quantity ...int) string {
+	var qty int
+	if len(quantity) > 0 {
+		qty = quantity[0]
+	}
+
 	msg := "\n"
 
 	msg += fmt.Sprintf("%s: %s\n", m.ItemName, m.ItemNames[item.Name])
@@ -418,7 +424,11 @@ func (m *Messages) ItemDescription(item models.Item) string {
 		}
 	}
 	if item.PotionEffectType != "" {
-		msg += fmt.Sprintf("%s: %s", m.ItemPotionEffect, item.GetShortCharacteristicsText())
+		msg += fmt.Sprintf("%s: %s\n", m.ItemPotionEffect, item.GetShortCharacteristicsText())
+	}
+
+	if qty > 0 {
+		msg += fmt.Sprintf("%s : %v", m.ItemQuantity, qty)
 	}
 
 	return msg

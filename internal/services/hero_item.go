@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
@@ -24,11 +26,28 @@ func newHeroItemService(repo repository.HeroItem, heroService *HeroService) *Her
 	}
 }
 
-func (s *HeroItemService) Create(ctx *types.Context, heroID int64, itemID int64) (*models.HeroItem, error) {
-	heroItem, err := s.repo.Create(ctx.GetContext(), models.HeroItem{
+func (s *HeroItemService) PutIntoInventory(ctx *types.Context, heroID int64, itemID int64) (*models.HeroItem, error) {
+	heroItem, err := s.repo.FindBy(ctx.GetContext(), &models.HeroItem{
 		HeroID: heroID,
 		ItemID: itemID,
 	})
+	if err != nil && !errors.Is(err, errors.ErrNotFound) {
+		logrus.Error(fmt.Errorf("put into inventory find by err: %w", err))
+
+		return nil, errors.ErrServerError
+	}
+
+	if errors.Is(err, errors.ErrNotFound) {
+		heroItem, err = s.repo.Create(ctx.GetContext(), models.HeroItem{
+			HeroID:   heroID,
+			ItemID:   itemID,
+			Quantity: 1,
+		})
+	} else {
+		heroItem, err = s.repo.UpdateMap(ctx.GetContext(), heroItem, map[string]any{
+			models.HeroItemFieldQuantity: heroItem.Quantity + 1,
+		})
+	}
 	if err != nil {
 		logrus.Error(err)
 

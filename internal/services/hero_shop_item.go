@@ -52,7 +52,7 @@ func (s *HeroShopItemService) BuyItem(ctx *types.Context, heroID, itemID int64) 
 		return nil, err
 	}
 
-	if _, err := s.heroItemService.Create(ctx, heroID, itemID); err != nil {
+	if _, err := s.heroItemService.PutIntoInventory(ctx, heroID, itemID); err != nil {
 		return nil, err
 	}
 

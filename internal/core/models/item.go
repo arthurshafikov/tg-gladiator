@@ -72,12 +72,12 @@ func (i Item) GetShortCharacteristicsText() string {
 		switch i.PotionEffectType {
 		case enums.PotionEffectTypeHeal:
 			icon = "❤️"
-		case enums.PotionEffectTypeAttackBuff:
-			icon = "💪"
-		case enums.PotionEffectTypeDefenseBuff:
-			icon = "🛡️"
-		case enums.PotionEffectTypeEvasionBuff:
-			icon = "🍀"
+			// case enums.PotionEffectTypeAttackBuff:
+			// 	icon = "💪"
+			// case enums.PotionEffectTypeDefenseBuff:
+			// 	icon = "🛡️"
+			// case enums.PotionEffectTypeEvasionBuff:
+			// 	icon = "🍀"
 		}
 
 		var durationText string

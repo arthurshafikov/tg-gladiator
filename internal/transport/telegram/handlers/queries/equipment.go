@@ -92,13 +92,22 @@ func (h *Handler) HandleOpenHeroEquipment(ctx *types.Context, query *tgbotapi.Ca
 			equippedText = " (🎒)"
 		}
 
+		var quantityText string
+		if heroItem.Quantity > 1 {
+			quantityText = fmt.Sprintf("(%v)", heroItem.Quantity)
+		}
+
 		itemsKeyboardButtons = append(
 			itemsKeyboardButtons,
 			telegram.KeyboardButton{
 				CallbackQuery: queries.HeroEquipmentOpenItem.WithID(hero.ID).WithID(heroItem.ItemID),
 				Text: fmt.Sprintf(
 					"%s%s",
-					ctx.Messages().GetItemNameWithIcon(heroItem.Item),
+					fmt.Sprintf(
+						"%s%s",
+						ctx.Messages().GetItemNameWithIcon(heroItem.Item),
+						quantityText,
+					),
 					equippedText,
 				),
 			},
@@ -170,7 +179,7 @@ func (h *Handler) HandleHeroEquipmentOpenItem(ctx *types.Context, query *tgbotap
 	msg := h.Helper.NewEditMessage(
 		ctx.GetChatID(),
 		query.Message.MessageID,
-		ctx.Messages().ItemDescription(heroItem.Item),
+		ctx.Messages().ItemDescription(heroItem.Item, heroItem.Quantity),
 	)
 
 	buttons := make([]telegram.KeyboardButton, 0, 2)

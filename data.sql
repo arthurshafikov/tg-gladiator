@@ -107,8 +107,8 @@ INSERT INTO "items"
 ("name", "category", "potion_effect_type", "potion_effect_value", "potion_effect_duration", "base_price") 
 VALUES
 ('health_potion', 'potion', 'heal', 30, NULL, 50),
-('greater_health_potion', 'potion', 'heal', 60, NULL, 100),
-('strength_potion', 'potion', 'attack_buff', 5, 3, 80),
-('defense_potion', 'potion', 'defense_buff', 5, 3, 80),
-('evasion_potion', 'potion', 'evasion_buff', 10, 2, 70),
-('invisibility_potion', 'potion', 'evasion_buff', 50, 1, 200);
+('greater_health_potion', 'potion', 'heal', 60, NULL, 100);
+-- ('strength_potion', 'potion', 'attack_buff', 5, 3, 80),
+-- ('defense_potion', 'potion', 'defense_buff', 5, 3, 80),
+-- ('evasion_potion', 'potion', 'evasion_buff', 10, 2, 70),
+-- ('invisibility_potion', 'potion', 'evasion_buff', 50, 1, 200);

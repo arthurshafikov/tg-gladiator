@@ -83,6 +83,7 @@ RU:
   ItemCritBonus: "Бонус к шансу крита"
   ItemEvasionBonus: "Бонус к шансу уклонения"
   ItemPotionEffect: "Действие"
+  ItemQuantity: "Количество"
 
   HeroLevelUpNotification: "Ваш герой %s получил %v уровень ⭐️!"
   HeroChooseWhereSpendLevelUpBonus: "Выберите куда направить статы: %v штук"
