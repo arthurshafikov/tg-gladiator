@@ -6,40 +6,39 @@ import (
 
 type Query string
 
-// @todo prior to launch replace these text values with numbers 0-999
 const (
-	OpenMenu     Query = "OpenMenu"
-	OpenMyHeroes Query = "OpenMyHeroes"
-	OpenMyHero   Query = "OpenMyHero"
+	OpenMenu     Query = "0"
+	OpenMyHeroes Query = "1"
+	OpenMyHero   Query = "2"
 
-	HeroCreationStart       Query = "HeroCreationStart"
-	HeroCreationSelectClass Query = "HeroCreationSelectClass"
+	HeroCreationStart       Query = "3"
+	HeroCreationSelectClass Query = "4"
 
-	OpenShop           Query = "OpenShop"
-	ShopBuyItem        Query = "ShopBuyItem"
-	ShopBuyItemConfirm Query = "ShopBuyItemConfirm"
+	OpenShop           Query = "5"
+	ShopBuyItem        Query = "6"
+	ShopBuyItemConfirm Query = "7"
 
-	ChallengeBoss            Query = "ChallengeBoss"
-	StartTournamentFight     Query = "StartTournamentFight"
-	OpenActiveFight          Query = "OpenActiveFight"
-	FightActionSimpleStrike  Query = "FightActionSimpleStrike"
-	FightActionStrongStrike  Query = "FightActionStrongStrike"
-	FightActionPreciseStrike Query = "FightActionPreciseStrike"
-	FightActionInventory     Query = "FightActionInventory"
-	FightActionRunAway       Query = "FightActionRunAway"
+	ChallengeBoss            Query = "8"
+	StartTournamentFight     Query = "9"
+	OpenActiveFight          Query = "10"
+	FightActionSimpleStrike  Query = "11"
+	FightActionStrongStrike  Query = "12"
+	FightActionPreciseStrike Query = "13"
+	FightActionInventory     Query = "14"
+	FightActionRunAway       Query = "15"
 
-	OpenHeroEquipment        Query = "OpenHeroEquipment"
-	HeroEquipmentOpenItem    Query = "HeroEquipmentOpenItem"
-	HeroEquipmentEquipItem   Query = "HeroEquipmentEquipItem"
-	HeroEquipmentUnequipItem Query = "HeroEquipmentUnequipItem"
-	HeroEquipmentConsumeItem Query = "HeroEquipmentConsumeItem"
+	OpenHeroEquipment        Query = "16"
+	HeroEquipmentOpenItem    Query = "17"
+	HeroEquipmentEquipItem   Query = "18"
+	HeroEquipmentUnequipItem Query = "19"
+	HeroEquipmentConsumeItem Query = "20"
 
-	OpenLevelUpBonusesOverview Query = "OpenLevelUpBonusesOverview"
-	SpendLevelUpBonus          Query = "SpendLevelUpBonus"
+	OpenLevelUpBonusesOverview Query = "21"
+	SpendLevelUpBonus          Query = "22"
 
-	HeroDelete Query = "HeroDelete"
+	HeroDelete Query = "23"
 
-	Back Query = "Back"
+	Back Query = "9999"
 
 	SpecialDelimeterInQueryCallback = "#_#"
 )
