@@ -241,10 +241,11 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	)
 
 	msg += fmt.Sprintf(
-		"%s: %v/%v (+1 каждые 15 минут)\n",
+		"%s: %v/%v (+1 каждые %v минут)\n",
 		m.HeroEnergy,
 		hero.CurrentEnergy,
 		models.HeroMaxEnergy,
+		models.HeroMinutesToRestoreEnergy,
 	)
 
 	return msg, nil
