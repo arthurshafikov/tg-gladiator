@@ -377,7 +377,7 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, hero models.Fig
 
 	return fmt.Sprintf(
 		"- %s %s%s %s",
-		hero.GetName(),
+		hero.GetName(m.EnemyNames),
 		fmt.Sprintf(
 			actionInfo,
 			fightEvent.DamageDealt,

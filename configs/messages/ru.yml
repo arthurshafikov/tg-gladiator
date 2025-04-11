@@ -2,7 +2,7 @@ RU:
   StartSuccess: "🚀 Игра запущена!"
   Help: "ℹ️ Помощь"
 
-  DeleteConfirmation: "❌ Подтвердите удаление"
+  DeleteConfirmation: "Удалить"
 
   OpenedMenu: "📋 Вы открыли меню"
   DefaultBackBtn: "🔙 Назад"

@@ -15,7 +15,7 @@ const (
 	StartEnergy = models.HeroMaxEnergy
 	StartGold   = 0
 
-	LevelUpStatsUpgradeAvailable = 5
+	LevelUpStatsUpgradeAvailable = 3
 )
 
 type HeroService struct {
