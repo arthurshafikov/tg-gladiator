@@ -25,8 +25,8 @@ type Messages struct {
 	MyHeroesList     string
 
 	MenuItemHasLevelUpBonuses    string
+	MenuItemOpenFightOptions     string
 	MenuItemChallengeBoss        string
-	MenuItemStartTournamentFight string
 	MenuItemOpenHeroEquipment    string
 	MenuItemShop                 string
 	MenuItemDeleteHero           string
@@ -55,6 +55,7 @@ type Messages struct {
 
 	HeroNameWithStats string
 
+	FightSelectLocation      string
 	FightOverview            string
 	FightChooseAction        string
 	FightActionSimpleStrike  string
@@ -111,6 +112,8 @@ type Messages struct {
 	ItemCategories map[enums.ItemCategory]string
 	ItemEquipsOns  map[enums.ItemEquipsOn]string
 	ItemNames      map[string]string
+	EnemyNames     map[string]string
+	FightLocations map[string]string
 	Errors         map[string]string
 }
 
@@ -197,7 +200,7 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	)
 
 	msg += fmt.Sprintf(
-		"%s: %v (%s - %v XP)\n",
+		"⭐ %s: %v (%s - %v XP)\n",
 		m.Level,
 		hero.GetLevel(),
 		m.XPForNextLevelLeft,
@@ -266,7 +269,7 @@ func (m *Messages) FightInfo(fight *models.Fight) (string, error) {
 		fight.Hero.GetName(),
 		fight.Hero.GetLevel(),
 		m.GetFightStatistics(fight, fight.Hero),
-		fight.Opponent.GetName(),
+		fight.Opponent.GetName(m.EnemyNames),
 		fight.Opponent.GetLevel(),
 		m.GetFightStatistics(fight, fight.Opponent),
 	)
@@ -346,7 +349,7 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, hero models.Fig
 	if fightEvent.WasEvaded {
 		opponentReactionInfo = fmt.Sprintf(
 			m.FightActionInfoOpponentEvaded,
-			opponent.GetName(),
+			opponent.GetName(m.EnemyNames),
 			fightEvent.EvadeChancePercent,
 		)
 	} else {
@@ -365,7 +368,7 @@ func (m *Messages) FightActionInfo(fightEvent models.FightEvent, hero models.Fig
 			"%s%s",
 			fmt.Sprintf(
 				m.FightActionInfoOpponentHPLost,
-				opponent.GetName(),
+				opponent.GetName(m.EnemyNames),
 				fightEvent.DamageReceived,
 			),
 			damageBlockedText,

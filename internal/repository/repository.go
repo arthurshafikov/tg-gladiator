@@ -43,8 +43,9 @@ type Fight interface {
 type Enemy interface {
 	Find(ctx context.Context, id int64) (*models.Enemy, error)
 	FindBy(ctx context.Context, fields *models.Enemy) (*models.Enemy, error)
-	GetByMap(ctx context.Context, fields map[string]any) (*[]models.Enemy, error)
+	GetByMap(ctx context.Context, where *types.WhereConditions) (*[]models.Enemy, error)
 	GetNextBossForHero(ctx context.Context, heroID int64) (*models.Enemy, error)
+	GetBossesAmountLeft(ctx context.Context, heroID int64) (int, error)
 	// Update(ctx context.Context, id int64, fields *models.Chat) (*models.Chat, error)
 	// UpdateMap(ctx context.Context, id int64, fields map[string]interface{}) (*models.Chat, error)
 }

@@ -59,8 +59,10 @@ func (b *Bot) handleCallbackQuery(ctx *types.Context, query *tgbotapi.CallbackQu
 	case queries.ChallengeBoss:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleChallengeBoss)
 
-	case queries.StartTournamentFight:
-		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleStartTournamentFight)
+	case queries.OpenFightOptions:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenFightOptions)
+	case queries.StartFight:
+		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleStartFight)
 	case queries.OpenActiveFight:
 		err = middlewareChain(ctx, query, payloadQuery, payload, b.queryHandler.HandleOpenActiveFight)
 	case queries.FightActionSimpleStrike:

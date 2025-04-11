@@ -71,6 +71,7 @@ type HeroItem interface {
 
 type BossFight interface {
 	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
+	GetBossesAmountLeft(ctx *types.Context, heroID int64) (int, error)
 	MakeTurn(
 		ctx *types.Context,
 		fight *models.Fight,
@@ -80,7 +81,7 @@ type BossFight interface {
 }
 
 type TournamentFight interface {
-	Create(ctx *types.Context, heroID int64) (*models.Fight, error)
+	Create(ctx *types.Context, heroID int64, fightLocation enums.FightLocation) (*models.Fight, error)
 	MakeTurn(
 		ctx *types.Context,
 		fight *models.Fight,

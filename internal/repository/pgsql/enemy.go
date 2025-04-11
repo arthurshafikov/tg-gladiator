@@ -6,6 +6,7 @@ import (
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"gorm.io/gorm"
 )
 
@@ -42,11 +43,15 @@ func (r *Enemy) FindBy(ctx context.Context, fields *models.Enemy) (*models.Enemy
 	return &enemy, nil
 }
 
-func (r *Enemy) GetByMap(ctx context.Context, fields map[string]any) (*[]models.Enemy, error) {
+func (r *Enemy) GetByMap(ctx context.Context, where *types.WhereConditions) (*[]models.Enemy, error) {
 	var enemies []models.Enemy
-	if err := r.getDBInstance(ctx).
-		Where(fields).
-		Find(&enemies).Error; err != nil {
+
+	query := r.getDBInstance(ctx)
+	if where != nil {
+		query = query.Scopes(types.ApplyWhereConditions(where))
+	}
+
+	if err := query.Find(&enemies).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.ErrNotFound
 		}
@@ -68,6 +73,7 @@ func (r *Enemy) GetNextBossForHero(ctx context.Context, heroID int64) (*models.E
 			enums.FightStatusEnded,
 		).
 		Where("enemies.boss_type IS NOT null").
+		Where("enemies.deleted_at IS null").
 		Where("fights.id IS null").
 		Order("enemies.level ASC").
 		First(&boss).Error; err != nil {
@@ -79,6 +85,32 @@ func (r *Enemy) GetNextBossForHero(ctx context.Context, heroID int64) (*models.E
 	}
 
 	return &boss, nil
+}
+
+// @todo duplicate
+func (r *Enemy) GetBossesAmountLeft(ctx context.Context, heroID int64) (int, error) {
+	var count int64
+	if err := r.getDBInstance(ctx).
+		Table("enemies").
+		Joins(
+			"LEFT JOIN fights ON fights.hero_id = ? AND enemies.id = fights.opponent_id AND opponent_type = ?"+
+				" AND (fights.opponent_hp <= 0 AND fights.status = ?)",
+			heroID,
+			enums.OpponentTypeMob,
+			enums.FightStatusEnded,
+		).
+		Where("enemies.boss_type IS NOT null").
+		Where("enemies.deleted_at IS null").
+		Where("fights.id IS null").
+		Count(&count).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 0, errors.ErrNotFound
+		}
+
+		return 0, err
+	}
+
+	return int(count), nil
 }
 
 // func (r *Enemy) Create(ctx context.Context, enemy models.Enemy) (*models.Enemy, error) {

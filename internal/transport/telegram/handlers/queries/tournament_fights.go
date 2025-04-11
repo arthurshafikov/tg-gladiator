@@ -11,8 +11,8 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func (h *Handler) HandleStartTournamentFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
-	if err := h.ValidatePayloadLength(payload, 1); err != nil {
+func (h *Handler) HandleStartFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error {
+	if err := h.ValidatePayloadLength(payload, 2); err != nil {
 		return err
 	}
 
@@ -21,7 +21,9 @@ func (h *Handler) HandleStartTournamentFight(ctx *types.Context, query *tgbotapi
 		return err
 	}
 
-	fight, err := h.Services.TournamentFight.Create(ctx, heroID)
+	fightLocation := enums.GetFightLocation(payload[1])
+
+	fight, err := h.Services.TournamentFight.Create(ctx, heroID, fightLocation)
 	if err != nil {
 		return err
 	}

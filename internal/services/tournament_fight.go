@@ -35,7 +35,7 @@ func newTournamentFightService(
 	}
 }
 
-func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*models.Fight, error) {
+func (s *TournamentFightService) Create(ctx *types.Context, heroID int64, fightLocation enums.FightLocation) (*models.Fight, error) {
 	hero, err := s.heroService.FindMy(ctx, heroID)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (s *TournamentFightService) Create(ctx *types.Context, heroID int64) (*mode
 		return nil, err
 	}
 
-	enemy, err := s.enemyService.getRandomNonBossEnemy(ctx, hero.Level)
+	enemy, err := s.enemyService.getRandomNonBossEnemyFromLocation(ctx, fightLocation)
 	if err != nil {
 		return nil, err
 	}

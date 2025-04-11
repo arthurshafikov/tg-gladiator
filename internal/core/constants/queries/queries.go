@@ -19,7 +19,8 @@ const (
 	ShopBuyItemConfirm Query = "7"
 
 	ChallengeBoss            Query = "8"
-	StartTournamentFight     Query = "9"
+	OpenFightOptions         Query = "24"
+	StartFight               Query = "9"
 	OpenActiveFight          Query = "10"
 	FightActionSimpleStrike  Query = "11"
 	FightActionStrongStrike  Query = "12"

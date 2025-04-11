@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -88,5 +89,40 @@ func TestCalculateLevelForXP(t *testing.T) {
 				t.Errorf("Hero.CalculateLevelForXP() = %v, want %v", got, tt.expectedLevel)
 			}
 		})
+	}
+}
+
+func TestTotalGetXPLevelInfo(t *testing.T) {
+	t.Skip("uncomment to see stats")
+
+	h := Hero{
+		Level: 1,
+		XP:    0,
+	}
+
+	enemiesAvgXPForLevel := map[int]int{
+		1: 15,
+		2: 20,
+		3: 40,
+		4: 50,
+		5: 65,
+		6: 75,
+		7: 100,
+		8: 120,
+	}
+
+	for ; h.Level < 25; h.Level++ {
+		xpLeft := h.GetXPForNextLevelLeft()
+
+		h.XP += xpLeft
+
+		enemyKills := 0
+		if avgXP, ok := enemiesAvgXPForLevel[h.Level]; ok {
+			enemyKills = xpLeft / avgXP
+		}
+
+		fmt.Printf("For level: %v, required XP - %v, total XP - %v, need to kill %v enemies", h.Level+1, xpLeft, h.XP, enemyKills)
+
+		fmt.Println()
 	}
 }

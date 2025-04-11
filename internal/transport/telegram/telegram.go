@@ -47,7 +47,8 @@ type QueryHandler interface {
 
 	HandleChallengeBoss(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 
-	HandleStartTournamentFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleOpenFightOptions(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
+	HandleStartFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleOpenActiveFight(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionSimpleStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error
 	HandleFightActionStrongStrike(ctx *types.Context, query *tgbotapi.CallbackQuery, payload []string) error

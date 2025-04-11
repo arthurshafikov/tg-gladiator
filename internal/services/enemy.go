@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"math/big"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -38,15 +39,22 @@ func (s *EnemyService) find(ctx *types.Context, id int64) (*models.Enemy, error)
 	return enemy, nil
 }
 
-func (s *EnemyService) getRandomNonBossEnemy(ctx *types.Context, level int) (*models.Enemy, error) {
-	if level > 10 {
-		level = 10
-	}
+func (s *EnemyService) getRandomNonBossEnemyFromLocation(ctx *types.Context, fightLocation enums.FightLocation) (*models.Enemy, error) {
+	minLevel, maxLevel := enums.FightLocationLevelRange(fightLocation)
 
-	enemies, err := s.repo.GetByMap(ctx.GetContext(), map[string]any{
-		models.EnemyFieldLevel:    level,
-		models.EnemyFieldBossType: nil,
+	enemies, err := s.repo.GetByMap(ctx.GetContext(), &types.WhereConditions{
+		Between: map[string]types.BetweenClause{
+			models.EnemyFieldLevel: {
+				Min:    minLevel,
+				Max:    maxLevel,
+				Strict: false,
+			},
+		},
+		Where: map[string]interface{}{
+			models.EnemyFieldBossType: nil,
+		},
 	})
+
 	if err != nil {
 		s.logger.Error(err)
 
@@ -80,4 +88,19 @@ func (s *EnemyService) getNextBossEnemy(ctx *types.Context, heroID int64) (*mode
 	}
 
 	return boss, nil
+}
+
+func (s *EnemyService) getBossesAmountLeft(ctx *types.Context, heroID int64) (int, error) {
+	amount, err := s.repo.GetBossesAmountLeft(ctx.GetContext(), heroID)
+	if err != nil {
+		if errors.Is(err, errors.ErrNotFound) {
+			return 0, err
+		}
+
+		s.logger.Error(err)
+
+		return 0, errors.ErrServerError
+	}
+
+	return amount, nil
 }

@@ -1,6 +1,9 @@
 package models
 
-import "github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+import (
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+	"gorm.io/gorm"
+)
 
 const (
 	EnemyFieldLevel    = "level"
@@ -8,20 +11,21 @@ const (
 )
 
 type Enemy struct {
-	ID                    int64  `gorm:"->" json:"id"`
-	Level                 int    `json:"level"`
-	Name                  string `json:"name"`
-	HP                    int    `json:"hp"`
-	MinAttack             int    `json:"min_attack"`
-	MaxAttack             int    `json:"max_attack"`
-	Defense               int    `json:"defense"`
-	CriticalChancePercent int    `json:"critical_chance_percent"`
-	EvasionChancePercent  int    `json:"evasion_chance_percent"`
-	GoldRewardMin         int    `json:"gold_reward_min"`
-	GoldRewardMax         int    `json:"gold_reward_max"`
-	XpRewardMin           int    `json:"xp_reward_min"`
-	XpRewardMax           int    `json:"xp_reward_max"`
-	BossType              string `json:"boss_type"`
+	ID                    int64          `gorm:"->" json:"id"`
+	Level                 int            `json:"level"`
+	Name                  string         `json:"name"`
+	HP                    int            `json:"hp"`
+	MinAttack             int            `json:"min_attack"`
+	MaxAttack             int            `json:"max_attack"`
+	Defense               int            `json:"defense"`
+	CriticalChancePercent int            `json:"critical_chance_percent"`
+	EvasionChancePercent  int            `json:"evasion_chance_percent"`
+	GoldRewardMin         int            `json:"gold_reward_min"`
+	GoldRewardMax         int            `json:"gold_reward_max"`
+	XpRewardMin           int            `json:"xp_reward_min"`
+	XpRewardMax           int            `json:"xp_reward_max"`
+	BossType              string         `json:"boss_type"`
+	DeletedAt             gorm.DeletedAt `gorm:"index"`
 }
 
 func (Enemy) TableName() string {
@@ -36,7 +40,13 @@ func (e *Enemy) GetType() enums.FighterType {
 	return enums.FighterTypeOpponent
 }
 
-func (e *Enemy) GetName() string {
+func (e *Enemy) GetName(enemyNames ...map[string]string) string {
+	if len(enemyNames) > 0 {
+		if name, ok := enemyNames[0][e.Name]; ok {
+			return name
+		}
+	}
+
 	return e.Name
 }
 

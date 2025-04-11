@@ -58,7 +58,7 @@ func (h *Hero) GetType() enums.FighterType {
 	return enums.FighterTypeHero
 }
 
-func (h *Hero) GetName() string {
+func (h *Hero) GetName(enemyNames ...map[string]string) string {
 	return h.Name
 }
 
@@ -157,7 +157,7 @@ func (h *Hero) GetXPForNextLevelLeft() int {
 
 func (h *Hero) CalculateLevelForXP(xp int) int {
 	for level := 1; ; level++ {
-		requiredXPForTheNextLevel := level * level * 50
+		requiredXPForTheNextLevel := level * level * LevelUpRequiredXPKoefficient
 
 		xp = xp - requiredXPForTheNextLevel
 
@@ -166,43 +166,3 @@ func (h *Hero) CalculateLevelForXP(xp int) int {
 		}
 	}
 }
-
-// For level - 2, required total XP - 50
-// For level - 3, required total XP - 250
-// For level - 4, required total XP - 700
-// For level - 5, required total XP - 1500
-// For level - 6, required total XP - 2750
-// For level - 7, required total XP - 4550
-// For level - 8, required total XP - 7000
-// For level - 9, required total XP - 10200
-// For level - 10, required total XP - 14250
-// For level - 11, required total XP - 19250
-// For level - 12, required total XP - 25300
-// For level - 13, required total XP - 32500
-// For level - 14, required total XP - 40950
-// For level - 15, required total XP - 50750
-// For level - 16, required total XP - 62000
-// For level - 17, required total XP - 74800
-// For level - 18, required total XP - 89250
-// For level - 19, required total XP - 105450
-// For level - 20, required total XP - 123500
-// For level - 21, required total XP - 143500
-// For level - 22, required total XP - 165550
-// For level - 23, required total XP - 189750
-// For level - 24, required total XP - 216200
-// For level - 25, required total XP - 245000
-// For level - 26, required total XP - 276250
-// For level - 27, required total XP - 310050
-// For level - 28, required total XP - 346500
-// For level - 29, required total XP - 385700
-// For level - 30, required total XP - 427750
-// For level - 31, required total XP - 472750
-// For level - 32, required total XP - 520800
-// For level - 33, required total XP - 572000
-// For level - 34, required total XP - 626450
-// For level - 35, required total XP - 684250
-// For level - 36, required total XP - 745500
-// For level - 37, required total XP - 810300
-// For level - 38, required total XP - 878750
-// For level - 39, required total XP - 950950
-// For level - 40, required total XP - 1027000

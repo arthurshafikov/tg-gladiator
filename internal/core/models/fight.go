@@ -56,7 +56,7 @@ func (f *Fight) HasEnded() bool {
 type Fighter interface {
 	GetID() int64
 	GetType() enums.FighterType
-	GetName() string
+	GetName(enemyNames ...map[string]string) string
 	GetLevel() int
 	GetHP() int
 	HasAttackRange() bool

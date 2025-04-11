@@ -65,6 +65,15 @@ func (s *BossFightService) Create(ctx *types.Context, heroID int64) (*models.Fig
 	return fight, nil
 }
 
+func (s *BossFightService) GetBossesAmountLeft(ctx *types.Context, heroID int64) (int, error) {
+	hero, err := s.heroService.FindMy(ctx, heroID)
+	if err != nil {
+		return 0, err
+	}
+
+	return s.enemyService.getBossesAmountLeft(ctx, hero.ID)
+}
+
 func (s *BossFightService) RunAwayAsHero(ctx *types.Context, fightID int64) error {
 	return s.tournamentFightService.RunAwayAsHero(ctx, fightID)
 }
