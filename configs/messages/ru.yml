@@ -116,162 +116,25 @@ RU:
     finger: "Палец"
 
   ItemNames:
-    rusty_sword: "Ржавый меч"
-    iron_sword: "Железный меч"
-    steel_sword: "Стальной меч"
-    knights_blade: "Клинок рыцаря"
-    shadow_dagger: "Кинжал теней"
-    berserker_axe: "Топор берсерка"
-    greatsword: "Двуручный меч"
-    warhammer: "Боевой молот"
-    twin_daggers: "Парные кинжалы"
-    firebrand: "Огненный клинок"
-    shield_of_valor: "Щит доблести"
-    wardens_shield: "Щит хранителя"
-    leather_armor: "Кожаная броня"
-    chainmail_armor: "Кольчужная броня"
-    iron_plate: "Железный доспех"
-    paladins_armor: "Доспех паладина"
-    shadow_cloak: "Плащ теней"
-    dragon_scale_armor: "Доспех из драконьей чешуи"
-    reinforced_vest: "Усиленный жилет"
-    iron_helmet: "Железный шлем"
-    knights_helmet: "Шлем рыцаря"
-    shadow_hood: "Капюшон теней"
-    crown_of_thorns: "Корона из шипов"
-    battle_mask: "Боевая маска"
-    hunters_gloves: "Перчатки охотника"
-    titan_gauntlets: "Рукавицы титана"
-    agile_boots: "Проворные ботинки"
-    boots_of_speed: "Ботинки скорости"
-    elven_boots: "Эльфийские ботинки"
-    dark_cloak: "Тёмный плащ"
-    phantom_gloves: "Перчатки фантома"
-    lucky_amulet: "Амулет удачи"
-    ring_of_protection: "Кольцо защиты"
-    ring_of_agility: "Кольцо ловкости"
-    ring_of_strength: "Кольцо силы"
-    amulet_of_power: "Амулет силы"
-    ancient_talisman: "Древний талисман"
-    blood_ring: "Кровавое кольцо"
-    bronze_armor: "Бронзовый доспех"
-    health_potion: "❤️ Зелье здоровья"
-    greater_health_potion: "❤️ Большое зелье здоровья"
-    strength_potion: "💪 Зелье силы"
-    defense_potion: "🛡️ Зелье защиты"
-    evasion_potion: "🍀 Зелье уклонения"
-    invisibility_potion: "🫥 Зелье невидимости"
 
   EnemyNames:
-    goblin: Гоблин
-    wild_dog: Дикая собака
-    forest_snake: Лесная змея
-    bandit: Бандит
-    slow_trent: Медленный трент
-    wolf: Волк
-    skeleton: Скелет  
-    orc: Орк  
-    haunted_soul: Призрачная душа  
-    zombie: Зомби  
-    vampire: Вампир  
-    rotting_corpse: Гниющий труп  
-    undead_knight: Рыцарь-нежить  
-    giant_bat: Гигантская летучая мышь  
-    bandit_leader: Главарь бандитов  
-    dark_sorcerer: Тёмный чародей  
-    cursed_monk: Проклятый монах  
-    red_ogre: Красный огр  
-    satan_servant: Слуга Сатаны  
-    flame_imp: Огненный бес  
-    fire_knight: Огненный рыцарь  
-    fire_elemental: Элементаль огня  
-    volcanic_golem: Вулканический голем  
-    demon: Демон  
-    ancient_warlord: Древний полководец  
-    infernal_hound: Адская гончая  
-    dragonspawn: Порождение дракона  
-    chaos_champion: Чемпион хаоса  
-    hellfire_witch: Ведьма адского пламени  
-    ice_golem: Ледяной голем  
-    frost_wraith: Призрак мороза  
-    snow_wolf: Снежный волк  
-    glacier_elemental: Ледниковый элементаль  
-    frozen_cultist: Замёрзший культист  
-    yeti: Йети  
-    sand_wyrm: Песчаный вирм  
-    scorpion_king: Царь скорпионов  
-    desert_raider: Пустынный налётчик  
-    mummy_guardian: Страж мумии  
-    ancient_serpent: Древняя змея  
-    sand_elemental: Элементаль песка  
-    samurai_ghost: Призрак самурая  
-    ninja_specter: Призрак ниндзя  
-    ronin_traitor: Ронин-предатель  
-    shogun_spirit: Дух сегуна  
-    dark_monk: Тёмный монах  
-    crimson_archer: Багровый лучник  
-    giant_spider: Гигантский паук  
-    web_caster: Плетущий паутину  
-    poison_widow: Ядовитая вдова  
-    spider_matriarch: Матриарх пауков  
-    venom_seeker: Искатель яда  
-    dark_arachna: Тёмная арахна  
-    steam_soldier: Паровой солдат  
-    gadget_assassin: Убийца-гаджет  
-    clockwork_beast: Часовой зверь  
-    tesla_conductor: Проводник Теслы  
-    iron_engineer: Железный инженер  
-    lightning_golem: Громовой голем  
-    magic_sentinel: Магический страж  
-    arcane_scholar: Учёный арканы  
-    mana_wisp: Частица маны  
-    spell_reaver: Похититель чар  
-    chrono_mage: Хрономаг  
-    elder_arcanist: Старший арканист  
-    dark_paladin: Тёмный паладин  
-    void_walker: Странник Бездны  
-    nightmare_hound: Гончая кошмара  
-    doom_bringer: Несущий гибель  
-    abyssal_knight: Бездна-рыцарь  
-    avatar_of_chaos: Аватар хаоса  
-    goblin_warlord: Вождь гоблинов  
-    undead_captain: Капитан нежити  
-    troll_berserker: Тролль-берсерк  
-    shadow_assassin: Убийца из теней  
-    dark_sorcerer_lord: Повелитель тёмных чародеев  
-    demonic_knight: Демонический рыцарь  
-    cursed_warlord: Проклятый полководец  
-    fire_golem: Огненный голем  
-    frost_titan: Ледяной титан  
-    necromancer_king: Король некромантов  
-    chaos_behemoth: Бехемот хаоса  
-    ancient_dragon: Древний дракон  
-    archdemon: Архидемон  
-    god_of_destruction: Бог разрушения  
-    avatar_of_the_void: Аватар пустоты  
-    twilight_reaper: Жнец сумерек  
-    elder_lich: Древний лич  
-    celestial_knight: Небесный рыцарь  
-    emperor_of_shadows: Император теней  
-    fury_of_the_elements: Ярость стихий  
-    prime_abyssal: Верховный бездновик  
-    draconic_overlord: Драконий повелитель  
-    void_tyrant: Тиран пустоты  
-    titan_of_oblivion: Титан забвения  
+    goblin: "Гоблин"
+    wolf: "Волк"
+    forest_spider: "Лесной паук"
+    bandit: "Бандит"
+    skeleton: "Скелет"
+    orc: "Орк"
+    ghost: "Призрак"
+    zombie: "Зомби"
+    knight: "Рыцарь"
+    castle_guard: "Страж замка"
+    vampire: "Вампир"
+    troll: "Тролль"
 
   FightLocations:
     forest: "🌲 Лес"
     graveyard: "⚰️ Кладбище"
-    abandoned_castle: "🏰 Заброшенный замок"
-    fire_caves: "🌋 Огненные пещеры"
-    nether_world: "😈 Преисподняя"
-    ice_caves: "🧊 Ледяные пещеры"
-    desert: "🏜️ Пустыня"
-    east_fortress: "🏯 Восточная крепость"
-    web_catacombs: "🕸️ Паутиные катакомбы"
-    steam_city: "⚡ Паровой город"
-    magic_academy: "🧠 Академия магии"
-    end_lands: "🗡️ Финальные земли"
+    castle: "🏰 Замок"
 
   Errors:
     403_forbidden: "⛔️ Ошибка: недостаточно прав для выполнения действия"

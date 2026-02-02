@@ -15,7 +15,8 @@ const (
 	FightFieldGoldReward = "gold_reward"
 	FightFieldXPReward   = "xp_reward"
 
-	FightArmorDamageReductionModificator = 30 // the more - the less % of damage will get blocked
+	FightArmorDamageReductionModificator = 20 // the more - the less % of damage will get blocked
+	XPGainModificator                    = 50
 )
 
 type Fight struct {
@@ -46,7 +47,7 @@ func (f *Fight) GetCurrentHPFor(fighter Fighter) int {
 }
 
 func (f *Fight) IsHeroWon() bool {
-	return f.OpponentHP <= 0
+	return f.OpponentHP <= 0 && f.HeroHP > 0
 }
 
 func (f *Fight) HasEnded() bool {
@@ -65,10 +66,8 @@ type Fighter interface {
 	GetDefense() int
 	GetCriticalChancePercent() int
 	GetEvasionChancePercent() int
-	GetMinGoldReward() int
-	GetMaxGoldReward() int
-	GetMinXPReward() int
-	GetMaxXPReward() int
+	GetXPReward() int
+	GetGoldReward() int
 }
 
 // @todo DTO?

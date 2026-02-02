@@ -126,22 +126,6 @@ func (h *Hero) GetEvasionChancePercent() int {
 	return evasionChancePercent + h.EvasionChancePercentBonus
 }
 
-func (h *Hero) GetMinGoldReward() int {
-	return 0
-}
-
-func (h *Hero) GetMaxGoldReward() int {
-	return h.GetMinGoldReward()
-}
-
-func (h *Hero) GetMinXPReward() int {
-	return 0 // @todo
-}
-
-func (h *Hero) GetMaxXPReward() int {
-	return h.GetMinXPReward()
-}
-
 func (h *Hero) HasLevelUpBonuses() bool {
 	return h.LevelUpBonusesLeft > 0
 }
@@ -149,7 +133,7 @@ func (h *Hero) HasLevelUpBonuses() bool {
 func (h *Hero) GetXPForNextLevelLeft() int {
 	requiredTotalXP := 0
 	for level := 1; level <= h.Level; level++ {
-		requiredTotalXP += level * level * LevelUpRequiredXPKoefficient
+		requiredTotalXP += level * level * 20
 	}
 
 	return int(math.Abs(float64(h.XP - requiredTotalXP)))
@@ -157,7 +141,7 @@ func (h *Hero) GetXPForNextLevelLeft() int {
 
 func (h *Hero) CalculateLevelForXP(xp int) int {
 	for level := 1; ; level++ {
-		requiredXPForTheNextLevel := level * level * LevelUpRequiredXPKoefficient
+		requiredXPForTheNextLevel := level * level * 20
 
 		xp = xp - requiredXPForTheNextLevel
 
@@ -165,4 +149,12 @@ func (h *Hero) CalculateLevelForXP(xp int) int {
 			return level
 		}
 	}
+}
+
+func (h *Hero) GetXPReward() int {
+	return 0
+}
+
+func (h *Hero) GetGoldReward() int {
+	return 0
 }

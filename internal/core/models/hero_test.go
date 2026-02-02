@@ -14,17 +14,17 @@ func TestGetXPForNextLevelLeft(t *testing.T) {
 		{
 			currentXP:      0,
 			currentLevel:   1,
-			expectedXPLeft: 50,
+			expectedXPLeft: 20,
 		},
 		{
 			currentXP:      51,
 			currentLevel:   2,
-			expectedXPLeft: 199,
+			expectedXPLeft: 49,
 		},
 		{
 			currentXP:      250,
 			currentLevel:   3,
-			expectedXPLeft: 450,
+			expectedXPLeft: 30,
 		},
 	}
 	for _, tt := range tests {
@@ -46,7 +46,7 @@ func TestCalculateLevelForXP(t *testing.T) {
 		expectedLevel int
 	}{
 		{
-			xp:            49,
+			xp:            19,
 			expectedLevel: 1,
 		},
 		{
@@ -54,32 +54,24 @@ func TestCalculateLevelForXP(t *testing.T) {
 			expectedLevel: 1,
 		},
 		{
-			xp:            51,
+			xp:            20,
 			expectedLevel: 2,
 		},
 		{
-			xp:            249,
+			xp:            99,
 			expectedLevel: 2,
 		},
 		{
-			xp:            250,
+			xp:            100,
 			expectedLevel: 3,
 		},
 		{
-			xp:            451,
+			xp:            279,
 			expectedLevel: 3,
 		},
 		{
-			xp:            699,
-			expectedLevel: 3,
-		},
-		{
-			xp:            700,
+			xp:            280,
 			expectedLevel: 4,
-		},
-		{
-			xp:            12345678,
-			expectedLevel: 90,
 		},
 	}
 	for _, tt := range tests {
@@ -93,22 +85,10 @@ func TestCalculateLevelForXP(t *testing.T) {
 }
 
 func TestTotalGetXPLevelInfo(t *testing.T) {
-	t.Skip("uncomment to see stats")
 
 	h := Hero{
 		Level: 1,
 		XP:    0,
-	}
-
-	enemiesAvgXPForLevel := map[int]int{
-		1: 15,
-		2: 20,
-		3: 40,
-		4: 50,
-		5: 65,
-		6: 75,
-		7: 100,
-		8: 120,
 	}
 
 	for ; h.Level < 25; h.Level++ {
@@ -116,10 +96,11 @@ func TestTotalGetXPLevelInfo(t *testing.T) {
 
 		h.XP += xpLeft
 
-		enemyKills := 0
-		if avgXP, ok := enemiesAvgXPForLevel[h.Level]; ok {
-			enemyKills = xpLeft / avgXP
+		opponent := Enemy{
+			Level: h.Level,
 		}
+
+		enemyKills := xpLeft / opponent.GetXPReward()
 
 		fmt.Printf("For level: %v, required XP - %v, total XP - %v, need to kill %v enemies", h.Level+1, xpLeft, h.XP, enemyKills)
 

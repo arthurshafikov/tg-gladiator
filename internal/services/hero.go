@@ -15,7 +15,7 @@ const (
 	StartEnergy = models.HeroMaxEnergy
 	StartGold   = 0
 
-	LevelUpStatsUpgradeAvailable = 3
+	LevelUpStatsUpgradeAvailable = 1
 )
 
 type HeroService struct {
@@ -226,7 +226,7 @@ func (s *HeroService) SpendLevelUpBonus(ctx *types.Context, id int64, statName s
 
 	switch statName {
 	case enums.StatsUpgradeHealth:
-		fields[models.HeroFieldHealthBonus] = hero.HpBonus + 10 // @todo all these values from config
+		fields[models.HeroFieldHealthBonus] = hero.HpBonus + 5 // @todo all these values from config
 	case enums.StatsUpgradeAttack:
 		fields[models.HeroFieldAttackBonus] = hero.AttackBonus + 1
 	case enums.StatsUpgradeDefence:

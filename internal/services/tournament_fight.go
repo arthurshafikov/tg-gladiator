@@ -1,12 +1,10 @@
 package services
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
-	"github.com/arthurshafikov/tg-gladiator/internal/core/helpers"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 )
@@ -130,11 +128,8 @@ func (s *TournamentFightService) MakeTurn(
 	if updateFields[models.FightFieldOpponentHP] == 0 || updateFields[models.FightFieldHeroHP] == 0 {
 		updateFields[models.FightFieldStatus] = enums.FightStatusEnded
 
-		if updateFields[models.FightFieldOpponentHP] == 0 {
-			goldReward, err := s.calculateGoldReward(fight.Opponent)
-			if err != nil {
-				return nil, err
-			}
+		if updateFields[models.FightFieldOpponentHP] == 0 && updateFields[models.FightFieldHeroHP] != 0 {
+			goldReward := fight.Opponent.GetGoldReward()
 
 			updateFields[models.FightFieldGoldReward] = goldReward
 
@@ -142,10 +137,7 @@ func (s *TournamentFightService) MakeTurn(
 				return nil, err
 			}
 
-			xpReward, err := s.calculateXPReward(fight.Opponent)
-			if err != nil {
-				return nil, err
-			}
+			xpReward := fight.Opponent.GetXPReward()
 
 			updateFields[models.FightFieldXPReward] = xpReward
 
@@ -163,43 +155,4 @@ func (s *TournamentFightService) MakeTurn(
 	fight.Events = events
 
 	return fight, nil
-}
-
-func (s *TournamentFightService) calculateGoldReward(opponent models.Fighter) (int, error) {
-	if opponent.GetMaxGoldReward() < opponent.GetMinGoldReward() {
-		s.logger.Error(fmt.Errorf(
-			"gold reward max cannot be less than min, enemy id: %s - %v",
-			opponent.GetType(),
-			opponent.GetID(),
-		))
-
-		return 0, errors.ErrServerError
-	}
-
-	return s.generateRandomNumberInRange(opponent.GetMinGoldReward(), opponent.GetMaxGoldReward())
-}
-
-func (s *TournamentFightService) calculateXPReward(opponent models.Fighter) (int, error) {
-	if opponent.GetMaxXPReward() < opponent.GetMinXPReward() {
-		s.logger.Error(fmt.Errorf(
-			"xp reward max cannot be less than min, enemy id: %s - %v",
-			opponent.GetType(),
-			opponent.GetID(),
-		))
-
-		return 0, errors.ErrServerError
-	}
-
-	return s.generateRandomNumberInRange(opponent.GetMinXPReward(), opponent.GetMaxXPReward())
-}
-
-func (s *TournamentFightService) generateRandomNumberInRange(min, max int) (int, error) {
-	random, err := helpers.GenerateRandomNumberInRange(min, max)
-	if err != nil {
-		s.logger.Error(err)
-
-		return 0, errors.ErrServerError
-	}
-
-	return random, nil
 }

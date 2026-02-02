@@ -33,7 +33,7 @@ func (h *Handler) HandleOpenLevelUpBonusesOverview(ctx *types.Context, query *tg
 			Text: fmt.Sprintf(
 				"%s +%v (%v)",
 				ctx.Messages().HP,
-				10,
+				5,
 				hero.GetHP(),
 			),
 		},
@@ -107,8 +107,12 @@ func (h *Handler) HandleSpendLevelUpBonus(ctx *types.Context, query *tgbotapi.Ca
 
 	statToUpgrade := payload[1] // @todo enum type
 
-	if _, err = h.Services.Hero.SpendLevelUpBonus(ctx, hero.ID, statToUpgrade); err != nil {
+	if hero, err = h.Services.Hero.SpendLevelUpBonus(ctx, hero.ID, statToUpgrade); err != nil {
 		return err
+	}
+
+	if hero.LevelUpBonusesLeft < 1 {
+		return h.OpenMyHero(ctx, hero, query)
 	}
 
 	return h.HandleOpenLevelUpBonusesOverview(ctx, query, payload)

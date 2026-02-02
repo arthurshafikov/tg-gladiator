@@ -20,10 +20,6 @@ type Enemy struct {
 	Defense               int            `json:"defense"`
 	CriticalChancePercent int            `json:"critical_chance_percent"`
 	EvasionChancePercent  int            `json:"evasion_chance_percent"`
-	GoldRewardMin         int            `json:"gold_reward_min"`
-	GoldRewardMax         int            `json:"gold_reward_max"`
-	XpRewardMin           int            `json:"xp_reward_min"`
-	XpRewardMax           int            `json:"xp_reward_max"`
 	BossType              string         `json:"boss_type"`
 	DeletedAt             gorm.DeletedAt `gorm:"index"`
 }
@@ -81,22 +77,10 @@ func (e *Enemy) GetEvasionChancePercent() int {
 	return e.EvasionChancePercent
 }
 
-func (e *Enemy) GetMinGoldReward() int {
-	return e.GoldRewardMin
+func (h *Enemy) GetXPReward() int {
+	return h.GetLevel() * 10
 }
 
-func (e *Enemy) GetMaxGoldReward() int {
-	return e.GoldRewardMax
-}
-
-// @todo calculate reward depending on the enemy level (with koefficient)
-// xpReward := int(math.Round(math.Pow(float64(enemy.Level), 1.5) * 10))
-// goldReward := int(math.Round(float64(enemy.Level) * (5 + rand.Float64()*5)))
-// dropChance := math.Min(0.1+0.02*float64(enemy.Level), 0.5) // до 50% шанс
-func (e *Enemy) GetMinXPReward() int {
-	return e.XpRewardMin
-}
-
-func (e *Enemy) GetMaxXPReward() int {
-	return e.XpRewardMax
+func (h *Enemy) GetGoldReward() int {
+	return 0
 }
