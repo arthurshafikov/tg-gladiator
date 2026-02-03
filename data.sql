@@ -39,7 +39,7 @@ VALUES
 ('dark_elf',       9, 85, 9, 11, 7, 10, 10, null),
 ('werewolf',       9, 88, 10, 12, 7, 9, 8, null),
 ('shadow_beast',   9, 86, 9, 11, 6, 12, 12, null),
-('dark_knight',    10, 94, 11, 13, 8, 10, 6, null),
+('fallen_knight',    10, 94, 11, 13, 8, 10, 6, null),
 ('shadow_assassin',10, 96, 11, 13, 8, 9, 5, null),
 ('night_stalker',  10, 93, 10, 12, 7, 8, 6, null),
 

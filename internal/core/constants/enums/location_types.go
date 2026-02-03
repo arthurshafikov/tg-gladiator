@@ -9,9 +9,16 @@ import (
 type FightLocation string
 
 const (
-	LocationTypeForest    FightLocation = "forest"
-	LocationTypeGraveyard FightLocation = "graveyard"
-	LocationTypeCastle    FightLocation = "castle"
+	LocationTypeForest          FightLocation = "forest"
+	LocationTypeGraveyard       FightLocation = "graveyard"
+	LocationTypeCastle          FightLocation = "castle"
+	LocationTypeDragonMountains FightLocation = "dragon_mountains"
+	LocationTypeDarkForest      FightLocation = "dark_forest"
+	LocationTypeIceCaves        FightLocation = "ice_caves"
+	LocationTypeVolcanicPlains  FightLocation = "volcanic_plains"
+	LocationTypeDesertDunes     FightLocation = "desert_dunes"
+	LocationTypeOceanDepths     FightLocation = "ocean_depths"
+	LocationTypeStormPeaks      FightLocation = "storm_peaks"
 )
 
 func AllFightLocations() []FightLocation {
@@ -19,6 +26,13 @@ func AllFightLocations() []FightLocation {
 		LocationTypeForest,
 		LocationTypeGraveyard,
 		LocationTypeCastle,
+		LocationTypeDragonMountains,
+		LocationTypeDarkForest,
+		LocationTypeIceCaves,
+		LocationTypeVolcanicPlains,
+		LocationTypeDesertDunes,
+		LocationTypeOceanDepths,
+		LocationTypeStormPeaks,
 	}
 }
 
@@ -35,6 +49,34 @@ func FightLocationLevelRange(loc FightLocation) (int, int) {
 		LocationTypeCastle: {
 			5,
 			6,
+		},
+		LocationTypeDragonMountains: {
+			7,
+			8,
+		},
+		LocationTypeDarkForest: {
+			9,
+			10,
+		},
+		LocationTypeIceCaves: {
+			11,
+			12,
+		},
+		LocationTypeVolcanicPlains: {
+			13,
+			14,
+		},
+		LocationTypeDesertDunes: {
+			15,
+			16,
+		},
+		LocationTypeOceanDepths: {
+			17,
+			18,
+		},
+		LocationTypeStormPeaks: {
+			19,
+			20,
 		},
 	}[loc]
 
