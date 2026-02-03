@@ -3,10 +3,12 @@ package telegram
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/commands"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
 	"github.com/arthurshafikov/tg-gladiator/internal/services"
@@ -24,6 +26,8 @@ type Bot struct {
 	interactionHandler InteractionHandler
 
 	helper handlers.TelegramHandlerHelper
+
+	chatMutexes sync.Map // map[chatID]*sync.Mutex
 }
 
 type BaseHandler interface {
@@ -116,9 +120,28 @@ func (b *Bot) Start(ctx context.Context) error { // nolint:gocognit,gocyclo
 		return err
 	}
 
-	for update := range updates {
-		b.ProcessUpdate(ctx, update)
+	const workerCount = 32
+	updateChan := make(chan tgbotapi.Update, workerCount*2)
+
+	// Запускаем воркеры
+	var wg sync.WaitGroup
+	for i := 0; i < workerCount; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for update := range updateChan {
+				b.ProcessUpdate(ctx, update)
+			}
+		}()
 	}
+
+	// Читаем апдейты и отправляем в канал
+	for update := range updates {
+		updateChan <- update
+	}
+
+	close(updateChan)
+	wg.Wait()
 
 	return nil
 }
@@ -147,6 +170,26 @@ func (b *Bot) ProcessUpdate(ctx context.Context, update tgbotapi.Update) {
 
 		return
 	}
+
+	mutexIface, _ := b.chatMutexes.LoadOrStore(chatID, &sync.Mutex{})
+	mutex := mutexIface.(*sync.Mutex)
+	locked := mutex.TryLock()
+	if !locked {
+		if update.CallbackQuery != nil {
+			b.helper.AnswerCallbackQueryNil(update.CallbackQuery.ID)
+		}
+
+		if update.Message != nil {
+			b.handleError(
+				chatID,
+				errors.ErrAnotherRequestInProgress,
+				messages,
+			)
+		}
+
+		return
+	}
+	defer mutex.Unlock()
 
 	newCtx := types.NewContext(ctx, chat, messages)
 
@@ -195,7 +238,7 @@ func (b *Bot) ProcessUpdate(ctx context.Context, update tgbotapi.Update) {
 	if err := b.handleMessage(newCtx); err != nil {
 		b.handleError(chatID, err, messages)
 	}
-	
+
 	// update latest active at
 	if chat != nil && (chat.LatestActiveAt.IsZero() ||
 		chat.LatestActiveAt.Before(time.Now().Add(time.Minute*-10))) { // log maximum once per 10 minutes
