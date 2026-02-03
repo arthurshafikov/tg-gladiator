@@ -1,7 +1,6 @@
 package models
 
 import (
-	"math"
 	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
@@ -15,8 +14,7 @@ const (
 	FightFieldGoldReward = "gold_reward"
 	FightFieldXPReward   = "xp_reward"
 
-	FightArmorDamageReductionModificator = 20 // the more - the less % of damage will get blocked
-	XPGainModificator                    = 50
+	XPGainModificator = 50
 )
 
 type Fight struct {
@@ -84,18 +82,4 @@ type FightEvent struct {
 type FightEvents struct {
 	HeroFightEvent     FightEvent
 	OpponentFightEvent FightEvent
-}
-
-func CalculateArmorReductionMultiplier(defense int) float64 {
-	if defense < 1 {
-		return 0
-	}
-
-	return float64(defense) / float64(defense+FightArmorDamageReductionModificator)
-}
-
-func CalculateArmorReductionPercent(defense int) float64 {
-	multiplier := CalculateArmorReductionMultiplier(defense)
-
-	return math.Round(multiplier * 100)
 }

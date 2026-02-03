@@ -316,9 +316,8 @@ func (m *Messages) GetFightStatistics(fight *models.Fight, fighter models.Fighte
 	)
 
 	msg += fmt.Sprintf(
-		"🛡 %v (%v%%), ",
+		"🛡 %v, ",
 		fighter.GetDefense(),
-		models.CalculateArmorReductionPercent(fighter.GetDefense()),
 	)
 
 	msg += fmt.Sprintf(

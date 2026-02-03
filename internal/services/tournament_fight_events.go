@@ -156,11 +156,12 @@ func (s *TournamentFightEventsService) calculateStrikeTypeModificatorDamage(
 }
 
 func (s *TournamentFightEventsService) calculateReceivedDamage(defense, damageDealt int) (int, int) {
-	damageReductionMultiplier := models.CalculateArmorReductionMultiplier(defense)
+	blockedDamage := int(float64(defense) * 0.6)
 
-	blockedDamage := int(math.Round(float64(damageDealt) * damageReductionMultiplier))
+	minDamage := int(math.Round(float64(damageDealt) * 0.3))
+	finalDamage := max(damageDealt-blockedDamage, minDamage)
 
-	return damageDealt - blockedDamage, blockedDamage
+	return finalDamage, blockedDamage
 }
 
 func (s *TournamentFightEventsService) calculateRandomChance(desiredChance int) (bool, error) {
