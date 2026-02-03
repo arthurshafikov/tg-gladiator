@@ -12,7 +12,6 @@ const (
 	HeroFieldXP                         = "xp"
 	HeroFieldLevel                      = "level"
 	HeroFieldLevelUpBonusesLeft         = "level_up_bonuses_left"
-	LevelUpRequiredXPKoefficient        = 50
 	HeroMaxEnergy                       = 15
 	HeroMinutesToRestoreEnergy          = 5
 	HeroFieldHealthBonus                = "hp_bonus"
@@ -21,6 +20,9 @@ const (
 	HeroFieldCriticalChancePercentBonus = "critical_chance_percent_bonus"
 	HeroFieldEvasionChancePercentBonus  = "evasion_chance_percent_bonus"
 	HeroFieldEnergy                     = "current_energy"
+
+	LevelUpRequiredXPKoefficient = 20
+	LevelUpRequiredXPLevelPower  = 2.2
 )
 
 type Hero struct {
@@ -133,19 +135,29 @@ func (h *Hero) HasLevelUpBonuses() bool {
 func (h *Hero) GetXPForNextLevelLeft() int {
 	requiredTotalXP := 0
 	for level := 1; level <= h.Level; level++ {
-		requiredTotalXP += level * level * 20
+		requiredTotalXP += int(
+			LevelUpRequiredXPKoefficient *
+				math.Pow(
+					float64(level),
+					LevelUpRequiredXPLevelPower,
+				),
+		)
 	}
-
-	return int(math.Abs(float64(h.XP - requiredTotalXP)))
+	return int(math.Max(0, float64(requiredTotalXP-h.XP)))
 }
 
 func (h *Hero) CalculateLevelForXP(xp int) int {
+	totalXP := 0
 	for level := 1; ; level++ {
-		requiredXPForTheNextLevel := level * level * 20
-
-		xp = xp - requiredXPForTheNextLevel
-
-		if xp < 0 {
+		xpForLevel := int(
+			LevelUpRequiredXPKoefficient *
+				math.Pow(
+					float64(level),
+					LevelUpRequiredXPLevelPower,
+				),
+		)
+		totalXP += xpForLevel
+		if xp < totalXP {
 			return level
 		}
 	}
