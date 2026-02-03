@@ -150,21 +150,6 @@ func (b *Bot) ProcessUpdate(ctx context.Context, update tgbotapi.Update) {
 
 	newCtx := types.NewContext(ctx, chat, messages)
 
-	// update latest active at
-	if chat != nil && (chat.LatestActiveAt.IsZero() ||
-		chat.LatestActiveAt.Before(time.Now().Add(time.Minute*-10))) { // log ,aximum once per 10 minutes
-		b.services.Chat.UpdateLatestActiveAt(newCtx)
-	}
-
-	// handle changed username
-	if chat != nil {
-		if update.Message != nil && update.Message.From.UserName != chat.Username {
-			b.handleChangedUsername(newCtx, update.Message.From.UserName)
-		} else if update.CallbackQuery != nil && update.CallbackQuery.From.UserName != chat.Username {
-			b.handleChangedUsername(newCtx, update.CallbackQuery.From.UserName)
-		}
-	}
-
 	// handle interactions
 	if chat != nil { //nolint:nestif
 		interaction, err := b.services.Interactions.Find(newCtx)
@@ -209,5 +194,20 @@ func (b *Bot) ProcessUpdate(ctx context.Context, update tgbotapi.Update) {
 
 	if err := b.handleMessage(newCtx); err != nil {
 		b.handleError(chatID, err, messages)
+	}
+	
+	// update latest active at
+	if chat != nil && (chat.LatestActiveAt.IsZero() ||
+		chat.LatestActiveAt.Before(time.Now().Add(time.Minute*-10))) { // log maximum once per 10 minutes
+		b.services.Chat.UpdateLatestActiveAt(newCtx)
+	}
+
+	// handle changed username
+	if chat != nil {
+		if update.Message != nil && update.Message.From.UserName != chat.Username {
+			b.handleChangedUsername(newCtx, update.Message.From.UserName)
+		} else if update.CallbackQuery != nil && update.CallbackQuery.From.UserName != chat.Username {
+			b.handleChangedUsername(newCtx, update.CallbackQuery.From.UserName)
+		}
 	}
 }
