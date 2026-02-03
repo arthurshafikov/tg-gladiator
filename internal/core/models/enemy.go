@@ -1,6 +1,8 @@
 package models
 
 import (
+	"math/rand"
+
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
 	"gorm.io/gorm"
 )
@@ -82,5 +84,7 @@ func (h *Enemy) GetXPReward() int {
 }
 
 func (h *Enemy) GetGoldReward() int {
-	return 0
+	minGold := h.GetLevel() * 5
+	maxGold := h.GetLevel() * 15
+	return rand.Intn(maxGold-minGold+1) + minGold
 }
