@@ -24,6 +24,7 @@ type Handler struct {
 	logger Logger
 
 	registeredEvents *RegisteredEventsMap
+	sem              chan struct{}
 }
 
 type Deps struct {
@@ -36,13 +37,14 @@ func NewHandler(
 	ctx context.Context,
 	group *errgroup.Group,
 	logger Logger,
+	maxGoroutines int,
 ) *Handler {
 	return &Handler{
-		ctx:    ctx,
-		group:  group,
-		logger: logger,
-
+		ctx:              ctx,
+		group:            group,
+		logger:           logger,
 		registeredEvents: &RegisteredEventsMap{},
+		sem:              make(chan struct{}, maxGoroutines),
 	}
 }
 
@@ -61,13 +63,14 @@ func (h *Handler) Dispatch(eventName string, params ...any) {
 		return
 	}
 
+	h.sem <- struct{}{} // блокирует если лимит превышен
 	h.group.Go(func() error {
+		defer func() { <-h.sem }() // освобождает слот
 		for _, listener := range listeners {
 			if err := listener.Handle(h.ctx, params...); err != nil {
 				h.logger.Error(err)
 			}
 		}
-
 		return nil
 	})
 }

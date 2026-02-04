@@ -25,8 +25,9 @@ type Config struct {
 }
 
 type App struct {
-	Env   string `mapstructure:"APP_ENV"`
-	Debug bool   `mapstructure:"APP_DEBUG"`
+	Env                       string `mapstructure:"APP_ENV"`
+	Debug                     bool   `mapstructure:"APP_DEBUG"`
+	MaxEventHandlerGoroutines int
 }
 
 type DBConfig struct {

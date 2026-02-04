@@ -71,7 +71,7 @@ func Run() {
 	}()
 
 	g := &errgroup.Group{}
-	eventsHandler := events.NewHandler(ctx, g, logger)
+	eventsHandler := events.NewHandler(ctx, g, logger, config.App.MaxEventHandlerGoroutines)
 
 	db := pgsql.ConnectToDatabase(ctx, &config.DBConfig, config.App.Debug)
 	repository := repository.NewRepository(db)
