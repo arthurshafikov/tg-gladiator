@@ -10,18 +10,41 @@ services:
     #         - pgsql
     pgsql:
         image: postgres:16.3
-        restart: on-failure
+        restart: unless-stopped
         ports:
             - "54401:5432"
         environment:
             POSTGRES_DB: ${DB_NAME}
             POSTGRES_USER: ${DB_USER}
             POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - ../build/database:/docker-entrypoint-initdb.d
     adminer:
         image: adminer
-        restart: on-failure
+        restart: unless-stopped
         ports:
             - "54402:8080"
         depends_on:
             - pgsql
-  
+    grafana:
+        image: grafana/grafana:latest
+        environment:
+            GF_DATABASE_TYPE: postgres
+            GF_DATABASE_HOST: pgsql:5432
+            GF_DATABASE_NAME: ${DB_GRAFANA_DATABASE_NAME}
+            GF_DATABASE_USER: ${DB_GRAFANA_USER}
+            GF_DATABASE_PASSWORD: ${DB_GRAFANA_PASSWORD}
+            GF_DATABASE_SSL_MODE: disable
+        restart: unless-stopped
+        depends_on:
+            - pgsql
+        ports:
+            - 54403:3000
+        volumes:
+            - ../build/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+            - ../build/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+
+# Connect to Grafana
+# Set up a basic dashboard connected with PostgreSQL, try to import it as a file so that it could be commited
+# set up analytic events
+# use those events in Grafana, create and export dashboards

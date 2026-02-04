@@ -1,0 +1,12 @@
+apiVersion: 1
+datasources:
+  - name: Postgres
+    type: postgres
+    access: proxy
+    url: pgsql:5432
+    user: homestead
+    secureJsonData:
+      password: secret
+    jsonData:
+      database: homestead
+      sslmode: disable

@@ -4,12 +4,12 @@ services:
       context: ../.
       dockerfile: ./build/app/Dockerfile
       target: prod
-    restart: always
+    restart: unless-stopped
     ports:
       - 80:80
       - 443:443
   adminer:
       image: adminer
-      restart: on-failure
+      restart: unless-stopped
       ports:
           - "8210:8080"

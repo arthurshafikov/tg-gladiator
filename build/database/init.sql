@@ -1,0 +1,6 @@
+CREATE USER grafana WITH ENCRYPTED PASSWORD 'secret';
+CREATE DATABASE grafana OWNER grafana;
+GRANT ALL PRIVILEGES ON DATABASE grafana TO grafana;
+GRANT ALL PRIVILEGES ON DATABASE grafana TO homestead;
+GRANT ALL ON SCHEMA public TO grafana;
+GRANT ALL ON SCHEMA public TO homestead;

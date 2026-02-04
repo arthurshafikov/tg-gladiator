@@ -69,8 +69,8 @@ func (s *APITestSuite) SetupSuite() {
 
 	s.repos = repository.NewRepository(s.db)
 	s.services = services.NewServices(services.Deps{
-		Repository:    s.repos,
-		Logger:        s.logger,
+		Repository: s.repos,
+		// Logger:        s.logger,
 		Config:        s.config,
 		EventsHandler: s.eventsHandler,
 	})
@@ -79,16 +79,16 @@ func (s *APITestSuite) SetupSuite() {
 
 	_ = handlers.NewBaseHandler(handlers.HandlerParams{
 		Services: s.services,
-		Logger:   s.logger,
-		Config:   s.config,
+		// Logger:   s.logger,
+		Config: s.config,
 
 		// Helper: s.telegramHelper,
 	})
 
 	s.bot = telegram.NewBot(&telegram.Deps{
 		Services: s.services,
-		Logger:   s.logger,
-		Config:   s.config,
+		// Logger:   s.logger,
+		Config: s.config,
 
 		// CommandsHandler:    commands.NewHandler(baseHandler),
 		// QueryHandler:       queries.NewQueryHandler(baseHandler),

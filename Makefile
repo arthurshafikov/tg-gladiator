@@ -49,6 +49,9 @@ go:
 rebuild:
 	$(DOCKER_COMPOSE) --env-file ./main.env -f ${DOCKER_COMPOSE_FILE} -p ${APP_NAME} up app --force-recreate --no-deps --build -d
 
+rebuild-grafana:
+	$(DOCKER_COMPOSE) --env-file ./main.env -f ${DOCKER_COMPOSE_FILE} -p ${APP_NAME} up grafana --force-recreate --no-deps --build -d
+
 up:
 	$(DOCKER_COMPOSE) --env-file ./main.env -f ${DOCKER_COMPOSE_FILE} -p ${APP_NAME} up -d
 
