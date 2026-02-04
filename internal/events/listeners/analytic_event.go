@@ -3,7 +3,6 @@ package listeners
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/services"
@@ -18,26 +17,14 @@ func NewAnalyticEventListener(service services.AnalyticEvent) *AnalyticEventList
 }
 
 func (l *AnalyticEventListener) Handle(ctx context.Context, params ...any) error {
-	if len(params) < 2 {
-		return fmt.Errorf("params len < 2 AnalyticEventListener")
-	}
-	eventName, ok := params[0].(models.EventName)
-	if !ok {
-		return fmt.Errorf("params[0] is not EventName: %#v", params)
-	}
-	chatID, ok := params[1].(int64)
-	if !ok {
-		return fmt.Errorf("params[1] is not int64 (chatID): %#v", params)
-	}
-	var payload any
-	if len(params) > 2 {
-		payload = params[2]
+	if len(params) != 1 {
+		return fmt.Errorf("invalid params length: expected 1, got %d", len(params))
 	}
 
-	return l.service.Create(ctx, models.CreateAnalyticEventDTO{
-		EventName: eventName,
-		ChatID:    chatID,
-		Payload:   payload,
-		Timestamp: time.Now(),
-	})
+	dto, ok := params[0].(models.CreateAnalyticEventDTO)
+	if !ok {
+		return fmt.Errorf("invalid params type: expected models.CreateAnalyticEventDTO, got %T", params)
+	}
+
+	return l.service.Create(ctx, dto)
 }

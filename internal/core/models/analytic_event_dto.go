@@ -14,7 +14,7 @@ const (
 type CreateAnalyticEventDTO struct {
 	EventName EventName
 	ChatID    int64
-	Payload   any
+	Payload   map[string]any
 	Timestamp time.Time
 }
 

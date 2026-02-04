@@ -17,5 +17,7 @@ func NewAnalyticEventRepository(baseRepo BaseRepo) *AnalyticEvent {
 }
 
 func (r *AnalyticEvent) Create(ctx context.Context, event models.AnalyticEvent) error {
-	return r.getDBInstance(ctx).Create(&event).Error
+	return r.getDBInstance(ctx).
+		Table("analytic_events").
+		Create(&event).Error
 }

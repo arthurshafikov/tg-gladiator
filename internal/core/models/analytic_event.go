@@ -1,11 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type AnalyticEvent struct {
-	ID        int       `json:"id" db:"id"`
+	ID        string    `json:"id" db:"id" gorm:"->"`
 	ChatID    int64     `json:"chat_id" db:"chat_id"`
 	Type      string    `json:"type" db:"type"`
-	Payload   any       `json:"payload" db:"payload"`
+	Payload   *string   `json:"payload" db:"payload" gorm:"type:jsonb"`
 	Timestamp time.Time `json:"timestamp" db:"timestamp"`
 }
