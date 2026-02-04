@@ -199,7 +199,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 7,
         "x": 12,
         "y": 0
@@ -519,17 +519,25 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "footer": {
-              "reducers": []
-            },
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
             "hideFrom": {
+              "legend": false,
+              "tooltip": false,
               "viz": false
             },
-            "inspect": false
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -556,8 +564,27 @@
       },
       "id": 6,
       "options": {
-        "cellHeight": "sm",
-        "showHeader": true
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "enemy_level",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
       },
       "pluginVersion": "12.3.2",
       "targets": [
@@ -592,7 +619,7 @@
         }
       ],
       "title": "The Most Frequent Enemy Levels",
-      "type": "table"
+      "type": "barchart"
     },
     {
       "datasource": {
@@ -603,19 +630,6 @@
         "defaults": {
           "color": {
             "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "footer": {
-              "reducers": []
-            },
-            "hideFrom": {
-              "viz": false
-            },
-            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -642,8 +656,19 @@
       },
       "id": 7,
       "options": {
-        "cellHeight": "sm",
-        "showHeader": true
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "12.3.2",
       "targets": [
@@ -656,7 +681,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n    percentile_cont(0.5) WITHIN GROUP (ORDER BY hero_hp) AS median_hero_hp,\n    avg(hero_hp) AS avg_hero_hp,\n    count(*) AS fights_count\nFROM fights\nWHERE status = 'ended'\n  AND created_at >= $__timeFrom(created_at)\n  AND created_at <= $__timeTo(created_at);\n",
+          "rawSql": "SELECT\n    percentile_cont(0.5) WITHIN GROUP (ORDER BY hero_hp) AS median_hero_hp,\n    avg(hero_hp) AS avg_hero_hp,\n    count(*) AS fights_count\nFROM fights\nWHERE status = 'ended' AND hero_hp > 0\n  AND created_at >= $__timeFrom(created_at)\n  AND created_at <= $__timeTo(created_at);\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -678,7 +703,7 @@
         }
       ],
       "title": "Hero HP At The End Of A Fight",
-      "type": "table"
+      "type": "gauge"
     }
   ],
   "preload": false,
@@ -695,5 +720,5 @@
   "timezone": "browser",
   "title": "My Dashboard",
   "uid": "adnzrqz",
-  "version": 1
+  "version": 3
 }
