@@ -20,6 +20,10 @@ type EventsHandler interface {
 	Dispatch(eventName string, params ...any)
 }
 
+type AnalyticEvent interface {
+	Create(ctx context.Context, dto models.CreateAnalyticEventDTO) error
+}
+
 type Chat interface {
 	FindByID(ctx context.Context, id int64) (*models.Chat, error)
 	FindByChatID(ctx context.Context, chatID int64) (*models.Chat, error)
@@ -96,6 +100,7 @@ type Shop interface {
 }
 
 type Services struct {
+	AnalyticEvent
 	Chat
 	Interactions
 	Fight
@@ -116,6 +121,8 @@ type Deps struct {
 }
 
 func NewServices(deps Deps) *Services {
+	analyticEventService := NewAnalyticEventService(deps.Repository.AnalyticEvent)
+
 	validatorService := newValidatorService(deps.Logger)
 
 	heroService := newHeroService(deps.Logger, deps.Repository.Hero, validatorService, nil, deps.EventsHandler)
@@ -145,6 +152,7 @@ func NewServices(deps Deps) *Services {
 	)
 
 	return &Services{
+		AnalyticEvent: analyticEventService,
 		Chat: newChatService(
 			deps.Logger,
 			deps.Repository.Chat,

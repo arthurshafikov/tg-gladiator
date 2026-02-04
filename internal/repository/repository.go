@@ -79,6 +79,10 @@ type HeroShopItem interface {
 	GetBy(ctx context.Context, fields *models.HeroShopItem) ([]models.HeroShopItem, error)
 }
 
+type AnalyticEvent interface {
+	Create(ctx context.Context, event models.AnalyticEvent) error
+}
+
 type Repository struct {
 	Chat
 	Hero
@@ -88,19 +92,21 @@ type Repository struct {
 	HeroItem
 	HeroShop
 	HeroShopItem
+	AnalyticEvent
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	baseRepo := pgsql.NewBaseRepo(db)
 
 	return &Repository{
-		Chat:         pgsql.NewChatRepository(*baseRepo),
-		Hero:         pgsql.NewHeroRepository(*baseRepo),
-		Fight:        pgsql.NewFightRepository(*baseRepo),
-		Enemy:        pgsql.NewEnemyRepository(*baseRepo),
-		Item:         pgsql.NewItemRepository(*baseRepo),
-		HeroItem:     pgsql.NewHeroItemRepository(*baseRepo),
-		HeroShop:     pgsql.NewHeroShopRepository(*baseRepo),
-		HeroShopItem: pgsql.NewHeroShopItemRepository(*baseRepo),
+		Chat:          pgsql.NewChatRepository(*baseRepo),
+		Hero:          pgsql.NewHeroRepository(*baseRepo),
+		Fight:         pgsql.NewFightRepository(*baseRepo),
+		Enemy:         pgsql.NewEnemyRepository(*baseRepo),
+		Item:          pgsql.NewItemRepository(*baseRepo),
+		HeroItem:      pgsql.NewHeroItemRepository(*baseRepo),
+		HeroShop:      pgsql.NewHeroShopRepository(*baseRepo),
+		HeroShopItem:  pgsql.NewHeroShopItemRepository(*baseRepo),
+		AnalyticEvent: pgsql.NewAnalyticEventRepository(*baseRepo),
 	}
 }
