@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/events"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -16,6 +17,7 @@ type HeroShopItemService struct {
 	heroShopRepo    repository.HeroShop
 	heroService     *HeroService
 	heroItemService *HeroItemService
+	eventsHandler   EventsHandler
 }
 
 func newHeroShopItemService(
@@ -23,12 +25,14 @@ func newHeroShopItemService(
 	heroShopRepo repository.HeroShop,
 	heroService *HeroService,
 	heroItemService *HeroItemService,
+	eventsHandler EventsHandler,
 ) *HeroShopItemService {
 	return &HeroShopItemService{
 		repo:            repo,
 		heroShopRepo:    heroShopRepo,
 		heroService:     heroService,
 		heroItemService: heroItemService,
+		eventsHandler:   eventsHandler,
 	}
 }
 
@@ -64,6 +68,18 @@ func (s *HeroShopItemService) BuyItem(ctx *types.Context, heroID, itemID int64) 
 			return nil, err
 		}
 	}
+
+	s.eventsHandler.Dispatch(
+		events.AnalyticEvent,
+		models.CreateAnalyticEventDTO{
+			ChatID:    hero.ChatID,
+			Type:      models.AnalyticEventTypeItemPurchased,
+			Timestamp: time.Now(),
+			Payload: map[string]any{
+				"item_id": itemID,
+			},
+		},
+	)
 
 	return shopItem, nil
 }

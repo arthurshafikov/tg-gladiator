@@ -71,8 +71,8 @@ func (s *APITestSuite) SetupSuite() {
 	s.services = services.NewServices(services.Deps{
 		Repository: s.repos,
 		// Logger:        s.logger,
-		Config:        s.config,
-		EventsHandler: s.eventsHandler,
+		Config: s.config,
+		// EventsHandler: s.eventsHandler,
 	})
 
 	s.telegramHelper = mock_handlers.NewMockTelegramHandlerHelper(ctrl)

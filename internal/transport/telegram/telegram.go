@@ -8,6 +8,7 @@ import (
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/commands"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/events"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -17,9 +18,10 @@ import (
 )
 
 type Bot struct {
-	services *services.Services
-	logger   services.Logger
-	config   *config.Config
+	services      *services.Services
+	logger        services.Logger
+	config        *config.Config
+	eventsHandler services.EventsHandler
 
 	commandHandler     CommandsHandler
 	queryHandler       QueryHandler
@@ -86,9 +88,10 @@ type NotificationsHandler interface {
 }
 
 type Deps struct {
-	Services *services.Services
-	Logger   services.Logger
-	Config   *config.Config
+	Services      *services.Services
+	Logger        services.Logger
+	Config        *config.Config
+	EventsHandler services.EventsHandler
 
 	CommandsHandler    CommandsHandler
 	QueryHandler       QueryHandler
@@ -99,9 +102,10 @@ type Deps struct {
 
 func NewBot(deps *Deps) *Bot {
 	return &Bot{
-		services: deps.Services,
-		logger:   deps.Logger,
-		config:   deps.Config,
+		services:      deps.Services,
+		logger:        deps.Logger,
+		config:        deps.Config,
+		eventsHandler: deps.EventsHandler,
 
 		commandHandler:     deps.CommandsHandler,
 		queryHandler:       deps.QueryHandler,
@@ -169,6 +173,17 @@ func (b *Bot) ProcessUpdate(ctx context.Context, update tgbotapi.Update) {
 		b.handleError(chatID, err, messages)
 
 		return
+	}
+
+	if chat != nil {
+		defer b.eventsHandler.Dispatch(
+			events.AnalyticEvent,
+			models.CreateAnalyticEventDTO{
+				ChatID:    chat.ID,
+				Type:      models.AnalyticEventTypeChatUpdateProcessed,
+				Timestamp: time.Now(),
+			},
+		)
 	}
 
 	mutexIface, _ := b.chatMutexes.LoadOrStore(chatID, &sync.Mutex{})

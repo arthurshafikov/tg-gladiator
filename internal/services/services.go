@@ -5,6 +5,7 @@ import (
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/events"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/interactions"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -17,7 +18,7 @@ type Logger interface {
 }
 
 type EventsHandler interface {
-	Dispatch(eventName string, params ...any)
+	Dispatch(eventName events.Event, params ...any)
 }
 
 type AnalyticEvent interface {
@@ -129,7 +130,7 @@ func NewServices(deps Deps) *Services {
 
 	enemyService := newEnemyService(deps.Logger, deps.Repository.Enemy)
 
-	fightService := newFightService(deps.Repository.Fight, enemyService, heroService)
+	fightService := newFightService(deps.Repository.Fight, enemyService, heroService, deps.EventsHandler)
 
 	tournamentFightEventsService := newTournamentFightEventsService(deps.Logger)
 
@@ -141,6 +142,7 @@ func NewServices(deps Deps) *Services {
 		deps.Repository.HeroShop,
 		heroService,
 		heroItemService,
+		deps.EventsHandler,
 	)
 
 	tournamentFightService := newTournamentFightService(

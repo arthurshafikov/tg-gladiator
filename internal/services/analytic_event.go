@@ -28,7 +28,7 @@ func (s *AnalyticEventService) Create(ctx context.Context, dto models.CreateAnal
 
 	analyticEvent := models.AnalyticEvent{
 		ChatID:    dto.ChatID,
-		Type:      dto.EventName.ToString(),
+		Type:      dto.Type,
 		Timestamp: dto.Timestamp,
 	}
 

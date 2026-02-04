@@ -102,9 +102,10 @@ func Run() {
 	baseHandler := handlers.NewBaseHandler(telegramHandlerParams)
 
 	telegramBot := telegram.NewBot(&telegram.Deps{
-		Services: services,
-		Logger:   logger,
-		Config:   config,
+		Services:      services,
+		Logger:        logger,
+		Config:        config,
+		EventsHandler: eventsHandler,
 
 		CommandsHandler:    commands.NewHandler(baseHandler),
 		QueryHandler:       queries.NewHandler(baseHandler),

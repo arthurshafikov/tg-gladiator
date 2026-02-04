@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
-	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/events"
 	"github.com/arthurshafikov/tg-gladiator/internal/events/listeners"
 	"github.com/arthurshafikov/tg-gladiator/internal/services"
 	"github.com/arthurshafikov/tg-gladiator/internal/transport/telegram"
@@ -49,21 +49,21 @@ func NewHandler(
 }
 
 func (h *Handler) InitEvents(deps *Deps) {
-	h.subscribe(models.EventHeroLevelUp.ToString(), listeners.NewHeroLevelUpListener(
+	h.subscribe(events.HeroLevelUp, listeners.NewHeroLevelUpListener(
 		deps.NotificationsHandler,
 		deps.Services.Chat,
 		&deps.Config.MessagesBag,
 	))
 
-	h.subscribe(models.EventAnalytic.ToString(), listeners.NewAnalyticEventListener(
+	h.subscribe(events.AnalyticEvent, listeners.NewAnalyticEventListener(
 		deps.Services.AnalyticEvent,
 	))
 }
 
-func (h *Handler) Dispatch(eventName string, params ...any) {
-	listeners, ok := (*h.registeredEvents)[eventName]
+func (h *Handler) Dispatch(eventName events.Event, params ...any) {
+	listeners, ok := (*h.registeredEvents)[eventName.ToString()]
 	if !ok {
-		h.logger.Error("no listeners registered for eventName " + eventName)
+		h.logger.Error("no listeners registered for eventName " + eventName.ToString())
 		return
 	}
 
@@ -79,6 +79,9 @@ func (h *Handler) Dispatch(eventName string, params ...any) {
 	})
 }
 
-func (h *Handler) subscribe(eventName string, listener listeners.Listener) {
-	(*h.registeredEvents)[eventName] = append((*h.registeredEvents)[eventName], listener)
+func (h *Handler) subscribe(eventName events.Event, listener listeners.Listener) {
+	(*h.registeredEvents)[eventName.ToString()] = append(
+		(*h.registeredEvents)[eventName.ToString()],
+		listener,
+	)
 }

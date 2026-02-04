@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/events"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -184,7 +185,7 @@ func (s *HeroService) RewardXP(ctx *types.Context, id int64, amount int) error {
 	}
 
 	if newLevel {
-		s.eventsHandler.Dispatch(models.EventHeroLevelUp.ToString(), *hero)
+		s.eventsHandler.Dispatch(events.HeroLevelUp, *hero)
 	}
 
 	return nil

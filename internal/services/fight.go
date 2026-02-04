@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/enums"
+	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/events"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -14,15 +15,17 @@ import (
 type FightService struct {
 	repo repository.Fight
 
-	enemyService *EnemyService
-	heroService  *HeroService
+	enemyService  *EnemyService
+	heroService   *HeroService
+	eventsHandler EventsHandler
 }
 
-func newFightService(repo repository.Fight, enemyService *EnemyService, heroService *HeroService) *FightService {
+func newFightService(repo repository.Fight, enemyService *EnemyService, heroService *HeroService, eventsHandler EventsHandler) *FightService {
 	return &FightService{
-		repo:         repo,
-		enemyService: enemyService,
-		heroService:  heroService,
+		repo:          repo,
+		enemyService:  enemyService,
+		heroService:   heroService,
+		eventsHandler: eventsHandler,
 	}
 }
 
@@ -61,6 +64,18 @@ func (s *FightService) create(ctx *types.Context, fields models.Fight) (*models.
 
 		return nil, err
 	}
+
+	s.eventsHandler.Dispatch(
+		events.AnalyticEvent,
+		models.CreateAnalyticEventDTO{
+			ChatID:    ctx.GetChat().ID,
+			Type:      models.AnalyticEventTypeFightStarted,
+			Timestamp: fight.CreatedAt,
+			Payload: map[string]any{
+				"fight_id": fight.ID,
+			},
+		},
+	)
 
 	return s.findBy(ctx, &models.Fight{
 		ID: fight.ID,
