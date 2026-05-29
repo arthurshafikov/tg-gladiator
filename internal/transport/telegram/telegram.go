@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/arthurshafikov/tg-gladiator/internal/config"
+	"github.com/arthurshafikov/tg-gladiator/internal/core"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/commands"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/constants/events"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
@@ -166,9 +167,13 @@ func (b *Bot) ProcessUpdate(ctx context.Context, update tgbotapi.Update) {
 		return
 	}
 
-	messages := b.config.MessagesBag.GetMessages("RU")
-
 	chat, err := b.authorize(ctx, chatID)
+
+	language := core.LanguageEN
+	if chat != nil && chat.Language != "" {
+		language = chat.Language
+	}
+	messages := b.config.MessagesBag.GetMessages(language)
 	if err != nil && (update.CallbackQuery != nil || update.Message.Command() != commands.Start) {
 		b.handleError(chatID, err, messages)
 

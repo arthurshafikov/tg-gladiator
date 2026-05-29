@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core"
 	"github.com/spf13/viper"
 )
 
@@ -106,7 +107,7 @@ func NewConfig(envFolderPath, configFolder string) *Config {
 
 func (b *MessagesBag) GetMessages(language string) *Messages {
 	switch language {
-	case "EN":
+	case core.LanguageEN:
 		return &b.EN
 	default:
 		return &b.RU

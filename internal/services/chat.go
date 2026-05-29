@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/arthurshafikov/tg-gladiator/internal/core"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/errors"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/models"
 	"github.com/arthurshafikov/tg-gladiator/internal/core/types"
@@ -70,7 +71,7 @@ func (s *ChatService) FirstOrCreate(ctx context.Context, data models.Chat) (*mod
 	if !errors.Is(err, errors.ErrNotFound) {
 		return nil, false, err
 	}
-	data.Language = "RU"
+	data.Language = core.LanguageEN
 	data.LatestActiveAt = time.Now()
 
 	chat, err = s.repo.Create(ctx, data)
