@@ -47,9 +47,9 @@ This structure makes the codebase easier to maintain, test, and scale.
 
 ## Demo
 
-YouTube Shorts (bot demo):
+YouTube demo video:
 
-- https://youtube.com/shorts/l1oMLxlhjag?is=wWiMNewXYezNVOK5
+- https://www.youtube.com/watch?v=fgbaNs3_fUA
 
 What is shown in the demo:
 
