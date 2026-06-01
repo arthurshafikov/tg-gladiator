@@ -51,6 +51,7 @@ type Messages struct {
 	EvasionChancePercent  string
 	HP                    string
 	HeroEnergy            string
+	HeroEnergyRegen       string
 	HeroGold              string
 
 	HeroNameWithStats string
@@ -244,7 +245,7 @@ func (m *Messages) GetHeroInfo(hero *models.Hero) (string, error) {
 	)
 
 	msg += fmt.Sprintf(
-		"%s: %v/%v (+1 каждые %v минут)\n",
+		m.HeroEnergyRegen,
 		m.HeroEnergy,
 		hero.CurrentEnergy,
 		models.HeroMaxEnergy,

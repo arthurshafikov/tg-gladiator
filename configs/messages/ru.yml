@@ -37,6 +37,7 @@ RU:
   EvasionChancePercent: "🍀 Шанс уклонения"
   HP: "❤️ Здоровье"
   HeroEnergy: "🏃‍♂️ Энергия"
+  HeroEnergyRegen: "%s: %v/%v (+1 каждые %v минут)"
   HeroGold: "💰 Золото"
 
   HeroName: "Имя"

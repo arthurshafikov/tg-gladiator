@@ -37,6 +37,7 @@ EN:
   EvasionChancePercent: "🍀 Evasion chance"
   HP: "❤️ Health"
   HeroEnergy: "🏃‍♂️ Energy"
+  HeroEnergyRegen: "%s: %v/%v (+1 every %v minutes)"
   HeroGold: "💰 Gold"
 
   HeroName: "Name"
